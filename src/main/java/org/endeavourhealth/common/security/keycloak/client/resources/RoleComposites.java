@@ -37,6 +37,28 @@ public class RoleComposites extends KeycloakAdminClientBase {
     }
 
     //
+    // get composites by Role Id
+    //
+
+    public List<RoleRepresentation> getCompositesByRoleId(String roleId) {
+        assertKeycloakAdminClientInitialised();
+        return getCompositesByRoleId(getRealm(), roleId);
+    }
+
+    public List<RoleRepresentation> getCompositesByRoleId(String realm, String roleId) {
+        assertKeycloakAdminClientInitialised();
+
+        List<RoleRepresentation> composites = null;
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpResponse response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + roleId.trim() + "/composites");
+            composites = toEntity(response, listRoleRepresentationTypeReference);
+        } catch (IOException e) {
+            LOG.error("Keycloak get composites by ID failed", e);
+        }
+        return composites;
+    }
+
+    //
     // post composite
     //
 
@@ -68,6 +90,37 @@ public class RoleComposites extends KeycloakAdminClientBase {
     }
 
     //
+    // post composite by Role Id
+    //
+
+    public List<RoleRepresentation> postCompositeByRoleId(String roleId, RoleRepresentation composite) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+        return postCompositeByRoleId(getRealm(), roleId, Arrays.asList(composite));
+    }
+
+    public List<RoleRepresentation> postCompositeByRoleId(String roleId, List<RoleRepresentation> composites) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+        return postCompositeByRoleId(getRealm(), roleId, composites);
+    }
+
+    public List<RoleRepresentation> postCompositeByRoleId(String realm, String roleId, List<RoleRepresentation> composites) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpResponse response = doPost(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + roleId.trim() + "/composites", composites);
+            if(isHttpOkStatus(response)) {
+                response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + roleId.trim() + "/composites");
+                return toEntity(response, listRoleRepresentationTypeReference);
+            } else {
+                throw new KeycloakClientException("Failed to post composite", response.getStatusLine().getReasonPhrase());
+            }
+        } catch (IOException e) {
+            LOG.error("Keycloak post composite by Role ID failed", e);
+        }
+        return null;
+    }
+
+    //
     // delete composite
     //
 
@@ -86,6 +139,28 @@ public class RoleComposites extends KeycloakAdminClientBase {
             }
         } catch (IOException e) {
             LOG.error("Keycloak delete composite failed", e);
+        }
+    }
+
+    //
+    // delete composite by Role Id
+    //
+
+    public void deleteCompositeByRoleId(String roleId, List<RoleRepresentation> composites) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+        deleteCompositeByRoleId(getRealm(), roleId, composites);
+    }
+
+    public void deleteCompositeByRoleId(String realm, String roleId, List<RoleRepresentation> composites) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpResponse response = doDelete(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + roleId.trim() + "/composites", composites);
+            if(!isHttpOkStatus(response)) {
+                throw new KeycloakClientException("Failed to delete composite", response.getStatusLine().getReasonPhrase());
+            }
+        } catch (IOException e) {
+            LOG.error("Keycloak delete composite by Role ID failed", e);
         }
     }
 }

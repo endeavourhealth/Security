@@ -78,6 +78,28 @@ public class Roles extends KeycloakAdminClientBase {
     }
 
     //
+    // get role by id
+    //
+
+    public RoleRepresentation getRoleById(String roleId) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+        return getRoleById(getRealm(), roleId);
+    }
+
+    public RoleRepresentation getRoleById(String realm, String roleId) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+
+        RoleRepresentation roleRepresentation = null;
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpResponse response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + roleId.trim());
+            roleRepresentation = toEntity(response, roleRepresentationTypeReference);
+        } catch (IOException e) {
+            LOG.error("Keycloak get role by ID failed", e);
+        }
+        return roleRepresentation;
+    }
+
+    //
     // post role
     //
 
@@ -115,9 +137,11 @@ public class Roles extends KeycloakAdminClientBase {
         assertKeycloakAdminClientInitialised();
 
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            HttpResponse response = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles/" + role.getName(), role);
+            //HttpResponse response = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles/" + role.getName(), role);
+            HttpResponse response = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + role.getId(), role);
             if(isHttpOkStatus(response)) {
-                response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles/" + role.getName());
+                //response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles/" + role.getName());
+                response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + role.getId());
                 role = toEntity(response, roleRepresentationTypeReference);
             } else {
                 throw new KeycloakClientException("Failed to put role", response.getStatusLine().getReasonPhrase());
@@ -147,6 +171,28 @@ public class Roles extends KeycloakAdminClientBase {
             }
         } catch (IOException e) {
             LOG.error("Keycloak delete role failed", e);
+        }
+    }
+
+    //
+    // delete role by id
+    //
+
+    public void deleteRealmRoleById(String roleId) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+        deleteRealmRoleById(getRealm(), roleId);
+    }
+
+    public void deleteRealmRoleById(String realm, String roleId) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpResponse response = doDelete(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + roleId.trim());
+            if(!isHttpOkStatus(response)) {
+                throw new KeycloakClientException("Failed to delete role", response.getStatusLine().getReasonPhrase());
+            }
+        } catch (IOException e) {
+            LOG.error("Keycloak delete role by ID failed", e);
         }
     }
 
