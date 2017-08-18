@@ -137,10 +137,8 @@ public class Roles extends KeycloakAdminClientBase {
         assertKeycloakAdminClientInitialised();
 
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
-            //HttpResponse response = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles/" + role.getName(), role);
             HttpResponse response = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + role.getId(), role);
             if(isHttpOkStatus(response)) {
-                //response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles/" + role.getName());
                 response = doGet(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/roles-by-id/" + role.getId());
                 role = toEntity(response, roleRepresentationTypeReference);
             } else {
