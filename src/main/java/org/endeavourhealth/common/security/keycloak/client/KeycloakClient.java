@@ -103,6 +103,30 @@ public class KeycloakClient {
         return new BasicHeader(HttpHeaders.AUTHORIZATION, "Bearer " + token);
     }
 
+    public void logoutSession() throws IOException {
+        CloseableHttpClient client = HttpClients.createDefault();
+
+        try {
+            HttpPost post = new HttpPost(KeycloakUriBuilder.fromUri(baseUrl)
+                    .path(ServiceUrlConstants.TOKEN_SERVICE_LOGOUT_PATH).build(realm));
+            List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+            formparams.add(new BasicNameValuePair(OAuth2Constants.CLIENT_ID, clientId));
+            formparams.add(new BasicNameValuePair(OAuth2Constants.REFRESH_TOKEN, currentToken.getRefreshToken()));
+            UrlEncodedFormEntity form = new UrlEncodedFormEntity(formparams, "UTF-8");
+            post.setEntity(form);
+
+            HttpResponse response = client.execute(post);
+            int status = response.getStatusLine().getStatusCode();
+            HttpEntity entity = response.getEntity();
+            if (status != 204) {
+                String json = getContent(entity);
+                throw new IOException("Bad status: " + status + " response: " + json);
+            }
+        } finally {
+            client.close();
+        }
+    }
+
     AccessTokenResponse getTokenInternal() throws IOException {
 
         CloseableHttpClient client = HttpClientBuilder.create().build();
