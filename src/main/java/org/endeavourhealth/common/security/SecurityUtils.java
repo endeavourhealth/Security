@@ -75,6 +75,7 @@ public class SecurityUtils {
         // get roles for an organisation
         List<String> orgGroupRoles = getOrganisationRoles(sc, organisationId);
         if(orgGroupRoles != null) {
+            LOG.info("Roles found for org ("+organisationId+"): "+orgGroupRoles);
             for (String orgGroupRole : orgGroupRoles) {
                 // check for matches
                 for (String role : roles) {

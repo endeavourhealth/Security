@@ -19,6 +19,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 
 @Provider
 public class CustomRolesAllowedFeature implements DynamicFeature {
@@ -85,10 +86,12 @@ public class CustomRolesAllowedFeature implements DynamicFeature {
         @Override
         public void filter(final ContainerRequestContext requestContext) throws IOException {
             if (!denyAll) {
+
                 if (rolesAllowed.length > 0 && !isAuthenticated(requestContext)) {
                     throw new ForbiddenException("Not Authorized");
                 }
 
+                LOG.info("rolesAllowed: "+ Arrays.toString(rolesAllowed));
                 // DEPRECATED: this has been remove in favour of organisation group roles, see below
                 /*for (final String role : rolesAllowed) {
                     if (SecurityUtils.hasRole(requestContext.getSecurityContext(), role)) {
@@ -105,6 +108,8 @@ public class CustomRolesAllowedFeature implements DynamicFeature {
 
                 if(SecurityUtils.hasOrganisationRole(requestContext.getSecurityContext(), organisationId, rolesAllowed))
                     return;
+
+                LOG.info(organisationId + " failed organisation Role check => 403");
             }
 
             throw new ForbiddenException("Not Authorized");
