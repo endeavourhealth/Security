@@ -34,7 +34,7 @@ public abstract class KeycloakAdminClientBase {
     protected void initKeycloakAdminClient() {
 
         // get the Endeavour realm name
-        keycloakDeployment = KeycloakConfigUtils.getDeployment();
+        keycloakDeployment = KeycloakConfigUtils.getDeployment("keycloak");
         authBaseUrl = KeycloakConfigUtils.initialize();
 
         try {

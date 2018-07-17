@@ -19,15 +19,17 @@ public class KeycloakConfigUtils {
 
     private static final Logger LOG = LoggerFactory.getLogger(KeycloakConfigUtils.class);
 
-    public static KeycloakDeployment getDeployment() {
-        String keycloakConfigJson = ConfigManager.getConfiguration("keycloak");
+    public static KeycloakDeployment getDeployment(String configName) {
 
-        if (keycloakConfigJson != null && StringUtils.isNotEmpty(keycloakConfigJson)) {
+        String keycloakConfigJson = ConfigManager.getConfiguration(configName);
+
+        if (StringUtils.isNotEmpty(keycloakConfigJson)) {
             InputStream stream = new ByteArrayInputStream(keycloakConfigJson.getBytes(StandardCharsets.UTF_8));
             return KeycloakDeploymentBuilder.build(stream);
-        }
 
-        return null;
+        } else {
+            return null;
+        }
     }
 
     public static String initialize() {
@@ -42,12 +44,12 @@ public class KeycloakConfigUtils {
 
             // build the admin client
             KeycloakClient.init(adminClientUrl,
-                "master",
-                adminClientUsername,
-                adminClientPassword,
-                "admin-cli");
+                    "master",
+                    adminClientUsername,
+                    adminClientPassword,
+                    "admin-cli");
         } catch (IOException e) {
-            LOG.error("Unable to parse keycloak proxy data");;
+            LOG.error("Unable to parse keycloak proxy data", e);
         }
 
         return adminClientUrl;

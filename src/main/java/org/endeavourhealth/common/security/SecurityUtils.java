@@ -185,7 +185,7 @@ public class SecurityUtils {
         return endUser;
     }
 
-    public Set<String> getUserAllowedOrganisationIdsFromSecurityContext(SecurityContext securityContext) {
+    public static Set<String> getUserAllowedOrganisationIdsFromSecurityContext(SecurityContext securityContext) {
         Set<String> orgs = new HashSet<>();
 
         AccessToken accessToken = SecurityUtils.getToken(securityContext);
