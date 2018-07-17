@@ -36,10 +36,12 @@ public class KeycloakConfigResolverImpl implements KeycloakConfigResolver {
         String uri = request.getURI();
         try {
             String path = new URL(uri).getPath();
-            int index = path.indexOf("/", 1);
-            String firstElement = path.substring(1, index);
-            if (firstElement.equalsIgnoreCase("machine-api")) {
-                keycloakConfigToUse = "keycloak_machine";
+            String[] toks = path.split("/");
+            for (String tok: toks) {
+                if (tok.equalsIgnoreCase("machine-api")) {
+                    keycloakConfigToUse = "keycloak_machine";
+                    break;
+                }
             }
 
         } catch (Exception ex) {
