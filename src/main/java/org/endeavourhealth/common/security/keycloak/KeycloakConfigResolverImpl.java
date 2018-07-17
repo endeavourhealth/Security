@@ -48,7 +48,7 @@ public class KeycloakConfigResolverImpl implements KeycloakConfigResolver {
             LOG.error("Failed to parse path from " + uri + " will use default keycloak config [" + keycloakConfigToUse + "]");
         }
 
-        LOG.debug("Using config " + keycloakConfigToUse);
+        //LOG.debug("Using config " + keycloakConfigToUse);
         return KeycloakConfigUtils.getDeployment(keycloakConfigToUse);
 
         /*KeycloakDeployment keycloakDeployment = KeycloakConfigUtils.getDeployment("keycloak");
