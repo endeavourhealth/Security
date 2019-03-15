@@ -4,7 +4,7 @@
 
   <groupId>org.endeavourhealth.common</groupId>
   <artifactId>security</artifactId>
-  <version>1.13-SNAPSHOT</version>
+  <version>1.14-SNAPSHOT</version>
 
   <properties>
     <java.version>1.8</java.version>
@@ -13,8 +13,8 @@
     <maven-surefire.version>2.19.1</maven-surefire.version>
     <maven-dependency.version>3.1.1</maven-dependency.version>
 
-    <endeavour-config.version>LATEST</endeavour-config.version>
-    <endeavour-cache.version>LATEST</endeavour-cache.version>
+    <endeavour-config.version>1.25-SNAPSHOT</endeavour-config.version>
+    <endeavour-cache.version>1.4-SNAPSHOT</endeavour-cache.version>
 
     <commons.version>3.4</commons.version>
     <httpclient.version>4.5.2</httpclient.version>
