@@ -26,16 +26,22 @@ public class Users extends KeycloakAdminClientBase {
     //
 
     public List<UserRepresentation> getUsers(int offset, int limit) {
-        return getUsers(null, offset, limit);
+        return getUsers(getRealm(), null, offset, limit);
     }
 
     public List<UserRepresentation> getUsers(String search, int offset, int limit) {
+        assertKeycloakAdminClientInitialised();
+        return getUsers(getRealm(), search, offset, limit);
+
+    }
+
+    public List<UserRepresentation> getUsers(String realm, String search, int offset, int limit) {
         assertKeycloakAdminClientInitialised();
 
         List<UserRepresentation> users = null;
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             // The URL is this: http://localhost:9080/auth/admin/realms/endeavour/users?first=0&max=20 (NOTE: paging in the query string)
-            String url = getAuthServerBaseUrl() + "/admin/realms/" + getRealm() + "/users?" + String.format("first=%d&max=%d", offset, limit);
+            String url = getAuthServerBaseUrl() + "/admin/realms/" + realm + "/users?" + String.format("first=%d&max=%d", offset, limit);
             if (StringUtils.isNotBlank(search)) {
                 url += "&search=" + URLEncoder.encode(search, "UTF-8");
             }
