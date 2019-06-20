@@ -97,7 +97,7 @@ import java.util.*;
                 query="select 'Total number of data processing agreements', count(distinct dpa.uuid) " +
                         "from DataProcessingAgreementEntity dpa "),
         @NamedQuery(name="dataSet.total",
-                query="select 'Total number of datasets', count(distinct ds.uuid) " +
+                query="select 'Total number of data sets', count(distinct ds.uuid) " +
                         "from DatasetEntity ds "),
         @NamedQuery(name="dsa.total",
                 query="select 'Total number of data sharing agreements', count(distinct dsa.uuid) " +
