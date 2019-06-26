@@ -11,7 +11,7 @@ public class CacheManager {
 
     public static void startScheduler() {
         if (future == null || future.isDone()) {
-            future = scheduler.scheduleAtFixedRate(flushAllCaches, 1, 1, TimeUnit.MINUTES);
+            future = scheduler.scheduleAtFixedRate(flushAllCaches, 5, 5, TimeUnit.MINUTES);
         }
     }
 
