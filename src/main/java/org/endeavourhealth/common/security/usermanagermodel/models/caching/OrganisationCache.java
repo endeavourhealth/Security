@@ -1,7 +1,9 @@
 package org.endeavourhealth.common.security.usermanagermodel.models.caching;
 
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityDataProcessingAgreementDAL;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityOrganisationDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataProcessingAgreementEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 
 import java.util.*;
@@ -9,6 +11,7 @@ import java.util.*;
 public class OrganisationCache {
 
     private static Map<String, OrganisationEntity> organisationMap = new HashMap<>();
+    private static Map<String, Boolean> organisationHasDPAMap = new HashMap<>();
 
     public static List<OrganisationEntity> getOrganisationDetails(List<String> organisations) throws Exception {
         List<OrganisationEntity> organisationEntities = new ArrayList<>();
@@ -106,7 +109,28 @@ public class OrganisationCache {
         return null;
     }
 
+    public static Boolean doesOrganisationHaveDPA(String odsCode) throws Exception {
+        Boolean orgHasDPA = false;
+
+        if (organisationHasDPAMap.containsKey(odsCode)) {
+            orgHasDPA = organisationHasDPAMap.get(odsCode);
+        } else {
+            List<DataProcessingAgreementEntity> processingAgreementEntities = new SecurityDataProcessingAgreementDAL().getDataProcessingAgreementsForOrganisation(odsCode);
+
+            if (processingAgreementEntities.size() > 0) {
+                orgHasDPA = true;
+            }
+            organisationHasDPAMap.put(odsCode, orgHasDPA);
+        }
+
+        CacheManager.startScheduler();
+
+        return orgHasDPA;
+
+    }
+
     public static void flushCache() throws Exception {
         organisationMap.clear();
+        organisationHasDPAMap.clear();
     }
 }
