@@ -120,4 +120,42 @@ public class SecurityOrganisationDAL {
 
         return orgs.subList(fromIndex, Math.min(fromIndex + pageSize, orgs.size()));
     }
+
+    public List<OrganisationEntity> getOrganisationsFromOdsList(List<String> odsCodes) throws Exception {
+        EntityManager entityManager = ConnectionManager.getDsmEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+        Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+
+        Predicate predicate = rootEntry.get("odsCode").in(odsCodes);
+
+        cq.where(predicate);
+        TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+
+        List<OrganisationEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret;
+    }
+
+    public OrganisationEntity getOrganisationsFromOdsCode(String odsCode) throws Exception {
+        EntityManager entityManager = ConnectionManager.getDsmEntityManager();
+
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+        Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+
+        Predicate predicate = cb.equal(rootEntry.get("odsCode"), odsCode);
+
+        cq.where(predicate);
+        TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+
+        List<OrganisationEntity> ret = query.getResultList();
+
+        entityManager.close();
+
+        return ret.get(0);
+    }
 }
