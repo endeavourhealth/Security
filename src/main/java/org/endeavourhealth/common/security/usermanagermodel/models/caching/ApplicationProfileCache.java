@@ -27,6 +27,13 @@ public class ApplicationProfileCache {
 
     }
 
+    public static void clearApplicationProfileCache(String applicationProfileId) throws Exception {
+        if (applicationProfileMap.containsKey(applicationProfileId)) {
+            applicationProfileMap.remove(applicationProfileId);
+        }
+
+    }
+
     public static void flushCache() throws Exception {
         applicationProfileMap.clear();
     }

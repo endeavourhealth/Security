@@ -126,6 +126,8 @@ public class SecurityUserProjectDAL {
             query.executeUpdate();
             entityManager.getTransaction().commit();
 
+            UserCache.clearUserCache(userId);
+
 
         } finally {
             entityManager.close();
@@ -141,6 +143,8 @@ public class SecurityUserProjectDAL {
         setCurrentDefaultProject(userId, defaultRoleId);
 
         String auditJson = getAuditJsonForDefaultRoleChange(oldDefaultProject, newDefaultRole);
+
+        UserCache.clearUserCache(userId);
 
         new SecurityAuditDAL().addToAuditTrail(userProjectId,
                 AuditAction.EDIT, ItemType.DEFAULT_PROJECT, null, null, auditJson);
@@ -161,6 +165,8 @@ public class SecurityUserProjectDAL {
 
             query.executeUpdate();
             entityManager.getTransaction().commit();
+
+            UserCache.clearUserCache(userId);
 
 
         } finally {

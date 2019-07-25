@@ -26,6 +26,12 @@ public class ApplicationCache {
 
     }
 
+    public static void clearApplicationCache(String applicationId) throws Exception {
+        if (applicationMap.containsKey(applicationId)) {
+            applicationMap.remove(applicationId);
+        }
+    }
+
     public static void flushCache() throws Exception {
         applicationMap.clear();
     }

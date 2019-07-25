@@ -129,6 +129,16 @@ public class OrganisationCache {
 
     }
 
+    public static void clearOrganisationCache(String organisationId) throws Exception {
+        if (organisationMap.containsKey(organisationId)) {
+            organisationMap.remove(organisationId);
+        }
+
+        if (organisationHasDPAMap.containsKey(organisationId)) {
+            organisationHasDPAMap.remove(organisationId);
+        }
+    }
+
     public static void flushCache() throws Exception {
         organisationMap.clear();
         organisationHasDPAMap.clear();

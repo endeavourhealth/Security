@@ -92,6 +92,20 @@ public class ProjectCache {
         return foundPolicy;
     }
 
+    public static void clearProjectCache(String projectId) throws Exception {
+        if (projectMap.containsKey(projectId)) {
+            projectMap.remove(projectId);
+        }
+
+        if (jsonProjectMap.containsKey(projectId)) {
+            jsonProjectMap.remove(projectId);
+        }
+
+        if (projectApplicationPolicyMap.containsKey(projectId)) {
+            projectApplicationPolicyMap.remove(projectId);
+        }
+    }
+
     public static void flushCache() throws Exception {
         projectMap.clear();
         jsonProjectMap.clear();

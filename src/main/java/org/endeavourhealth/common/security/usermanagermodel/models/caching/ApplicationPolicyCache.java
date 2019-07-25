@@ -63,6 +63,17 @@ public class ApplicationPolicyCache {
 
     }
 
+    public static void clearApplicationPolicyCache(String applicationPolicyId) throws Exception {
+        if (applicationPolicyMap.containsKey(applicationPolicyId)) {
+            applicationPolicyMap.remove(applicationPolicyId);
+        }
+
+        if (policyAttributeMap.containsKey(applicationPolicyId)) {
+            policyAttributeMap.remove(applicationPolicyId);
+        }
+
+    }
+
     public static void flushCache() throws Exception {
         applicationPolicyMap.clear();
         policyAttributeMap.clear();

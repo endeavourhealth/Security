@@ -28,6 +28,13 @@ public class DelegationCache {
 
     }
 
+    public static void clearDelegationCache(String delegationId) throws Exception {
+        if (delegationMap.containsKey(delegationId)) {
+            delegationMap.remove(delegationId);
+        }
+
+    }
+
     public static void flushCache() throws Exception {
         delegationMap.clear();
     }

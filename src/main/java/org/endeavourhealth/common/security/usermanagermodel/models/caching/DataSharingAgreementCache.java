@@ -55,6 +55,13 @@ public class DataSharingAgreementCache {
 
     }
 
+    public static void clearDataSharingAgreementCache(String dsaId) throws Exception {
+        if (dataSharingAgreementMap.containsKey(dsaId)) {
+            dataSharingAgreementMap.remove(dsaId);
+        }
+
+    }
+
     public static void flushCache() throws Exception {
         dataSharingAgreementMap.clear();
     }

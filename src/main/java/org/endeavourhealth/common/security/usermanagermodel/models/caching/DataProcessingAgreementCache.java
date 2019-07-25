@@ -55,6 +55,13 @@ public class DataProcessingAgreementCache {
 
     }
 
+    public static void clearDataProcessingAgreementCache(String dpaId) throws Exception {
+        if (dataProcessingAgreementMap.containsKey(dpaId)) {
+            dataProcessingAgreementMap.remove(dpaId);
+        }
+
+    }
+
     public static void flushCache() throws Exception {
         dataProcessingAgreementMap.clear();
     }

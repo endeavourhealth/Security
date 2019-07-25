@@ -47,6 +47,12 @@ public class RegionCache {
 
     }
 
+    public static void clearRegionCache(String regionId) throws Exception {
+        if (regionMap.containsKey(regionId)) {
+            regionMap.remove(regionId);
+        }
+    }
+
     public static void flushCache() throws Exception {
         regionMap.clear();
         allRegionsFound = false;

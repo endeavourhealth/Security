@@ -102,6 +102,24 @@ public class UserCache {
         return foundPolicy;
     }
 
+    public static void clearUserCache(String userId) throws Exception {
+        if (userApplicationPolicyMap.containsKey(userId)) {
+            userApplicationPolicyMap.remove(userId);
+        }
+
+        if (userApplicationPolicyIdMap.containsKey(userId)) {
+            userApplicationPolicyIdMap.remove(userId);
+        }
+
+        if (userProjectApplicationAccessMap.containsKey(userId)) {
+            userProjectApplicationAccessMap.remove(userId);
+        }
+
+        if (userMap.containsKey(userId)) {
+            userMap.remove(userId);
+        }
+    }
+
     public static Boolean getUserProjectApplicationAccess(String userId, String projectId, String appName) throws Exception {
         String upa = userId + "|" + projectId + "|" + appName;
 
@@ -123,5 +141,6 @@ public class UserCache {
         userMap.clear();
         userApplicationPolicyIdMap.clear();
         userProjectApplicationAccessMap.clear();
+        userApplicationPolicyMap.clear();
     }
 }
