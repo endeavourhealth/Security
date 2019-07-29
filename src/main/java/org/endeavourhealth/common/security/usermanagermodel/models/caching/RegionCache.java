@@ -51,6 +51,8 @@ public class RegionCache {
         if (regionMap.containsKey(regionId)) {
             regionMap.remove(regionId);
         }
+
+        allRegionsFound = false;
     }
 
     public static void flushCache() throws Exception {
