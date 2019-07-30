@@ -25,7 +25,7 @@
             <property name="hibernate.hikari.minimumIdle" value="1" />
             <property name="hibernate.hikari.idleTimeout" value="60000" />
             <property name="hibernate.hikari.dataSourceClassName" value="com.mysql.cj.jdbc.MysqlDataSource" />
-            <property name="hibernate.hikari.leakDetectionThreshold" value="5000" />
+            <property name="hibernate.hikari.leakDetectionThreshold" value="50000" />
             <property name="hibernate.connection.autocommit" value="false" />
             <!-- NOTE: ALL THESE PROPERTIES MAY BE OVERRIDDEN BY THE CONFIG JSON -->
         </properties>
@@ -59,7 +59,7 @@
             <property name="hibernate.hikari.minimumIdle" value="1" />
             <property name="hibernate.hikari.idleTimeout" value="60000" />
             <property name="hibernate.hikari.dataSourceClassName" value="com.mysql.cj.jdbc.MysqlDataSource" />
-            <property name="hibernate.hikari.leakDetectionThreshold" value="5000" />
+            <property name="hibernate.hikari.leakDetectionThreshold" value="50000" />
             <property name="hibernate.connection.autocommit" value="false" />
             <!-- NOTE: ALL THESE PROPERTIES MAY BE OVERRIDDEN BY THE CONFIG JSON -->
         </properties>
