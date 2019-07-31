@@ -10,10 +10,12 @@ public class SecurityApplicationAccessProfileDAL {
     public ApplicationAccessProfileEntity getApplicationProfile(String applicationProfileId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationAccessProfileEntity ret = entityManager.find(ApplicationAccessProfileEntity.class, applicationProfileId);
+        try {
+            ApplicationAccessProfileEntity ret = entityManager.find(ApplicationAccessProfileEntity.class, applicationProfileId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

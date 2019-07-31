@@ -16,19 +16,21 @@ public class SecurityCohortDAL {
     public List<CohortEntity> getCohortsFromList(List<String> cohorts) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<CohortEntity> cq = cb.createQuery(CohortEntity.class);
-        Root<CohortEntity> rootEntry = cq.from(CohortEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<CohortEntity> cq = cb.createQuery(CohortEntity.class);
+            Root<CohortEntity> rootEntry = cq.from(CohortEntity.class);
 
-        Predicate predicate = rootEntry.get("uuid").in(cohorts);
+            Predicate predicate = rootEntry.get("uuid").in(cohorts);
 
-        cq.where(predicate);
-        TypedQuery<CohortEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<CohortEntity> query = entityManager.createQuery(cq);
 
-        List<CohortEntity> ret = query.getResultList();
+            List<CohortEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

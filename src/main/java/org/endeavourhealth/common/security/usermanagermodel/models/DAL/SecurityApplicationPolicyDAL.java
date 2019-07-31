@@ -16,29 +16,33 @@ public class SecurityApplicationPolicyDAL {
     public ApplicationPolicyEntity getApplicationPolicy(String roleId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationPolicyEntity ret = entityManager.find(ApplicationPolicyEntity.class, roleId);
+        try {
+            ApplicationPolicyEntity ret = entityManager.find(ApplicationPolicyEntity.class, roleId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<ApplicationPolicyEntity> getAllApplicationPolicies() throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ApplicationPolicyEntity> cq = cb.createQuery(ApplicationPolicyEntity.class);
-        Root<ApplicationPolicyEntity> rootEntry = cq.from(ApplicationPolicyEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ApplicationPolicyEntity> cq = cb.createQuery(ApplicationPolicyEntity.class);
+            Root<ApplicationPolicyEntity> rootEntry = cq.from(ApplicationPolicyEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
+            Predicate predicate = cb.equal(rootEntry.get("isDeleted"), 0);
 
-        cq.where(predicate);
+            cq.where(predicate);
 
-        TypedQuery<ApplicationPolicyEntity> query = entityManager.createQuery(cq);
-        List<ApplicationPolicyEntity> ret = query.getResultList();
+            TypedQuery<ApplicationPolicyEntity> query = entityManager.createQuery(cq);
+            List<ApplicationPolicyEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

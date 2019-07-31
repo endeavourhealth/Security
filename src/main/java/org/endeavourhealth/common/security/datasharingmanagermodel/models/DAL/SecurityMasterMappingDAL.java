@@ -17,50 +17,55 @@ public class SecurityMasterMappingDAL {
     public List<String> getParentMappings(String childUuid, Short childMapTypeId, Short parentMapTypeId) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
-        Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
+            Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("childUuid"), childUuid ),
-                cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId),
-                cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId));
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("childUuid"), childUuid),
+                    cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId),
+                    cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId));
 
-        cq.where(predicate);
-        TypedQuery<MasterMappingEntity> query = entityManager.createQuery(cq);
-        List<MasterMappingEntity> maps =  query.getResultList();
+            cq.where(predicate);
+            TypedQuery<MasterMappingEntity> query = entityManager.createQuery(cq);
+            List<MasterMappingEntity> maps = query.getResultList();
 
-        List<String> parents = new ArrayList<>();
-        for(MasterMappingEntity mme : maps){
-            parents.add(mme.getParentUuid());
+            List<String> parents = new ArrayList<>();
+            for (MasterMappingEntity mme : maps) {
+                parents.add(mme.getParentUuid());
+            }
+
+            return parents;
+        } finally {
+            entityManager.close();
         }
-
-        entityManager.close();
-
-        return parents;
     }
 
     public List<String> getChildMappings(String parentUuid, Short parentMapTypeId, Short childMapTypeId) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
-        Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
+            Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), parentUuid ),
-                cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId),
-                cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId));
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("parentUuid"), parentUuid),
+                    cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId),
+                    cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId));
 
-        cq.where(predicate);
-        TypedQuery<MasterMappingEntity> query = entityManager.createQuery(cq);
-        List<MasterMappingEntity> maps =  query.getResultList();
+            cq.where(predicate);
+            TypedQuery<MasterMappingEntity> query = entityManager.createQuery(cq);
+            List<MasterMappingEntity> maps = query.getResultList();
 
-        List<String> children = new ArrayList<>();
-        for(MasterMappingEntity mme : maps){
-            children.add(mme.getChildUuid());
+            List<String> children = new ArrayList<>();
+            for (MasterMappingEntity mme : maps) {
+                children.add(mme.getChildUuid());
+            }
+
+            return children;
+        } finally {
+            entityManager.close();
         }
 
-        entityManager.close();
-
-        return children;
     }
 }

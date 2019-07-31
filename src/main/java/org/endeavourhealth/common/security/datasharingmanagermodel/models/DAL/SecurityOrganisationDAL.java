@@ -18,30 +18,34 @@ public class SecurityOrganisationDAL {
     public List<OrganisationEntity> getOrganisationsFromList(List<String> organisations) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
-        Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+            Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
 
-        Predicate predicate = rootEntry.get("uuid").in(organisations);
+            Predicate predicate = rootEntry.get("uuid").in(organisations);
 
-        cq.where(predicate);
-        TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
 
-        List<OrganisationEntity> ret = query.getResultList();
+            List<OrganisationEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public OrganisationEntity getOrganisation(String uuid) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        OrganisationEntity ret = entityManager.find(OrganisationEntity.class, uuid);
+        try {
+            OrganisationEntity ret = entityManager.find(OrganisationEntity.class, uuid);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<OrganisationEntity> searchOrganisations(String expression, boolean searchServices,
@@ -49,35 +53,35 @@ public class SecurityOrganisationDAL {
                                                         Integer pageNumber, Integer pageSize,
                                                         String orderColumn, boolean descending, UUID userId) throws Exception {
 
-        System.out.println("searching for " +  expression);
-
         //Only query the DB if the search term has changed for that user
         if (cachedSearchTerm.get(userId) == null || !cachedSearchTerm.get(userId).equals(expression) ) {
-            System.out.println("Not found so searching in DB  " + expression);
 
             cachedOrganisations.remove(userId);
             cachedSearchTerm.put(userId, expression);
 
             EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
-            Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+            try {
+                CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+                CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+                Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
 
 
-            Predicate predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)),
-                    (cb.or(cb.like(rootEntry.get("name"), "%" + expression + "%"),
-                            cb.like(rootEntry.get("odsCode"), "%" + expression + "%"),
-                            cb.like(rootEntry.get("alternativeName"), "%" + expression + "%"),
-                            cb.like(rootEntry.get("icoCode"), "%" + expression + "%"))));
+                Predicate predicate = cb.and(cb.equal(rootEntry.get("isService"), (byte) (searchServices ? 1 : 0)),
+                        (cb.or(cb.like(rootEntry.get("name"), "%" + expression + "%"),
+                                cb.like(rootEntry.get("odsCode"), "%" + expression + "%"),
+                                cb.like(rootEntry.get("alternativeName"), "%" + expression + "%"),
+                                cb.like(rootEntry.get("icoCode"), "%" + expression + "%"))));
 
-            cq.where(predicate);
+                cq.where(predicate);
 
-            TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+                TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
 
-            cachedOrganisations.put(userId, query.getResultList());
+                cachedOrganisations.put(userId, query.getResultList());
 
-            entityManager.close();
+            } finally {
+                entityManager.close();
+            }
         }
 
         List<OrganisationEntity> cachedOrgs = cachedOrganisations.get(userId);
@@ -124,38 +128,42 @@ public class SecurityOrganisationDAL {
     public List<OrganisationEntity> getOrganisationsFromOdsList(List<String> odsCodes) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
-        Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+            Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
 
-        Predicate predicate = rootEntry.get("odsCode").in(odsCodes);
+            Predicate predicate = rootEntry.get("odsCode").in(odsCodes);
 
-        cq.where(predicate);
-        TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
 
-        List<OrganisationEntity> ret = query.getResultList();
+            List<OrganisationEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public OrganisationEntity getOrganisationsFromOdsCode(String odsCode) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
-        Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<OrganisationEntity> cq = cb.createQuery(OrganisationEntity.class);
+            Root<OrganisationEntity> rootEntry = cq.from(OrganisationEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("odsCode"), odsCode);
+            Predicate predicate = cb.equal(rootEntry.get("odsCode"), odsCode);
 
-        cq.where(predicate);
-        TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<OrganisationEntity> query = entityManager.createQuery(cq);
 
-        List<OrganisationEntity> ret = query.getResultList();
+            List<OrganisationEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret.get(0);
+            return ret.get(0);
+        } finally {
+            entityManager.close();
+        }
     }
 }

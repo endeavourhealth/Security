@@ -10,10 +10,12 @@ public class SecurityUserRegionDAL {
     public static UserRegionEntity getUserRegion(String userId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        UserRegionEntity ret = entityManager.find(UserRegionEntity.class, userId);
+        try {
+            UserRegionEntity ret = entityManager.find(UserRegionEntity.class, userId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

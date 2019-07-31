@@ -16,29 +16,33 @@ public class SecurityDataSharingAgreementDAL {
     public DataSharingAgreementEntity getDSA(String uuid) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        DataSharingAgreementEntity ret = entityManager.find(DataSharingAgreementEntity.class, uuid);
+        try {
+            DataSharingAgreementEntity ret = entityManager.find(DataSharingAgreementEntity.class, uuid);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<DataSharingAgreementEntity> getDSAsFromList(List<String> dsas) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DataSharingAgreementEntity> cq = cb.createQuery(DataSharingAgreementEntity.class);
-        Root<DataSharingAgreementEntity> rootEntry = cq.from(DataSharingAgreementEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DataSharingAgreementEntity> cq = cb.createQuery(DataSharingAgreementEntity.class);
+            Root<DataSharingAgreementEntity> rootEntry = cq.from(DataSharingAgreementEntity.class);
 
-        Predicate predicate = rootEntry.get("uuid").in(dsas);
+            Predicate predicate = rootEntry.get("uuid").in(dsas);
 
-        cq.where(predicate);
-        TypedQuery<DataSharingAgreementEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<DataSharingAgreementEntity> query = entityManager.createQuery(cq);
 
-        List<DataSharingAgreementEntity> ret = query.getResultList();
+            List<DataSharingAgreementEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

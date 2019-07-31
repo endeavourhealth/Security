@@ -10,10 +10,12 @@ public class SecurityProjectApplicationPolicyDAL {
     public ProjectApplicationPolicyEntity getProjectApplicationPolicyId(String projectUuid) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        ProjectApplicationPolicyEntity ret = entityManager.find(ProjectApplicationPolicyEntity.class, projectUuid);
+        try {
+            ProjectApplicationPolicyEntity ret = entityManager.find(ProjectApplicationPolicyEntity.class, projectUuid);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

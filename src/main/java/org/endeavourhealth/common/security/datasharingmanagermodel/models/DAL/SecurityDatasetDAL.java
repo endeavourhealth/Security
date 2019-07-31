@@ -16,19 +16,21 @@ public class SecurityDatasetDAL {
     public List<DatasetEntity> getDataSetsFromList(List<String> datasets) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<DatasetEntity> cq = cb.createQuery(DatasetEntity.class);
-        Root<DatasetEntity> rootEntry = cq.from(DatasetEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<DatasetEntity> cq = cb.createQuery(DatasetEntity.class);
+            Root<DatasetEntity> rootEntry = cq.from(DatasetEntity.class);
 
-        Predicate predicate = rootEntry.get("uuid").in(datasets);
+            Predicate predicate = rootEntry.get("uuid").in(datasets);
 
-        cq.where(predicate);
-        TypedQuery<DatasetEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<DatasetEntity> query = entityManager.createQuery(cq);
 
-        List<DatasetEntity> ret = query.getResultList();
+            List<DatasetEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

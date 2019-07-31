@@ -27,30 +27,34 @@ public class SecurityProjectDAL {
     public List<ProjectEntity> getProjectsFromList(List<String> projects) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<ProjectEntity> cq = cb.createQuery(ProjectEntity.class);
-        Root<ProjectEntity> rootEntry = cq.from(ProjectEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<ProjectEntity> cq = cb.createQuery(ProjectEntity.class);
+            Root<ProjectEntity> rootEntry = cq.from(ProjectEntity.class);
 
-        Predicate predicate = rootEntry.get("uuid").in(projects);
+            Predicate predicate = rootEntry.get("uuid").in(projects);
 
-        cq.where(predicate);
-        TypedQuery<ProjectEntity> query = entityManager.createQuery(cq);
+            cq.where(predicate);
+            TypedQuery<ProjectEntity> query = entityManager.createQuery(cq);
 
-        List<ProjectEntity> ret = query.getResultList();
+            List<ProjectEntity> ret = query.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public ProjectEntity getProject(String uuid) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        ProjectEntity ret = entityManager.find(ProjectEntity.class, uuid);
+        try {
+            ProjectEntity ret = entityManager.find(ProjectEntity.class, uuid);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<JsonAuthorityToShare> getUsersAssignedToProject(String projectUuid) throws Exception {
@@ -186,20 +190,22 @@ public class SecurityProjectDAL {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        Query query = entityManager.createQuery(
-                "select p from ProjectEntity p " +
-                        "inner join MasterMappingEntity mm on mm.parentUuid = p.uuid and mm.parentMapTypeId = :projectType " +
-                        "inner join OrganisationEntity o on o.uuid = mm.childUuid " +
-                        "where o.uuid = :orgUuid " +
-                        "and mm.childMapTypeId = :subscriberType ");
-        query.setParameter("projectType", MapType.PROJECT.getMapType());
-        query.setParameter("orgUuid", organisationId);
-        query.setParameter("subscriberType", MapType.SUBSCRIBER.getMapType());
+        try {
+            Query query = entityManager.createQuery(
+                    "select p from ProjectEntity p " +
+                            "inner join MasterMappingEntity mm on mm.parentUuid = p.uuid and mm.parentMapTypeId = :projectType " +
+                            "inner join OrganisationEntity o on o.uuid = mm.childUuid " +
+                            "where o.uuid = :orgUuid " +
+                            "and mm.childMapTypeId = :subscriberType ");
+            query.setParameter("projectType", MapType.PROJECT.getMapType());
+            query.setParameter("orgUuid", organisationId);
+            query.setParameter("subscriberType", MapType.SUBSCRIBER.getMapType());
 
-        List<ProjectEntity> result = query.getResultList();
+            List<ProjectEntity> result = query.getResultList();
 
-        entityManager.close();
-
-        return result;
+            return result;
+        } finally {
+            entityManager.close();
+        }
     }
 }

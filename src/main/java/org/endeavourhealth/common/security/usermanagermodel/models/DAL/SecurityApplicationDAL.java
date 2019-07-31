@@ -9,10 +9,12 @@ public class SecurityApplicationDAL {
     public ApplicationEntity getApplication(String applicationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        ApplicationEntity ret = entityManager.find(ApplicationEntity.class, applicationId);
+        try {
+            ApplicationEntity ret = entityManager.find(ApplicationEntity.class, applicationId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

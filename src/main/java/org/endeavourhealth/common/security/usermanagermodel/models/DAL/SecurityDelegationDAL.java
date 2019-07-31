@@ -10,10 +10,12 @@ public class SecurityDelegationDAL {
     public DelegationEntity getDelegation(String delegationId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        DelegationEntity ret = entityManager.find(DelegationEntity.class, delegationId);
+        try {
+            DelegationEntity ret = entityManager.find(DelegationEntity.class, delegationId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

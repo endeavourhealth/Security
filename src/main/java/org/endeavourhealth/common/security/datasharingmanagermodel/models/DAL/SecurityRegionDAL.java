@@ -16,26 +16,30 @@ public class SecurityRegionDAL {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        RegionEntity ret = entityManager.find(RegionEntity.class, uuid);
+        try {
+            RegionEntity ret = entityManager.find(RegionEntity.class, uuid);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
 
     }
 
     public List<RegionEntity> getAllRegions() throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<RegionEntity> cq = cb.createQuery(RegionEntity.class);
-        Root<RegionEntity> rootEntry = cq.from(RegionEntity.class);
-        CriteriaQuery<RegionEntity> all = cq.select(rootEntry);
-        TypedQuery<RegionEntity> allQuery = entityManager.createQuery(all);
-        List<RegionEntity> ret = allQuery.getResultList();
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<RegionEntity> cq = cb.createQuery(RegionEntity.class);
+            Root<RegionEntity> rootEntry = cq.from(RegionEntity.class);
+            CriteriaQuery<RegionEntity> all = cq.select(rootEntry);
+            TypedQuery<RegionEntity> allQuery = entityManager.createQuery(all);
+            List<RegionEntity> ret = allQuery.getResultList();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

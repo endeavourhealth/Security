@@ -177,39 +177,43 @@ public class SecurityUserProjectDAL {
     public UserProjectEntity getDefaultProject(String userId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserProjectEntity> cq = cb.createQuery(UserProjectEntity.class);
-        Root<UserProjectEntity> rootEntry = cq.from(UserProjectEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<UserProjectEntity> cq = cb.createQuery(UserProjectEntity.class);
+            Root<UserProjectEntity> rootEntry = cq.from(UserProjectEntity.class);
 
-        Predicate predicate = cb.and(cb.equal(rootEntry.get("userId"), userId),
-                (cb.equal(rootEntry.get("isDefault"), 1)),
-                (cb.equal(rootEntry.get("isDeleted"), 0)));
+            Predicate predicate = cb.and(cb.equal(rootEntry.get("userId"), userId),
+                    (cb.equal(rootEntry.get("isDefault"), 1)),
+                    (cb.equal(rootEntry.get("isDeleted"), 0)));
 
-        cq.where(predicate);
-        TypedQuery<UserProjectEntity> query = entityManager.createQuery(cq);
-        UserProjectEntity ret = query.getSingleResult();
+            cq.where(predicate);
+            TypedQuery<UserProjectEntity> query = entityManager.createQuery(cq);
+            UserProjectEntity ret = query.getSingleResult();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public UserProjectEntity getUserProject(String userProjectId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-        CriteriaQuery<UserProjectEntity> cq = cb.createQuery(UserProjectEntity.class);
-        Root<UserProjectEntity> rootEntry = cq.from(UserProjectEntity.class);
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<UserProjectEntity> cq = cb.createQuery(UserProjectEntity.class);
+            Root<UserProjectEntity> rootEntry = cq.from(UserProjectEntity.class);
 
-        Predicate predicate = cb.equal(rootEntry.get("id"), userProjectId);
+            Predicate predicate = cb.equal(rootEntry.get("id"), userProjectId);
 
-        cq.where(predicate);
-        TypedQuery<UserProjectEntity> query = entityManager.createQuery(cq);
-        UserProjectEntity ret = query.getSingleResult();
+            cq.where(predicate);
+            TypedQuery<UserProjectEntity> query = entityManager.createQuery(cq);
+            UserProjectEntity ret = query.getSingleResult();
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     private String getAuditJsonForDefaultRoleChange(UserProjectEntity oldDefault, UserProjectEntity newDefault) throws Exception {

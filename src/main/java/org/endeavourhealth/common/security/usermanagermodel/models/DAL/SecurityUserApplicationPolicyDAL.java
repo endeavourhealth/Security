@@ -10,10 +10,12 @@ public class SecurityUserApplicationPolicyDAL {
     public UserApplicationPolicyEntity getUserApplicationPolicy(String userId) throws Exception {
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        UserApplicationPolicyEntity ret = entityManager.find(UserApplicationPolicyEntity.class, userId);
+        try {
+            UserApplicationPolicyEntity ret = entityManager.find(UserApplicationPolicyEntity.class, userId);
 
-        entityManager.close();
-
-        return ret;
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }

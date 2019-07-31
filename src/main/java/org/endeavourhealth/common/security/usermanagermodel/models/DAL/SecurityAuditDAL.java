@@ -16,28 +16,32 @@ public class SecurityAuditDAL {
 
         EntityManager entityManager = ConnectionManager.getUmEntityManager();
 
-        AuditEntity auditEntity = new AuditEntity();
-        auditEntity.setId(UUID.randomUUID().toString());
-        auditEntity.setTimestamp(new Timestamp(System.currentTimeMillis()));
-        auditEntity.setAuditType(auditAction.getAuditAction().byteValue());
-        auditEntity.setItemType(itemType.getItemType().byteValue());
-        auditEntity.setUserProjectId(userRoleId);
-        if (itemBefore != null) {
-            auditEntity.setItemBefore(itemBefore);
+        try {
+            AuditEntity auditEntity = new AuditEntity();
+            auditEntity.setId(UUID.randomUUID().toString());
+            auditEntity.setTimestamp(new Timestamp(System.currentTimeMillis()));
+            auditEntity.setAuditType(auditAction.getAuditAction().byteValue());
+            auditEntity.setItemType(itemType.getItemType().byteValue());
+            auditEntity.setUserProjectId(userRoleId);
+            if (itemBefore != null) {
+                auditEntity.setItemBefore(itemBefore);
+            }
+            if (itemAfter != null) {
+                auditEntity.setItemAfter(itemAfter);
+            }
+            if (auditJson != null) {
+                auditEntity.setAuditJson(auditJson);
+            }
+
+
+            entityManager.getTransaction().begin();
+            entityManager.merge(auditEntity);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            entityManager.getTransaction().rollback();
+            throw e;
+        } finally {
+            entityManager.close();
         }
-        if (itemAfter != null) {
-            auditEntity.setItemAfter(itemAfter);
-        }
-        if (auditJson != null) {
-            auditEntity.setAuditJson(auditJson);
-        }
-
-
-        entityManager.getTransaction().begin();
-        entityManager.merge(auditEntity);
-        entityManager.getTransaction().commit();
-
-        entityManager.close();
-
     }
 }
