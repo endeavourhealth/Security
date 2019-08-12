@@ -1,13 +1,17 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.RegionEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SecurityRegionDAL {
@@ -41,5 +45,31 @@ public class SecurityRegionDAL {
         } finally {
             entityManager.close();
         }
+    }
+
+    public List<OrganisationEntity> getAllOrganisationsForAllChildRegions(String regionUUID) throws Exception {
+        List<String> organisationUuids = new ArrayList<>();
+
+        organisationUuids = getOrganisations(regionUUID, organisationUuids);
+        List<OrganisationEntity> ret = new ArrayList<>();
+
+        if (!organisationUuids.isEmpty())
+            ret = OrganisationCache.getOrganisationDetails(organisationUuids);
+
+        return ret;
+
+    }
+
+    public List<String> getOrganisations(String regionUUID, List<String> organisationUuids) throws Exception {
+
+        organisationUuids.addAll(new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.ORGANISATION.getMapType()));
+
+        List<String> childRegions = new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.REGION.getMapType());
+
+        for (String region : childRegions) {
+            organisationUuids = getOrganisations(region, organisationUuids);
+        }
+
+        return organisationUuids;
     }
 }

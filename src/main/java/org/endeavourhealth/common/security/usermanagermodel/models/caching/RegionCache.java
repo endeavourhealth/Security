@@ -2,6 +2,7 @@ package org.endeavourhealth.common.security.usermanagermodel.models.caching;
 
 
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityRegionDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.RegionEntity;
 
 import java.util.ArrayList;
@@ -12,6 +13,7 @@ import java.util.Map;
 public class RegionCache {
     private static Map<String, RegionEntity> regionMap = new HashMap<>();
     private static boolean allRegionsFound = false;
+    private static Map<String, List<OrganisationEntity>> allOrgsForAllChildRegion = new HashMap<>();
 
     public static RegionEntity getRegionDetails(String regionId) throws Exception {
         RegionEntity foundRegion = null;
@@ -47,16 +49,34 @@ public class RegionCache {
 
     }
 
+    public static List<OrganisationEntity> getAllOrganisationsForAllChildRegions(String regionId) throws Exception {
+        List <OrganisationEntity> allOrgs = new ArrayList<>();
+
+        if (allOrgsForAllChildRegion.containsKey(regionId)) {
+            allOrgs = allOrgsForAllChildRegion.get(regionId);
+        } else {
+            allOrgs = new SecurityRegionDAL().getAllOrganisationsForAllChildRegions(regionId);
+            allOrgsForAllChildRegion.put(regionId, allOrgs);
+        }
+
+        CacheManager.startScheduler();
+
+        return allOrgs;
+    }
+
     public static void clearRegionCache(String regionId) throws Exception {
         if (regionMap.containsKey(regionId)) {
             regionMap.remove(regionId);
         }
+
+        allOrgsForAllChildRegion.clear();
 
         allRegionsFound = false;
     }
 
     public static void flushCache() throws Exception {
         regionMap.clear();
+        allOrgsForAllChildRegion.clear();
         allRegionsFound = false;
     }
 }
