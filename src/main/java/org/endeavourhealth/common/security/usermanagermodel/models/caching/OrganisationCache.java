@@ -5,6 +5,7 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.Se
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityOrganisationDAL;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataProcessingAgreementEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisationCCG;
 
 import java.util.*;
 
@@ -12,6 +13,7 @@ public class OrganisationCache {
 
     private static Map<String, OrganisationEntity> organisationMap = new HashMap<>();
     private static Map<String, Boolean> organisationHasDPAMap = new HashMap<>();
+    private static Map<String, String> organisationCCGMap = new HashMap<>();
 
     public static List<OrganisationEntity> getOrganisationDetails(List<String> organisations) throws Exception {
         List<OrganisationEntity> organisationEntities = new ArrayList<>();
@@ -129,6 +131,36 @@ public class OrganisationCache {
 
     }
 
+    public static List<JsonOrganisationCCG> getCCGForOrganisationList(List<String> odsCodes) throws Exception {
+        List<JsonOrganisationCCG> organisationCCGS = new ArrayList<>();
+        List<String> missingOrgCCGs = new ArrayList<>();
+
+        for (String ods : odsCodes) {
+            if (organisationCCGMap.containsKey(ods)) {
+                JsonOrganisationCCG orgCCG = new JsonOrganisationCCG();
+                orgCCG.setOdsCode(ods);
+                orgCCG.setCcgName(organisationCCGMap.get(ods));
+                organisationCCGS.add(orgCCG);
+            } else {
+                missingOrgCCGs.add(ods);
+            }
+        }
+
+        if (missingOrgCCGs.size() > 0) {
+            List<JsonOrganisationCCG> orgCCGList = new SecurityOrganisationDAL().getCCGForOrganisationOdsList(missingOrgCCGs);
+
+            for (JsonOrganisationCCG orgCCG : orgCCGList) {
+                organisationCCGMap.put(orgCCG.getOdsCode(), orgCCG.getCcgName());
+                organisationCCGS.add(orgCCG);
+            }
+        }
+
+        CacheManager.startScheduler();
+
+        return organisationCCGS;
+
+    }
+
     public static void clearOrganisationCache(String organisationId) throws Exception {
         if (organisationMap.containsKey(organisationId)) {
             organisationMap.remove(organisationId);
@@ -142,5 +174,6 @@ public class OrganisationCache {
     public static void flushCache() throws Exception {
         organisationMap.clear();
         organisationHasDPAMap.clear();
+        organisationCCGMap.clear();
     }
 }

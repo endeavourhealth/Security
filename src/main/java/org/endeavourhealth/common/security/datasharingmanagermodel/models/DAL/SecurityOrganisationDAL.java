@@ -1,9 +1,12 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisationCCG;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -162,6 +165,37 @@ public class SecurityOrganisationDAL {
             List<OrganisationEntity> ret = query.getResultList();
 
             return ret.get(0);
+        } finally {
+            entityManager.close();
+        }
+    }
+
+    public List<JsonOrganisationCCG> getCCGForOrganisationOdsList(List<String> odsCodes) throws Exception {
+
+        List<JsonOrganisationCCG> orgCCGList = new ArrayList<>();
+
+        EntityManager entityManager = ConnectionManager.getDsmEntityManager();
+
+        try {
+            Query query = entityManager.createQuery(
+                    "select child.odsCode, parent.name from OrganisationEntity child " +
+                            "inner join MasterMappingEntity mm on mm.childUuid = child.uuid and mm.parentMapTypeId = :orgType and mm.childMapTypeId = :orgType " +
+                            "inner join OrganisationEntity parent on parent.uuid = mm.parentUuid " +
+                            "where child.odsCode IN (:odsList) " +
+                            " and parent.type = 8 " );
+            query.setParameter("orgType", MapType.ORGANISATION.getMapType());
+            query.setParameter("odsList", odsCodes);
+
+            List<Object[]> results = query.getResultList();
+
+            for (Object[] res : results) {
+                JsonOrganisationCCG orgCCG = new JsonOrganisationCCG();
+                orgCCG.setOdsCode((String)res[0]);
+                orgCCG.setCcgName((String)res[1]);
+                orgCCGList.add(orgCCG);
+            }
+
+            return orgCCGList;
         } finally {
             entityManager.close();
         }

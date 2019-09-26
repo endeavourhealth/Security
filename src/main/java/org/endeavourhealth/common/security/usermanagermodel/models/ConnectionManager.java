@@ -25,7 +25,8 @@ public class ConnectionManager {
 
     public static enum Db {
         Dsm,
-        Um;
+        Um,
+        Dds;
     }
     private static final Logger LOG = LoggerFactory.getLogger(ConnectionManager.class);
     private static Map<String, EntityManagerFactory> entityManagerFactoryMap = new ConcurrentHashMap<>();
@@ -198,6 +199,8 @@ public class ConnectionManager {
 
         } else if (dbName == Db.Um) {
             json = ConfigManager.getConfigurationAsJson(configName, "user-manager");
+        } else if (dbName == Db.Dds) {
+            json = ConfigManager.getConfigurationAsJson("admin", "db_common");
         } else {
             throw new RuntimeException("Unknown database " + dbName);
         }
@@ -214,6 +217,8 @@ public class ConnectionManager {
             return "DataSharingManager";
         } else if (dbName == Db.Um) {
             return "UserManager";
+        } else if (dbName == Db.Dds) {
+            return "DDS";
         } else {
             throw new RuntimeException("Unknown database " + dbName);
         }
@@ -226,6 +231,10 @@ public class ConnectionManager {
 
     public static EntityManager getUmEntityManager() throws Exception {
         return getEntityManager(Db.Um, "database");
+    }
+
+    public static EntityManager getDdsEntityManager() throws Exception {
+        return getEntityManager(Db.Dds, "database");
     }
 
     private static int getConnectionPoolMaxSize(Db dbName, String explicitConfigName) throws Exception {
