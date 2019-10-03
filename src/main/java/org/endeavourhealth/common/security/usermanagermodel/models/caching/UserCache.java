@@ -1,9 +1,12 @@
 package org.endeavourhealth.common.security.usermanagermodel.models.caching;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityRegionDAL;
 import org.endeavourhealth.common.security.keycloak.client.KeycloakAdminClient;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserApplicationPolicyDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserProjectDAL;
+import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserRegionDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserApplicationPolicyEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.UserRegionEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -18,6 +21,7 @@ public class UserCache {
     private static Map<String, String> userApplicationPolicyIdMap = new HashMap<>();
     private static Map<String, UserApplicationPolicyEntity> userApplicationPolicyMap = new HashMap<>();
     private static Map<String, Boolean> userProjectApplicationAccessMap = new HashMap<>();
+    private static Map<String, UserRegionEntity> userRegionMap = new HashMap<>();
 
     public static UserRepresentation getUserDetails(String userId) throws Exception {
         UserRepresentation foundUser = null;
@@ -102,22 +106,20 @@ public class UserCache {
         return foundPolicy;
     }
 
-    public static void clearUserCache(String userId) throws Exception {
-        if (userApplicationPolicyMap.containsKey(userId)) {
-            userApplicationPolicyMap.remove(userId);
+    public static UserRegionEntity getUserRegion(String userId) throws Exception {
+        UserRegionEntity foundRegion = null;
+
+        if (userRegionMap.containsKey(userId)) {
+            foundRegion = userRegionMap.get(userId);
+        } else {
+            UserRegionEntity userRegion = new SecurityUserRegionDAL().getUserRegion(userId);
+            foundRegion = userRegion;
+            userRegionMap.put(userId, userRegion);
         }
 
-        if (userApplicationPolicyIdMap.containsKey(userId)) {
-            userApplicationPolicyIdMap.remove(userId);
-        }
+        CacheManager.startScheduler();
 
-        if (userProjectApplicationAccessMap.containsKey(userId)) {
-            userProjectApplicationAccessMap.remove(userId);
-        }
-
-        if (userMap.containsKey(userId)) {
-            userMap.remove(userId);
-        }
+        return foundRegion;
     }
 
     public static Boolean getUserProjectApplicationAccess(String userId, String projectId, String appName) throws Exception {
@@ -137,10 +139,33 @@ public class UserCache {
         return accessToApp;
     }
 
+    public static void clearUserCache(String userId) throws Exception {
+        if (userApplicationPolicyMap.containsKey(userId)) {
+            userApplicationPolicyMap.remove(userId);
+        }
+
+        if (userApplicationPolicyIdMap.containsKey(userId)) {
+            userApplicationPolicyIdMap.remove(userId);
+        }
+
+        if (userProjectApplicationAccessMap.containsKey(userId)) {
+            userProjectApplicationAccessMap.remove(userId);
+        }
+
+        if (userMap.containsKey(userId)) {
+            userMap.remove(userId);
+        }
+
+        if (userRegionMap.containsKey(userId)) {
+            userRegionMap.remove(userId);
+        }
+    }
+
     public static void flushCache() throws Exception {
         userMap.clear();
         userApplicationPolicyIdMap.clear();
         userProjectApplicationAccessMap.clear();
         userApplicationPolicyMap.clear();
+        userRegionMap.clear();
     }
 }

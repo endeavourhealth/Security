@@ -8,6 +8,7 @@ import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionMan
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserProjectDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.DataSharingAgreementCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.ProjectCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
@@ -208,4 +209,23 @@ public class SecurityProjectDAL {
             entityManager.close();
         }
     }
+
+    public List<ProjectEntity> getProjectsForRegion(String regionUUID) throws Exception {
+
+        List<DataSharingAgreementEntity> dsaUUIDs = DataSharingAgreementCache.getAllDSAsForAllChildRegions(regionUUID);
+
+        List<String> projectUUIDs = new ArrayList<>();
+
+        for (DataSharingAgreementEntity dsa : dsaUUIDs) {
+            projectUUIDs.addAll(new SecurityMasterMappingDAL().getChildMappings(dsa.getUuid(), MapType.DATASHARINGAGREEMENT.getMapType(), MapType.PROJECT.getMapType()));
+        }
+
+        List<ProjectEntity> ret = new ArrayList<>();
+
+        if (!projectUUIDs.isEmpty())
+            ret = ProjectCache.getProjectDetails(projectUUIDs);
+
+        return ret;
+    }
+
 }

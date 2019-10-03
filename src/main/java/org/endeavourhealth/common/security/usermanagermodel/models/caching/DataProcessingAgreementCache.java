@@ -11,6 +11,7 @@ import java.util.Map;
 public class DataProcessingAgreementCache {
 
     private static Map<String, DataProcessingAgreementEntity> dataProcessingAgreementMap = new HashMap<>();
+    private static Map<String, List<DataProcessingAgreementEntity>> allDPAsForAllChildRegion = new HashMap<>();
 
     public static List<DataProcessingAgreementEntity> getDPADetails(List<String> processingAgreements) throws Exception {
         List<DataProcessingAgreementEntity> dataProcessingAgreementEntities = new ArrayList<>();
@@ -55,14 +56,32 @@ public class DataProcessingAgreementCache {
 
     }
 
+    public static List<DataProcessingAgreementEntity> getAllDPAsForAllChildRegions(String regionId) throws Exception {
+        List <DataProcessingAgreementEntity> allDPAs = new ArrayList<>();
+
+        if (allDPAsForAllChildRegion.containsKey(regionId)) {
+            allDPAs = allDPAsForAllChildRegion.get(regionId);
+        } else {
+            allDPAs = new SecurityDataProcessingAgreementDAL().getAllDPAsForAllChildRegions(regionId);
+            allDPAsForAllChildRegion.put(regionId, allDPAs);
+        }
+
+        CacheManager.startScheduler();
+
+        return allDPAs;
+    }
+
     public static void clearDataProcessingAgreementCache(String dpaId) throws Exception {
         if (dataProcessingAgreementMap.containsKey(dpaId)) {
             dataProcessingAgreementMap.remove(dpaId);
         }
 
+        allDPAsForAllChildRegion.clear();
+
     }
 
     public static void flushCache() throws Exception {
         dataProcessingAgreementMap.clear();
+        allDPAsForAllChildRegion.clear();
     }
 }

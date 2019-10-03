@@ -16,6 +16,7 @@ public class ProjectCache {
     private static Map<String, ProjectEntity> projectMap = new HashMap<>();
     private static Map<String, JsonProject> jsonProjectMap = new HashMap<>();
     private static Map<String, String> projectApplicationPolicyMap = new HashMap<>();
+    private static Map<String, List<ProjectEntity>> allProjectsForAllChildRegion = new HashMap<>();
 
     public static List<ProjectEntity> getProjectDetails(List<String> projects) throws Exception {
         List<ProjectEntity> projectEntities = new ArrayList<>();
@@ -92,6 +93,21 @@ public class ProjectCache {
         return foundPolicy;
     }
 
+    public static List<ProjectEntity> getAllProjectsForAllChildRegions(String regionId) throws Exception {
+        List <ProjectEntity> allDSAs = new ArrayList<>();
+
+        if (allProjectsForAllChildRegion.containsKey(regionId)) {
+            allDSAs = allProjectsForAllChildRegion.get(regionId);
+        } else {
+            allDSAs = new SecurityProjectDAL().getProjectsForRegion(regionId);
+            allProjectsForAllChildRegion.put(regionId, allDSAs);
+        }
+
+        CacheManager.startScheduler();
+
+        return allDSAs;
+    }
+
     public static void clearProjectCache(String projectId) throws Exception {
         if (projectMap.containsKey(projectId)) {
             projectMap.remove(projectId);
@@ -104,11 +120,14 @@ public class ProjectCache {
         if (projectApplicationPolicyMap.containsKey(projectId)) {
             projectApplicationPolicyMap.remove(projectId);
         }
+
+        allProjectsForAllChildRegion.clear();
     }
 
     public static void flushCache() throws Exception {
         projectMap.clear();
         jsonProjectMap.clear();
         projectApplicationPolicyMap.clear();
+        allProjectsForAllChildRegion.clear();
     }
 }

@@ -11,6 +11,7 @@ import java.util.Map;
 public class DataSharingAgreementCache {
 
     private static Map<String, DataSharingAgreementEntity> dataSharingAgreementMap = new HashMap<>();
+    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForAllChildRegion = new HashMap<>();
 
     public static List<DataSharingAgreementEntity> getDSADetails(List<String> sharingAgreements) throws Exception {
         List<DataSharingAgreementEntity> dataSharingAgreementEntities = new ArrayList<>();
@@ -55,14 +56,32 @@ public class DataSharingAgreementCache {
 
     }
 
+    public static List<DataSharingAgreementEntity> getAllDSAsForAllChildRegions(String regionId) throws Exception {
+        List <DataSharingAgreementEntity> allDSAs = new ArrayList<>();
+
+        if (allDSAsForAllChildRegion.containsKey(regionId)) {
+            allDSAs = allDSAsForAllChildRegion.get(regionId);
+        } else {
+            allDSAs = new SecurityDataSharingAgreementDAL().getAllDSAsForAllChildRegions(regionId);
+            allDSAsForAllChildRegion.put(regionId, allDSAs);
+        }
+
+        CacheManager.startScheduler();
+
+        return allDSAs;
+    }
+
     public static void clearDataSharingAgreementCache(String dsaId) throws Exception {
         if (dataSharingAgreementMap.containsKey(dsaId)) {
             dataSharingAgreementMap.remove(dsaId);
         }
 
+        allDSAsForAllChildRegion.clear();
+
     }
 
     public static void flushCache() throws Exception {
         dataSharingAgreementMap.clear();
+        allDSAsForAllChildRegion.clear();
     }
 }

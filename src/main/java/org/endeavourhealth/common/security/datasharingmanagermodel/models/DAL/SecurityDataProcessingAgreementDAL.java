@@ -3,6 +3,7 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataProcessingAgreementEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.DataProcessingAgreementCache;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -11,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SecurityDataProcessingAgreementDAL {
@@ -106,5 +108,31 @@ public class SecurityDataProcessingAgreementDAL {
         } finally {
             entityManager.close();
         }
+    }
+
+    public List<DataProcessingAgreementEntity> getAllDPAsForAllChildRegions(String regionUUID) throws Exception {
+        List<String> dpaUUIDs = new ArrayList<>();
+
+        dpaUUIDs = getRegionDPAs(regionUUID, dpaUUIDs);
+        List<DataProcessingAgreementEntity> ret = new ArrayList<>();
+
+        if (!dpaUUIDs.isEmpty())
+            ret = DataProcessingAgreementCache.getDPADetails(dpaUUIDs);
+
+        return ret;
+
+    }
+
+    public List<String> getRegionDPAs(String regionUUID, List<String> dpaUUIDs) throws Exception {
+
+        dpaUUIDs.addAll(new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.DATAPROCESSINGAGREEMENT.getMapType()));
+
+        List<String> childRegions = new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.REGION.getMapType());
+
+        for (String region : childRegions) {
+            dpaUUIDs = getRegionDPAs(region, dpaUUIDs);
+        }
+
+        return dpaUUIDs;
     }
 }
