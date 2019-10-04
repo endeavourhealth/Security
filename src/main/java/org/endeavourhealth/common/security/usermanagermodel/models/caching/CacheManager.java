@@ -34,6 +34,8 @@ public class CacheManager {
                 ApplicationCache.flushCache();
                 ApplicationPolicyCache.flushCache();
                 ApplicationProfileCache.flushCache();
+                DataProcessingAgreementCache.flushCache();
+                DataSharingAgreementCache.flushCache();
                 DelegationCache.flushCache();
                 OrganisationCache.flushCache();
                 ProjectCache.flushCache();
