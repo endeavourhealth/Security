@@ -1,9 +1,11 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataProcessingAgreementEntity;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.RegionEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.DataProcessingAgreementCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.RegionCache;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -113,7 +115,12 @@ public class SecurityDataProcessingAgreementDAL {
     public List<DataProcessingAgreementEntity> getAllDPAsForAllChildRegions(String regionUUID) throws Exception {
         List<String> dpaUUIDs = new ArrayList<>();
 
-        dpaUUIDs = getRegionDPAs(regionUUID, dpaUUIDs);
+        List<RegionEntity> allRegions = RegionCache.getAllChildRegionsForRegion(regionUUID);
+
+        for (RegionEntity region : allRegions) {
+            dpaUUIDs.addAll(new SecurityMasterMappingDAL().getChildMappings(region.getUuid(), MapType.REGION.getMapType(), MapType.DATAPROCESSINGAGREEMENT.getMapType()));
+        }
+
         List<DataProcessingAgreementEntity> ret = new ArrayList<>();
 
         if (!dpaUUIDs.isEmpty())
@@ -121,18 +128,5 @@ public class SecurityDataProcessingAgreementDAL {
 
         return ret;
 
-    }
-
-    public List<String> getRegionDPAs(String regionUUID, List<String> dpaUUIDs) throws Exception {
-
-        dpaUUIDs.addAll(new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.DATAPROCESSINGAGREEMENT.getMapType()));
-
-        List<String> childRegions = new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.REGION.getMapType());
-
-        for (String region : childRegions) {
-            dpaUUIDs = getRegionDPAs(region, dpaUUIDs);
-        }
-
-        return dpaUUIDs;
     }
 }

@@ -5,6 +5,7 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.databa
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.OrganisationCache;
+import org.endeavourhealth.common.security.usermanagermodel.models.caching.RegionCache;
 
 import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
@@ -71,5 +72,35 @@ public class SecurityRegionDAL {
         }
 
         return organisationUuids;
+    }
+
+    public List<RegionEntity> getAllChildRegionsForRegion(String regionId) throws Exception {
+        List<String> regionUUIDs = new ArrayList<>();
+
+        List<RegionEntity> ret = new ArrayList<>();
+
+        regionUUIDs.add(regionId);
+
+        regionUUIDs = getRegions(regionId, regionUUIDs);
+
+        for (String regionUUID : regionUUIDs) {
+            ret.add(RegionCache.getRegionDetails(regionUUID));
+        }
+
+        return ret;
+
+    }
+
+    public List<String> getRegions(String regionUUID, List<String> regionUUIDs) throws Exception {
+
+        List<String> childRegions = new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.REGION.getMapType());
+
+        regionUUIDs.addAll(childRegions);
+
+        for (String region : childRegions) {
+            regionUUIDs = getRegions(region, regionUUIDs);
+        }
+
+        return regionUUIDs;
     }
 }

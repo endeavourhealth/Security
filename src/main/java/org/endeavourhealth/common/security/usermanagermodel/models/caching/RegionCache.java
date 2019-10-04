@@ -14,6 +14,7 @@ public class RegionCache {
     private static Map<String, RegionEntity> regionMap = new HashMap<>();
     private static boolean allRegionsFound = false;
     private static Map<String, List<OrganisationEntity>> allOrgsForAllChildRegion = new HashMap<>();
+    private static Map<String, List<RegionEntity>> allRegionsForUser = new HashMap<>();
 
     public static RegionEntity getRegionDetails(String regionId) throws Exception {
         RegionEntity foundRegion = null;
@@ -64,12 +65,28 @@ public class RegionCache {
         return allOrgs;
     }
 
+    public static List<RegionEntity> getAllChildRegionsForRegion(String regionId) throws Exception {
+        List <RegionEntity> allRegions = new ArrayList<>();
+
+        if (allRegionsForUser.containsKey(regionId)) {
+            allRegions = allRegionsForUser.get(regionId);
+        } else {
+            allRegions = new SecurityRegionDAL().getAllChildRegionsForRegion(regionId);
+            allRegionsForUser.put(regionId, allRegions);
+        }
+
+        CacheManager.startScheduler();
+
+        return allRegions;
+    }
+
     public static void clearRegionCache(String regionId) throws Exception {
         if (regionMap.containsKey(regionId)) {
             regionMap.remove(regionId);
         }
 
         allOrgsForAllChildRegion.clear();
+        allRegionsForUser.clear();
 
         allRegionsFound = false;
     }
@@ -78,5 +95,6 @@ public class RegionCache {
         regionMap.clear();
         allOrgsForAllChildRegion.clear();
         allRegionsFound = false;
+        allRegionsForUser.clear();
     }
 }
