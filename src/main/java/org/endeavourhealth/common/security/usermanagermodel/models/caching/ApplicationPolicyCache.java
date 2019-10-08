@@ -64,13 +64,9 @@ public class ApplicationPolicyCache {
     }
 
     public static void clearApplicationPolicyCache(String applicationPolicyId) throws Exception {
-        if (applicationPolicyMap.containsKey(applicationPolicyId)) {
-            applicationPolicyMap.remove(applicationPolicyId);
-        }
-
-        if (policyAttributeMap.containsKey(applicationPolicyId)) {
-            policyAttributeMap.remove(applicationPolicyId);
-        }
+        applicationPolicyMap.clear();
+        policyAttributeMap.clear();
+        allApplicationPoliciesFound = false;
 
     }
 
