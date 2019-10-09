@@ -41,7 +41,7 @@ public class UserCache {
                 }
             } catch (Exception e) {
                 System.out.println(e.getMessage());
-                throw new Exception(e);
+                return null;
             }
         }
 

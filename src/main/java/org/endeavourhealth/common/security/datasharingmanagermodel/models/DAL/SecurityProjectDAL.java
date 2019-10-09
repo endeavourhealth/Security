@@ -75,8 +75,10 @@ public class SecurityProjectDAL {
                 authorities.add(auth);
             }
             UserRepresentation u = UserCache.getUserDetails(userProject.getUserId());
-            JsonUser jsonUser = new JsonUser(u);
-            auth.addUser(jsonUser);
+            if (u != null){
+                JsonUser jsonUser = new JsonUser(u);
+                auth.addUser(jsonUser);
+            }
 
         }
         return authorities;
