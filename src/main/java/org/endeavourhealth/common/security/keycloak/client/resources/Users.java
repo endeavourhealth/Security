@@ -12,6 +12,7 @@ import org.keycloak.representations.idm.UserRepresentation;
 
 import java.io.IOException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Users extends KeycloakAdminClientBase {
@@ -147,8 +148,11 @@ public class Users extends KeycloakAdminClientBase {
         assertKeycloakAdminClientInitialised();
 
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+
+            ArrayList<String> actions = new ArrayList<>();
+            actions.add("UPDATE_PASSWORD");
             HttpResponse response
-                    = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/users/" + user.getId() + "/execute-actions-email", "['UPDATE_PASSWORD']");
+                    = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/users/" + user.getId() + "/execute-actions-email", actions);
 
             if (!isHttpOkStatus(response)) {
                 throw new KeycloakClientException("Failed to send update password email", response.getStatusLine().getReasonPhrase());
