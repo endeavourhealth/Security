@@ -135,6 +135,32 @@ public class Users extends KeycloakAdminClientBase {
     }
 
     //
+    // put user update password email
+    //
+
+    public boolean putUserUpdatePasswordEmail(UserRepresentation user) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+        return putUserUpdatePasswordEmail(getRealm(), user);
+    }
+
+    public boolean putUserUpdatePasswordEmail(String realm, UserRepresentation user) throws KeycloakClientException {
+        assertKeycloakAdminClientInitialised();
+
+        try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
+            HttpResponse response
+                    = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/users/" + user.getId() + "/execute-actions-email", "[\"UPDATE_PASSWORD\"]");
+
+            if (!isHttpOkStatus(response)) {
+                throw new KeycloakClientException("Failed to send update password email", response.getStatusLine().getReasonPhrase());
+            }
+
+        } catch (IOException e) {
+            LOG.error("Keycloak put user update password email failed", e);
+        }
+        return false;
+    }
+
+    //
     // set user password
     //
 
