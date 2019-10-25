@@ -148,7 +148,7 @@ public class Users extends KeycloakAdminClientBase {
 
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
             HttpResponse response
-                    = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/users/" + user.getId() + "/execute-actions-email", "[\"UPDATE_PASSWORD\"]");
+                    = doPut(httpClient, getAuthServerBaseUrl() + "/admin/realms/" + realm + "/users/" + user.getId() + "/execute-actions-email", "['UPDATE_PASSWORD']");
 
             if (!isHttpOkStatus(response)) {
                 throw new KeycloakClientException("Failed to send update password email", response.getStatusLine().getReasonPhrase());
