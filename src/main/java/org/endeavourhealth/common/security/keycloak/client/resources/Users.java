@@ -139,12 +139,12 @@ public class Users extends KeycloakAdminClientBase {
     // put user update password email
     //
 
-    public boolean putUserUpdatePasswordEmail(UserRepresentation user) throws KeycloakClientException {
+    public void putUserUpdatePasswordEmail(UserRepresentation user) throws KeycloakClientException {
         assertKeycloakAdminClientInitialised();
-        return putUserUpdatePasswordEmail(getRealm(), user);
+        putUserUpdatePasswordEmail(getRealm(), user);
     }
 
-    public boolean putUserUpdatePasswordEmail(String realm, UserRepresentation user) throws KeycloakClientException {
+    public void putUserUpdatePasswordEmail(String realm, UserRepresentation user) throws KeycloakClientException {
         assertKeycloakAdminClientInitialised();
 
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
@@ -161,7 +161,6 @@ public class Users extends KeycloakAdminClientBase {
         } catch (IOException e) {
             LOG.error("Keycloak put user update password email failed", e);
         }
-        return false;
     }
 
     //
