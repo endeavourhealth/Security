@@ -8,8 +8,8 @@ public class JsonApplicationAccessProfile {
     private String name = null;
     private String applicationId = null;
     private String description = null;
-    private String profileTree = null;
     private boolean isDeleted;
+    private boolean superUser;
 
     public JsonApplicationAccessProfile() {
     }
@@ -18,8 +18,9 @@ public class JsonApplicationAccessProfile {
         this.id = applicationAccessProfileEntity.getId();
         this.name = applicationAccessProfileEntity.getName();
         this.description = applicationAccessProfileEntity.getDescription();
-        this.profileTree = applicationAccessProfileEntity.getProfileTree();
         this.isDeleted = applicationAccessProfileEntity.getIsDeleted() == 1;
+        this.superUser = applicationAccessProfileEntity.getSuperUser() == 1;
+
     }
 
     public String getId() {
@@ -54,19 +55,19 @@ public class JsonApplicationAccessProfile {
         this.description = description;
     }
 
-    public String getProfileTree() {
-        return profileTree;
-    }
-
-    public void setProfileTree(String profileTree) {
-        this.profileTree = profileTree;
-    }
-
     public boolean getIsDeleted() {
         return isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public boolean getIsSuperUser() {
+        return superUser;
+    }
+
+    public void setSuperUser(boolean superUser) {
+        this.superUser = superUser;
     }
 }

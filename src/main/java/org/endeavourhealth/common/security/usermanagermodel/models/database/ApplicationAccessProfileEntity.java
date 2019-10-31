@@ -4,14 +4,15 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "application_access_profile", schema = "user_manager")
+@Table(name = "application_access_profile", schema = "user_manager", catalog = "")
 public class ApplicationAccessProfileEntity {
+
     private String id;
     private String name;
     private String description;
     private String applicationId;
-    private String profileTree;
     private Byte isDeleted;
+    private byte superUser;
 
     @Id
     @Column(name = "id")
@@ -54,16 +55,6 @@ public class ApplicationAccessProfileEntity {
     }
 
     @Basic
-    @Column(name = "profile_tree")
-    public String getProfileTree() {
-        return profileTree;
-    }
-
-    public void setProfileTree(String profileTree) {
-        this.profileTree = profileTree;
-    }
-
-    @Basic
     @Column(name = "is_deleted")
     public Byte getIsDeleted() {
         return isDeleted;
@@ -73,22 +64,32 @@ public class ApplicationAccessProfileEntity {
         this.isDeleted = isDeleted;
     }
 
+    @Basic
+    @Column(name = "super_user")
+    public byte getSuperUser() {
+        return superUser;
+    }
+
+    public void setSuperUser(byte superUser) {
+        this.superUser = superUser;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ApplicationAccessProfileEntity that = (ApplicationAccessProfileEntity) o;
-        return Objects.equals(id, that.id) &&
+        return superUser == that.superUser &&
+                Objects.equals(id, that.id) &&
                 Objects.equals(name, that.name) &&
                 Objects.equals(description, that.description) &&
                 Objects.equals(applicationId, that.applicationId) &&
-                Objects.equals(profileTree, that.profileTree) &&
                 Objects.equals(isDeleted, that.isDeleted);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, name, description, applicationId, profileTree, isDeleted);
+        return Objects.hash(id, name, description, applicationId, isDeleted, superUser);
     }
 }

@@ -12,8 +12,10 @@ import java.util.Map;
 
 public class ApplicationPolicyCache {
     private static Map<String, ApplicationPolicyEntity> applicationPolicyMap = new HashMap<>();
+    private static List<ApplicationPolicyEntity> nonSUApplicationPolicies = new ArrayList<>();
     private static Map<String, List<JsonApplicationPolicyAttribute>> policyAttributeMap = new HashMap<>();
     private static boolean allApplicationPoliciesFound = false;
+    private static boolean nonSUApplicationPoliciesFound = false;
 
     public static ApplicationPolicyEntity getApplicationPolicyDetails(String applicationPolicyId) throws Exception {
         ApplicationPolicyEntity foundPolicy = null;
@@ -60,6 +62,38 @@ public class ApplicationPolicyCache {
         allApplicationPoliciesFound = true;
 
         return new ArrayList(applicationPolicyMap.values());
+
+    }
+
+    public static List<ApplicationPolicyEntity> getNonSUApplicationPolicies() throws Exception {
+
+        if (nonSUApplicationPoliciesFound) {
+            return nonSUApplicationPolicies;
+        }
+
+        List<ApplicationPolicyEntity> allPolicies = getAllApplicationPolicies();
+
+        for (ApplicationPolicyEntity policy : allPolicies) {
+            List<JsonApplicationPolicyAttribute> attributes = getApplicationPolicyAttributes(policy.getId());
+
+            Boolean containsSuperUser = false;
+            for (JsonApplicationPolicyAttribute atr : attributes) {
+                if (atr.getApplicationAccessProfileSuperUser()) {
+                    containsSuperUser = true;
+                    break;
+                }
+            }
+
+            if (!containsSuperUser) {
+                nonSUApplicationPolicies.add(policy);
+            }
+        }
+
+        CacheManager.startScheduler();
+
+        nonSUApplicationPoliciesFound = true;
+
+        return nonSUApplicationPolicies;
 
     }
 

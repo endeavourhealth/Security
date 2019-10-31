@@ -20,10 +20,10 @@ public class SecurityApplicationPolicyAttributeDAL {
                     " rt.name as roleName," +
                     " a.name as applicationName," +
                     " a.id as applicationId," +
-                    " aap.profileTree," +
                     " rp.applicationAccessProfileId," +
                     " aap.name as profileName," +
                     " aap.description as profileDescription," +
+                    " aap.superUser, " +
                     " rp.isDeleted" +
                     " from ApplicationPolicyAttributeEntity rp" +
                     " join ApplicationPolicyEntity rt on rp.applicationPolicyId = rt.id" +
@@ -44,8 +44,6 @@ public class SecurityApplicationPolicyAttributeDAL {
         }
     }
 
-
-
     private List<JsonApplicationPolicyAttribute> convertRoleProfilesToJson(List<Object[]> results) throws Exception {
         List<JsonApplicationPolicyAttribute> profiles = new ArrayList<>();
 
@@ -56,10 +54,10 @@ public class SecurityApplicationPolicyAttributeDAL {
             profile.setName(obj[2].toString());
             profile.setApplication(obj[3].toString());
             profile.setApplicationId(obj[4].toString());
-            profile.setProfileTree(obj[5].toString());
-            profile.setApplicationAccessProfileId(obj[6].toString());
-            profile.setApplicationAccessProfileName(obj[7].toString());
-            profile.setApplicationAccessProfileDescription(obj[8].toString());
+            profile.setApplicationAccessProfileId(obj[5].toString());
+            profile.setApplicationAccessProfileName(obj[6].toString());
+            profile.setApplicationAccessProfileDescription(obj[7].toString());
+            profile.setApplicationAccessProfileSuperUser(obj[8].toString().equals("1"));
             profile.setDeleted(obj[9].toString().equals("1"));
 
             profiles.add(profile);

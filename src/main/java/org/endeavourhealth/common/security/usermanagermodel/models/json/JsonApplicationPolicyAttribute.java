@@ -11,7 +11,7 @@ public class JsonApplicationPolicyAttribute {
     private String applicationAccessProfileId = null;
     private String applicationAccessProfileName = null;
     private String applicationAccessProfileDescription = null;
-    private String profileTree = null;
+    private boolean applicationAccessProfileSuperUser = false;
     private boolean isDeleted;
 
     public JsonApplicationPolicyAttribute() {
@@ -21,7 +21,6 @@ public class JsonApplicationPolicyAttribute {
         this.id = applicationPolicyAttributeEntity.getId();
         this.applicationPolicyId = applicationPolicyAttributeEntity.getApplicationPolicyId();
         this.applicationAccessProfileId = applicationPolicyAttributeEntity.getApplicationAccessProfileId();
-        this.profileTree = applicationPolicyAttributeEntity.getProfileTree();
         this.isDeleted = applicationPolicyAttributeEntity.getIsDeleted() == 1;
     }
 
@@ -89,12 +88,12 @@ public class JsonApplicationPolicyAttribute {
         this.applicationAccessProfileDescription = applicationAccessProfileDescription;
     }
 
-    public String getProfileTree() {
-        return profileTree;
+    public boolean getApplicationAccessProfileSuperUser() {
+        return applicationAccessProfileSuperUser;
     }
 
-    public void setProfileTree(String profileTree) {
-        this.profileTree = profileTree;
+    public void setApplicationAccessProfileSuperUser(boolean applicationAccessProfileSuperUser) {
+        this.applicationAccessProfileSuperUser = applicationAccessProfileSuperUser;
     }
 
     public boolean getIsDeleted() {

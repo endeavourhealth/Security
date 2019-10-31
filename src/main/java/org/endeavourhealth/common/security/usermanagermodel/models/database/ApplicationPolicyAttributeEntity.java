@@ -6,10 +6,10 @@ import java.util.Objects;
 @Entity
 @Table(name = "application_policy_attribute", schema = "user_manager")
 public class ApplicationPolicyAttributeEntity {
+
     private String id;
     private String applicationPolicyId;
     private String applicationAccessProfileId;
-    private String profileTree;
     private Byte isDeleted;
 
     @Id
@@ -28,8 +28,8 @@ public class ApplicationPolicyAttributeEntity {
         return applicationPolicyId;
     }
 
-    public void setApplicationPolicyId(String roleTypeId) {
-        this.applicationPolicyId = roleTypeId;
+    public void setApplicationPolicyId(String applicationPolicyId) {
+        this.applicationPolicyId = applicationPolicyId;
     }
 
     @Basic
@@ -40,16 +40,6 @@ public class ApplicationPolicyAttributeEntity {
 
     public void setApplicationAccessProfileId(String applicationAccessProfileId) {
         this.applicationAccessProfileId = applicationAccessProfileId;
-    }
-
-    @Basic
-    @Column(name = "profile_tree")
-    public String getProfileTree() {
-        return profileTree;
-    }
-
-    public void setProfileTree(String profileTree) {
-        this.profileTree = profileTree;
     }
 
     @Basic
@@ -70,13 +60,12 @@ public class ApplicationPolicyAttributeEntity {
         return Objects.equals(id, that.id) &&
                 Objects.equals(applicationPolicyId, that.applicationPolicyId) &&
                 Objects.equals(applicationAccessProfileId, that.applicationAccessProfileId) &&
-                Objects.equals(profileTree, that.profileTree) &&
                 Objects.equals(isDeleted, that.isDeleted);
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(id, applicationPolicyId, applicationAccessProfileId, profileTree, isDeleted);
+        return Objects.hash(id, applicationPolicyId, applicationAccessProfileId, isDeleted);
     }
 }
