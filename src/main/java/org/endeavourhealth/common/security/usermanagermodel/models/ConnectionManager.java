@@ -287,12 +287,12 @@ public class ConnectionManager {
     }
 
     public static void shutdown() {
-        LOG.debug("Shutting down Core connection factories");
+        LOG.debug("Shutting down User Manager connection factories");
         for(String factoryName : entityManagerFactoryMap.keySet()) {
             LOG.debug("Closing " + factoryName);
             EntityManagerFactory factory = entityManagerFactoryMap.get(factoryName);
             factory.close();
         }
-        LOG.debug("Core connection factory shutdown complete");
+        LOG.debug("User Manager connection factory shutdown complete");
     }
 }

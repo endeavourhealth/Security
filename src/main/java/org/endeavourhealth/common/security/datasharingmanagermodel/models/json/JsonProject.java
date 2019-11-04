@@ -35,6 +35,7 @@ public class JsonProject {
     private Map<UUID, String> projectConfiguration = null;
     private Map<UUID, String> dsas = null;
     private String applicationPolicy = null;
+    private List<JsonDocumentation> documentations = new ArrayList<>();
     private List<JsonApplicationPolicyAttribute> applicationPolicyAttributes = new ArrayList<>();
 
     public JsonProject() {
@@ -278,5 +279,13 @@ public class JsonProject {
 
     public void setFlowScheduleId(short flowScheduleId) {
         this.flowScheduleId = flowScheduleId;
+    }
+
+    public List<JsonDocumentation> getDocumentations() {
+        return documentations;
+    }
+
+    public void setDocumentations(List<JsonDocumentation> documentations) {
+        this.documentations = documentations;
     }
 }
