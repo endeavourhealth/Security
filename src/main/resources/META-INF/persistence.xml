@@ -41,6 +41,7 @@
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataSharingSummaryEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DatasetEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DocumentationEntity</class>
+        <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ExtractTechnicalDetailsEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.MasterMappingEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.OrganisationEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.PurposeEntity</class>

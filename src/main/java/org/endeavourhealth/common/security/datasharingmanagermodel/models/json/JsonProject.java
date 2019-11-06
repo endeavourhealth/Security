@@ -37,6 +37,7 @@ public class JsonProject {
     private String applicationPolicy = null;
     private List<JsonDocumentation> documentations = new ArrayList<>();
     private List<JsonApplicationPolicyAttribute> applicationPolicyAttributes = new ArrayList<>();
+    private JsonExtractTechnicalDetails extractTechnicalDetails = null;
 
     public JsonProject() {
     }
@@ -288,4 +289,13 @@ public class JsonProject {
     public void setDocumentations(List<JsonDocumentation> documentations) {
         this.documentations = documentations;
     }
+
+    public JsonExtractTechnicalDetails getExtractTechnicalDetails() {
+        return extractTechnicalDetails;
+    }
+
+    public void setExtractTechnicalDetails(JsonExtractTechnicalDetails extractTechnicalDetails) {
+        this.extractTechnicalDetails = extractTechnicalDetails;
+    }
+
 }
