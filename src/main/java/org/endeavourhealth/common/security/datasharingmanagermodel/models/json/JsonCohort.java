@@ -11,6 +11,7 @@ public class JsonCohort {
     private String name = null;
     private Short ConsentModelId = null;
     private String description = null;
+    private String technicalDefinition = null;
     private Map<UUID, String> dpas = null;
 
     public String getUuid() {
@@ -43,6 +44,14 @@ public class JsonCohort {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTechnicalDefinition() {
+        return technicalDefinition;
+    }
+
+    public void setTechnicalDefinition(String technicalDefinition) {
+        this.technicalDefinition = technicalDefinition;
     }
 
     public Map<UUID, String> getDpas() {

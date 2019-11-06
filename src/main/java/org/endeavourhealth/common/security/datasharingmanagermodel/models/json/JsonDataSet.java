@@ -11,6 +11,7 @@ public class JsonDataSet {
     private String uuid = null;
     private String name = null;
     private String description = null;
+    private String technicalDefinition = null;
     private String attributes = null;
     private String queryDefinition = null;
     private List<Object> composition = null;
@@ -41,6 +42,14 @@ public class JsonDataSet {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getTechnicalDefinition() {
+        return technicalDefinition;
+    }
+
+    public void setTechnicalDefinition(String technicalDefinition) {
+        this.technicalDefinition = technicalDefinition;
     }
 
     public String getAttributes() {

@@ -9,6 +9,7 @@ public class DatasetEntity {
     private String uuid;
     private String name;
     private String description;
+    private String technicalDefinition;
 
     @Id
     @Column(name = "uuid")
@@ -54,5 +55,15 @@ public class DatasetEntity {
     public int hashCode() {
 
         return Objects.hash(uuid, name, description);
+    }
+
+    @Basic
+    @Column(name = "technical_definition")
+    public String getTechnicalDefinition() {
+        return technicalDefinition;
+    }
+
+    public void setTechnicalDefinition(String technicalDefinition) {
+        this.technicalDefinition = technicalDefinition;
     }
 }

@@ -10,6 +10,7 @@ public class CohortEntity {
     private String name;
     private Short consentModelId;
     private String description;
+    private String technicalDefinition;
 
     @Id
     @Column(name = "uuid")
@@ -66,5 +67,15 @@ public class CohortEntity {
     public int hashCode() {
 
         return Objects.hash(uuid, name, consentModelId, description);
+    }
+
+    @Basic
+    @Column(name = "technical_definition")
+    public String getTechnicalDefinition() {
+        return technicalDefinition;
+    }
+
+    public void setTechnicalDefinition(String technicalDefinition) {
+        this.technicalDefinition = technicalDefinition;
     }
 }
