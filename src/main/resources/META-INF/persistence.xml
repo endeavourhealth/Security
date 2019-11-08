@@ -50,6 +50,7 @@
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataExchangeEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectEntity</class>
         <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectApplicationPolicyEntity</class>
+        <class>org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectScheduleEntity</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.show_sql" value="false" />

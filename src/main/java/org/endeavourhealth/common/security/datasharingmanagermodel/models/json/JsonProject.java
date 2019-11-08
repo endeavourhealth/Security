@@ -38,6 +38,7 @@ public class JsonProject {
     private List<JsonDocumentation> documentations = new ArrayList<>();
     private List<JsonApplicationPolicyAttribute> applicationPolicyAttributes = new ArrayList<>();
     private JsonExtractTechnicalDetails extractTechnicalDetails = null;
+    private JsonProjectSchedule projectSchedule = null;
 
     public JsonProject() {
     }
@@ -298,4 +299,11 @@ public class JsonProject {
         this.extractTechnicalDetails = extractTechnicalDetails;
     }
 
+    public JsonProjectSchedule getProjectSchedule() {
+        return projectSchedule;
+    }
+
+    public void setProjectSchedule(JsonProjectSchedule projectSchedule) {
+        this.projectSchedule = projectSchedule;
+    }
 }

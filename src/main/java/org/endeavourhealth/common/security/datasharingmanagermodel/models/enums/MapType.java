@@ -17,7 +17,8 @@ public enum MapType {
     DOCUMENT((short)12),
     DATAEXCHANGE((short)13),
     PROJECT((short)14),
-    EXTRACTTECHNICALDETAILS((short)15);
+    EXTRACTTECHNICALDETAILS((short)15),
+    SCHEDULE((short)16);
 
     private Short mapType;
 
