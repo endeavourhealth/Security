@@ -4,11 +4,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Entity
 @Table(name = "project_schedule", schema = "data_sharing_manager")
-public class ProjectScheduleEntity {
+public class ProjectScheduleEntity implements Serializable {
 
     private String uuid;
     private Date starts;
