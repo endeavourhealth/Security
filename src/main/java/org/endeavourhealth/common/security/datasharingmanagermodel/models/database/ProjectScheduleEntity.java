@@ -9,7 +9,7 @@ import java.sql.Date;
 
 @Entity
 @Table(name = "project_schedule", schema = "data_sharing_manager")
-public class ProjectScheduleEntity implements Serializable {
+public class ProjectScheduleEntity {
 
     private String uuid;
     private Date starts;
@@ -34,7 +34,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.uuid = uuid;
     }
 
-    @Id
     @Column(name = "starts")
     public Date getStarts() {
         return starts;
@@ -44,7 +43,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.starts = starts;
     }
 
-    @Id
     @Column(name = "ends")
     public Date getEnds() {
         return ends;
@@ -54,7 +52,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.ends = ends;
     }
 
-    @Id
     @Column(name = "frequency")
     public int getFrequency() {
         return frequency;
@@ -64,7 +61,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.frequency = frequency;
     }
 
-    @Id
     @Column(name = "weeks")
     public String getWeeks() {
         return weeks;
@@ -74,7 +70,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.weeks = weeks;
     }
 
-    @Id
     @Column(name = "is_monday")
     public byte getIsMonday() {
         return isMonday;
@@ -84,7 +79,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.isMonday = isMonday;
     }
 
-    @Id
     @Column(name = "is_tuesday")
     public byte getIsTuesday() {
         return isTuesday;
@@ -94,7 +88,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.isTuesday = isTuesday;
     }
 
-    @Id
     @Column(name = "is_wednesday")
     public byte getIsWednesday() {
         return isWednesday;
@@ -104,7 +97,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.isWednesday = isWednesday;
     }
 
-    @Id
     @Column(name = "is_thursday")
     public byte getIsThursday() {
         return isThursday;
@@ -114,7 +106,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.isThursday = isThursday;
     }
 
-    @Id
     @Column(name = "is_friday")
     public byte getIsFriday() {
         return isFriday;
@@ -124,7 +115,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.isFriday = isFriday;
     }
 
-    @Id
     @Column(name = "is_saturday")
     public byte getIsSaturday() {
         return isSaturday;
@@ -134,7 +124,6 @@ public class ProjectScheduleEntity implements Serializable {
         this.isSaturday = isSaturday;
     }
 
-    @Id
     @Column(name = "is_sunday")
     public byte getIsSunday() {
         return isSunday;
