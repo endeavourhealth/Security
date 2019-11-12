@@ -8,7 +8,7 @@ public class JsonProjectSchedule {
     private String uuid;
     private String starts;
     private String ends;
-    private int frequency;
+    private Short frequency;
     private String weeks;
     private boolean isMonday;
     private boolean isTuesday;
@@ -42,11 +42,11 @@ public class JsonProjectSchedule {
         this.ends = ends;
     }
 
-    public int getFrequency() {
+    public Short getFrequency() {
         return frequency;
     }
 
-    public void setFrequency(int frequency) {
+    public void setFrequency(Short  frequency) {
         this.frequency = frequency;
     }
 
