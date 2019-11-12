@@ -4,6 +4,7 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.databa
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonAuthorityToShare;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProject;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProjectSchedule;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserProjectDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.DataSharingAgreementCache;
@@ -21,6 +22,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 public class SecurityProjectDAL {
@@ -92,6 +94,7 @@ public class SecurityProjectDAL {
         List<OrganisationEntity> publishers = getLinkedOrganisations(projectId, MapType.PUBLISHER.getMapType());
         List<OrganisationEntity> subscribers = getLinkedOrganisations(projectId, MapType.SUBSCRIBER.getMapType());
         ProjectApplicationPolicyEntity applicationPolicy = new SecurityProjectApplicationPolicyDAL().getProjectApplicationPolicyId(projectId);
+        ProjectScheduleEntity scheduleEntity = getLinkedSchedule(projectId, MapType.SCHEDULE.getMapType());
 
         if (dsas != null) {
             Map<UUID, String> sharingAgreements = new HashMap<>();
@@ -142,6 +145,24 @@ public class SecurityProjectDAL {
             project.setApplicationPolicy(applicationPolicy.getApplicationPolicyId());
         }
 
+        if (scheduleEntity != null) {
+            JsonProjectSchedule schedule = new JsonProjectSchedule();
+            schedule.setUuid(scheduleEntity.getUuid());
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            schedule.setStarts(sdf.format(scheduleEntity.getStarts()));
+            schedule.setEnds(sdf.format(scheduleEntity.getEnds()));
+            schedule.setFrequency((short) scheduleEntity.getFrequency());
+            schedule.setWeeks(scheduleEntity.getWeeks());
+            schedule.setMonday(scheduleEntity.getIsMonday() == 1);
+            schedule.setTuesday(scheduleEntity.getIsTuesday() == 1);
+            schedule.setWednesday(scheduleEntity.getIsWednesday() == 1);
+            schedule.setThursday(scheduleEntity.getIsThursday() == 1);
+            schedule.setFriday(scheduleEntity.getIsFriday() == 1);
+            schedule.setSaturday(scheduleEntity.getIsSaturday() == 1);
+            schedule.setSunday(scheduleEntity.getIsSunday() == 1);
+            project.setSchedule(schedule);
+        }
+
         return project;
     }
 
@@ -187,6 +208,16 @@ public class SecurityProjectDAL {
             ret = OrganisationCache.getOrganisationDetails(orgUUIDs);
 
         return ret;
+    }
+
+    public ProjectScheduleEntity getLinkedSchedule(String projectId, Short mapType) throws Exception {
+
+        ProjectScheduleEntity schedule = null;
+        List<String> schedUUIDs = new SecurityMasterMappingDAL().getChildMappings(projectId, MapType.PROJECT.getMapType(), mapType);
+        if (schedUUIDs.size() > 0) {
+            schedule = new SecurityProjectScheduleDAL().get(schedUUIDs.get(0));
+        }
+        return schedule;
     }
 
     public List<ProjectEntity> getProjectsForOrganisation(String organisationId) throws Exception {
