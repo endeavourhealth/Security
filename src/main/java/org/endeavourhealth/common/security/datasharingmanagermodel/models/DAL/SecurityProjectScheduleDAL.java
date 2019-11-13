@@ -1,5 +1,6 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 
+import org.apache.commons.lang3.StringUtils;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.ProjectScheduleEntity;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProjectSchedule;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
@@ -26,21 +27,7 @@ public class SecurityProjectScheduleDAL {
         try {
             ProjectScheduleEntity entity = new ProjectScheduleEntity();
             entity.setUuid(schedule.getUuid());
-            if (schedule.getStarts() != null) {
-                entity.setStarts(Date.valueOf(schedule.getStarts()));
-            }
-            if (schedule.getEnds() != null) {
-                entity.setEnds(Date.valueOf(schedule.getEnds()));
-            }
-            entity.setFrequency(schedule.getFrequency());
-            entity.setWeeks(schedule.getWeeks());
-            entity.setIsMonday((byte) (schedule.isMonday() ? 1 : 0));
-            entity.setIsTuesday((byte) (schedule.isTuesday() ? 1 : 0));
-            entity.setIsWednesday((byte) (schedule.isWednesday() ? 1 : 0));
-            entity.setIsThursday((byte) (schedule.isThursday() ? 1 : 0));
-            entity.setIsFriday((byte) (schedule.isFriday() ? 1 : 0));
-            entity.setIsSaturday((byte) (schedule.isSaturday() ? 1 : 0));
-            entity.setIsSunday((byte) (schedule.isSunday() ? 1 : 0));
+            setValues(entity, schedule);
             entityManager.getTransaction().begin();
             entityManager.persist(entity);
             entityManager.getTransaction().commit();
@@ -59,21 +46,7 @@ public class SecurityProjectScheduleDAL {
             ProjectScheduleEntity entity = entityManager.find(ProjectScheduleEntity.class, schedule.getUuid());
             if (entity != null) {
                 entityManager.getTransaction().begin();
-                if (schedule.getStarts() != null) {
-                    entity.setStarts(Date.valueOf(schedule.getStarts()));
-                }
-                if (schedule.getEnds() != null) {
-                    entity.setEnds(Date.valueOf(schedule.getEnds()));
-                }
-                entity.setFrequency(schedule.getFrequency());
-                entity.setWeeks(schedule.getWeeks());
-                entity.setIsMonday((byte) (schedule.isMonday() ? 1 : 0));
-                entity.setIsTuesday((byte) (schedule.isTuesday() ? 1 : 0));
-                entity.setIsWednesday((byte) (schedule.isWednesday() ? 1 : 0));
-                entity.setIsThursday((byte) (schedule.isThursday() ? 1 : 0));
-                entity.setIsFriday((byte) (schedule.isFriday() ? 1 : 0));
-                entity.setIsSaturday((byte) (schedule.isSaturday() ? 1 : 0));
-                entity.setIsSunday((byte) (schedule.isSunday() ? 1 : 0));
+                setValues(entity, schedule);
                 entityManager.getTransaction().commit();
             }
         } catch (Exception e) {
@@ -82,6 +55,28 @@ public class SecurityProjectScheduleDAL {
         } finally {
             entityManager.close();
         }
+    }
+
+    private void setValues(ProjectScheduleEntity entity, JsonProjectSchedule schedule) {
+        if (StringUtils.isNotEmpty(schedule.getStarts())) {
+            entity.setStarts(Date.valueOf(schedule.getStarts()));
+        } else {
+            entity.setStarts(null);
+        }
+        if (StringUtils.isNotEmpty(schedule.getEnds())) {
+            entity.setEnds(Date.valueOf(schedule.getEnds()));
+        } else {
+            entity.setEnds(null);
+        }
+        entity.setFrequency(schedule.getFrequency());
+        entity.setWeeks(schedule.getWeeks());
+        entity.setIsMonday((byte) (schedule.isMonday() ? 1 : 0));
+        entity.setIsTuesday((byte) (schedule.isTuesday() ? 1 : 0));
+        entity.setIsWednesday((byte) (schedule.isWednesday() ? 1 : 0));
+        entity.setIsThursday((byte) (schedule.isThursday() ? 1 : 0));
+        entity.setIsFriday((byte) (schedule.isFriday() ? 1 : 0));
+        entity.setIsSaturday((byte) (schedule.isSaturday() ? 1 : 0));
+        entity.setIsSunday((byte) (schedule.isSunday() ? 1 : 0));
     }
 
     public void delete(String uuid) throws Exception {

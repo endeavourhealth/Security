@@ -1,5 +1,6 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 
+import org.apache.commons.lang3.StringUtils;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.*;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonAuthorityToShare;
@@ -146,24 +147,32 @@ public class SecurityProjectDAL {
         }
 
         if (scheduleEntity != null) {
-            JsonProjectSchedule schedule = new JsonProjectSchedule();
-            schedule.setUuid(scheduleEntity.getUuid());
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            schedule.setStarts(sdf.format(scheduleEntity.getStarts()));
-            schedule.setEnds(sdf.format(scheduleEntity.getEnds()));
-            schedule.setFrequency((short) scheduleEntity.getFrequency());
-            schedule.setWeeks(scheduleEntity.getWeeks());
-            schedule.setMonday(scheduleEntity.getIsMonday() == 1);
-            schedule.setTuesday(scheduleEntity.getIsTuesday() == 1);
-            schedule.setWednesday(scheduleEntity.getIsWednesday() == 1);
-            schedule.setThursday(scheduleEntity.getIsThursday() == 1);
-            schedule.setFriday(scheduleEntity.getIsFriday() == 1);
-            schedule.setSaturday(scheduleEntity.getIsSaturday() == 1);
-            schedule.setSunday(scheduleEntity.getIsSunday() == 1);
-            project.setSchedule(schedule);
+            project.setSchedule(setJsonProjectSchedule(scheduleEntity));
         }
 
         return project;
+    }
+
+    public static JsonProjectSchedule setJsonProjectSchedule(ProjectScheduleEntity scheduleEntity) {
+        JsonProjectSchedule schedule = new JsonProjectSchedule();
+        schedule.setUuid(scheduleEntity.getUuid());
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        if (scheduleEntity.getStarts() != null) {
+            schedule.setStarts(sdf.format(scheduleEntity.getStarts()));
+        }
+        if (scheduleEntity.getEnds() != null) {
+            schedule.setEnds(sdf.format(scheduleEntity.getEnds()));
+        }
+        schedule.setFrequency((short) scheduleEntity.getFrequency());
+        schedule.setWeeks(scheduleEntity.getWeeks());
+        schedule.setMonday(scheduleEntity.getIsMonday() == 1);
+        schedule.setTuesday(scheduleEntity.getIsTuesday() == 1);
+        schedule.setWednesday(scheduleEntity.getIsWednesday() == 1);
+        schedule.setThursday(scheduleEntity.getIsThursday() == 1);
+        schedule.setFriday(scheduleEntity.getIsFriday() == 1);
+        schedule.setSaturday(scheduleEntity.getIsSaturday() == 1);
+        schedule.setSunday(scheduleEntity.getIsSunday() == 1);
+        return schedule;
     }
 
     public List<DataSharingAgreementEntity> getLinkedDsas(String projectId) throws Exception {
