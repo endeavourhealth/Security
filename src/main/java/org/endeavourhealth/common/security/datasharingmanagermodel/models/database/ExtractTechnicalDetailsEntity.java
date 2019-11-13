@@ -10,18 +10,17 @@ public class ExtractTechnicalDetailsEntity {
     private String uuid;
     private String name;
     private String sftpHostName;
-
-    // TODO (for now, just a subset of all the required fields, while doing development
-    /*
-    private String sftpHostPublicKey;
     private String sftpHostDirectory;
     private Integer sftpHostPort;
     private String sftpClientUsername;
     private String sftpClientPrivateKeyPassword;
+
+    // TODO (for now, a subset of all required fields, while doing further development)
+    /*
+    private String sftpHostPublicKey;
     private String sftpClientPrivateKey;
     private String pgpCustomerPublicKey;
-    private String pgpArchivePublicKey;
-    private String pgpArchivePrivateKey;
+    private String pgpInternalPublicKey;
     */
 
     @Id
@@ -52,18 +51,6 @@ public class ExtractTechnicalDetailsEntity {
 
     public void setSftpHostName(String sftpHostName) {
         this.sftpHostName = sftpHostName;
-    }
-
-    /*
-
-    @Basic
-    @Column(name = "sftp_host_public_key")
-    public String getSftpHostPublicKey() {
-        return sftpHostPublicKey;
-    }
-
-    public void setSftpHostPublicKey(String sftpHostPublicKey) {
-        this.sftpHostPublicKey = sftpHostPublicKey;
     }
 
     @Basic
@@ -106,6 +93,18 @@ public class ExtractTechnicalDetailsEntity {
         this.sftpClientPrivateKeyPassword = sftpClientPrivateKeyPassword;
     }
 
+    /*
+
+    @Basic
+    @Column(name = "sftp_host_public_key")
+    public String getSftpHostPublicKey() {
+        return sftpHostPublicKey;
+    }
+
+    public void setSftpHostPublicKey(String sftpHostPublicKey) {
+        this.sftpHostPublicKey = sftpHostPublicKey;
+    }
+
     @Basic
     @Column(name = "sftp_client_private_key")
     public String getSftpClientPrivateKey() {
@@ -127,24 +126,15 @@ public class ExtractTechnicalDetailsEntity {
     }
 
     @Basic
-    @Column(name = "pgp_archive_public_key")
+    @Column(name = "pgp_internal_public_key")
     public String getPgpArchivePublicKey() {
         return pgpArchivePublicKey;
     }
 
-    public void setPgpArchivePublicKey(String pgpArchivePublicKey) {
-        this.pgpArchivePublicKey = pgpArchivePublicKey;
+    public void setPgpInternalPublicKey(String pgpInternalPublicKey) {
+        this.pgpInternalPublicKey = pgpInternalPublicKey;
     }
 
-    @Basic
-    @Column(name = "pgp_archive_private_key")
-    public String getPgpArchivePrivateKey() {
-        return pgpArchivePrivateKey;
-    }
-
-    public void setPgpArchivePrivateKey(String pgpArchivePrivateKey) {
-        this.pgpArchivePrivateKey = pgpArchivePrivateKey;
-    }
     */
 
     @Override
@@ -154,18 +144,17 @@ public class ExtractTechnicalDetailsEntity {
         ExtractTechnicalDetailsEntity that = (ExtractTechnicalDetailsEntity) o;
         return Objects.equals(uuid, that.uuid) &&
                 Objects.equals(name, that.name) &&
-                Objects.equals(sftpHostName, that.sftpHostName)
-                /*
-                &&
-                Objects.equals(sftpHostPublicKey, that.sftpHostPublicKey) &&
+                Objects.equals(sftpHostName, that.sftpHostName) &&
                 Objects.equals(sftpHostDirectory, that.sftpHostDirectory) &&
                 Objects.equals(sftpHostPort, that.sftpHostPort) &&
                 Objects.equals(sftpClientUsername, that.sftpClientUsername) &&
-                Objects.equals(sftpClientPrivateKeyPassword, that.sftpClientPrivateKeyPassword) &&
+                Objects.equals(sftpClientPrivateKeyPassword, that.sftpClientPrivateKeyPassword)
+                /*
+                &&
+                Objects.equals(sftpHostPublicKey, that.sftpHostPublicKey) &&
                 Objects.equals(sftpClientPrivateKey, that.sftpClientPrivateKey) &&
                 Objects.equals(pgpCustomerPublicKey, that.pgpCustomerPublicKey) &&
-                Objects.equals(pgpArchivePublicKey, that.pgpArchivePublicKey) &&
-                Objects.equals(pgpArchivePrivateKey, that.pgpArchivePrivateKey)
+                Objects.equals(pgpInternalPublicKey, that.pgpInternalPublicKey)
                 */
                 ;
     }
@@ -173,9 +162,9 @@ public class ExtractTechnicalDetailsEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(uuid, name, sftpHostName/*, sftpHostPublicKey, sftpHostDirectory, sftpHostPort,
-                sftpClientUsername, sftpClientPrivateKeyPassword,sftpClientPrivateKey,
-                pgpCustomerPublicKey, pgpArchivePublicKey, pgpArchivePrivateKey*/);
+        return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort,
+                sftpClientUsername, sftpClientPrivateKeyPassword /*, sftpHostPublicKey,
+                sftpClientPrivateKey, pgpCustomerPublicKey, pgpInternalPublicKey*/);
     }
 
 }

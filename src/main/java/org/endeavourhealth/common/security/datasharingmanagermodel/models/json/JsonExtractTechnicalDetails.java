@@ -8,18 +8,17 @@ public class JsonExtractTechnicalDetails {
     private String uuid = null;
     private String name = null;
     private String sftpHostName = null;
-
-    // TODO (for now, just a subset of all the required fields, while doing development)
-    /*
-    private String sftpHostPublicKey = null;
     private String sftpHostDirectory = null;
     private Integer sftpHostPort = null;
     private String sftpClientUsername = null;
     private String sftpClientPrivateKeyPassword = null;
+
+    // TODO (for now, a subset of all required fields, while doing further development)
+    /*
+    private String sftpHostPublicKey = null;
     private String sftpClientPrivateKey = null;
     private String pgpCustomerPublicKey = null;
-    private String pgpArchivePublicKey = null;
-    private String pgpArchivePrivateKey = null;
+    private String pgpInternalPublicKey = null;
     */
 
     public JsonExtractTechnicalDetails() {
@@ -47,15 +46,6 @@ public class JsonExtractTechnicalDetails {
 
     public void setSftpHostName(String sftpHostName) {
         this.sftpHostName = sftpHostName;
-    }
-
-    /*
-    public String getSftpHostPublicKey() {
-        return sftpHostPublicKey;
-    }
-
-    public void setSftpHostPublicKey(String sftpHostPublicKey) {
-        this.sftpHostPublicKey = sftpHostPublicKey;
     }
 
     public String getSftpHostDirectory() {
@@ -90,6 +80,16 @@ public class JsonExtractTechnicalDetails {
         this.sftpClientPrivateKeyPassword = sftpClientPrivateKeyPassword;
     }
 
+    /*
+
+    public String getSftpHostPublicKey() {
+        return sftpHostPublicKey;
+    }
+
+    public void setSftpHostPublicKey(String sftpHostPublicKey) {
+        this.sftpHostPublicKey = sftpHostPublicKey;
+    }
+
     public String getSftpClientPrivateKey() {
         return sftpClientPrivateKey;
     }
@@ -106,21 +106,14 @@ public class JsonExtractTechnicalDetails {
         this.pgpCustomerPublicKey = pgpCustomerPublicKey;
     }
 
-    public String getPgpArchivePublicKey() {
-        return pgpArchivePublicKey;
+    public String getPgpInternalPublicKey() {
+        return pgpInternalPublicKey;
     }
 
-    public void setPgpArchivePublicKey(String pgpArchivePublicKey) {
-        this.pgpArchivePublicKey = pgpArchivePublicKey;
+    public void setPgpInternalPublicKey(String pgpInternalPublicKey) {
+        this.pgpInternalPublicKey = pgpInternalPublicKey;
     }
 
-    public String getPgpArchivePrivateKey() {
-        return pgpArchivePrivateKey;
-    }
-
-    public void setPgpArchivePrivateKey(String pgpArchivePrivateKey) {
-        this.pgpArchivePrivateKey = pgpArchivePrivateKey;
-    }
     */
 
 }
