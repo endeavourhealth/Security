@@ -1,6 +1,7 @@
 package org.endeavourhealth.common.security.usermanagermodel.models.DAL;
 
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationPolicyAttributeEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 
 import javax.persistence.EntityManager;
@@ -64,5 +65,17 @@ public class SecurityApplicationPolicyAttributeDAL {
         }
 
         return profiles;
+    }
+
+    public ApplicationPolicyAttributeEntity getRoleTypeAccessProfile(String profileId) throws Exception {
+        EntityManager entityManager = ConnectionManager.getUmEntityManager();
+
+        try {
+            ApplicationPolicyAttributeEntity ret = entityManager.find(ApplicationPolicyAttributeEntity.class, profileId);
+
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 }
