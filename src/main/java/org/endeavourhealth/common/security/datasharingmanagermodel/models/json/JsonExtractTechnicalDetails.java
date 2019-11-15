@@ -9,16 +9,20 @@ public class JsonExtractTechnicalDetails {
     private String name = null;
     private String sftpHostName = null;
     private String sftpHostDirectory = null;
-    private Integer sftpHostPort = null;
+    private String sftpHostPort = null;
     private String sftpClientUsername = null;
     private String sftpClientPrivateKeyPassword = null;
+    private String sftpHostPublicKeyFilename = null;
+    private String sftpHostPublicKeyFileData = null;
 
     // TODO (for now, a subset of all required fields, while doing further development)
     /*
-    private String sftpHostPublicKey = null;
-    private String sftpClientPrivateKey = null;
-    private String pgpCustomerPublicKey = null;
-    private String pgpInternalPublicKey = null;
+    private String sftpClientPrivateKeyFilename = null;
+    private String sftpClientPrivateKeyFileData = null;
+    private String pgpCustomerPublicKeyFilename = null;
+    private String pgpCustomerPublicKeyFileData = null;
+    private String pgpInternalPublicKeyFilename = null;
+    private String pgpInternalPublicKeyFileData = null;
     */
 
     public JsonExtractTechnicalDetails() {
@@ -56,11 +60,11 @@ public class JsonExtractTechnicalDetails {
         this.sftpHostDirectory = sftpHostDirectory;
     }
 
-    public Integer getSftpHostPort() {
+    public String getSftpHostPort() {
         return sftpHostPort;
     }
 
-    public void setSftpHostPort(Integer sftpHostPort) {
+    public void setSftpHostPort(String sftpHostPort) {
         this.sftpHostPort = sftpHostPort;
     }
 
@@ -80,15 +84,23 @@ public class JsonExtractTechnicalDetails {
         this.sftpClientPrivateKeyPassword = sftpClientPrivateKeyPassword;
     }
 
+    public String getSftpHostPublicKeyFilename() {
+        return sftpHostPublicKeyFilename;
+    }
+
+    public void setSftpHostPublicKeyFilename(String sftpHostPublicKeyFilename) {
+        this.sftpHostPublicKeyFilename = sftpHostPublicKeyFilename;
+    }
+
+    public String getSftpHostPublicKeyFileData() {
+        return sftpHostPublicKeyFileData;
+    }
+
+    public void setSftpHostPublicKeyFileData(String sftpHostPublicKeyFileData) {
+        this.sftpHostPublicKeyFileData = sftpHostPublicKeyFileData;
+    }
+
     /*
-
-    public String getSftpHostPublicKey() {
-        return sftpHostPublicKey;
-    }
-
-    public void setSftpHostPublicKey(String sftpHostPublicKey) {
-        this.sftpHostPublicKey = sftpHostPublicKey;
-    }
 
     public String getSftpClientPrivateKey() {
         return sftpClientPrivateKey;

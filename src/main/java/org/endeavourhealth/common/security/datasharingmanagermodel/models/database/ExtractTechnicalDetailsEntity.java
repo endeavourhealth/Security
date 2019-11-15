@@ -11,16 +11,20 @@ public class ExtractTechnicalDetailsEntity {
     private String name;
     private String sftpHostName;
     private String sftpHostDirectory;
-    private Integer sftpHostPort;
+    private String sftpHostPort;
     private String sftpClientUsername;
     private String sftpClientPrivateKeyPassword;
+    private String sftpHostPublicKeyFilename;
+    private String sftpHostPublicKeyFileData;
 
     // TODO (for now, a subset of all required fields, while doing further development)
     /*
-    private String sftpHostPublicKey;
-    private String sftpClientPrivateKey;
-    private String pgpCustomerPublicKey;
-    private String pgpInternalPublicKey;
+    private String sftpClientPrivateKeyFilename;
+    private String sftpClientPrivateKeyFileData;
+    private String pgpCustomerPublicKeyFilename;
+    private String pgpCustomerPublicKeyFileData;
+    private String pgpInternalPublicKeyFilename;
+    private String pgpInternalPublicKeyFileData;
     */
 
     @Id
@@ -65,11 +69,11 @@ public class ExtractTechnicalDetailsEntity {
 
     @Basic
     @Column(name = "sftp_host_port")
-    public Integer getSftpHostPort() {
+    public String getSftpHostPort() {
         return sftpHostPort;
     }
 
-    public void setSftpHostPort(Integer sftpHostPort) {
+    public void setSftpHostPort(String sftpHostPort) {
         this.sftpHostPort = sftpHostPort;
     }
 
@@ -93,17 +97,27 @@ public class ExtractTechnicalDetailsEntity {
         this.sftpClientPrivateKeyPassword = sftpClientPrivateKeyPassword;
     }
 
-    /*
+    @Basic
+    @Column(name = "sftp_host_public_key_filename")
+    public String getSftpHostPublicKeyFilename() {
+        return sftpHostPublicKeyFilename;
+    }
+
+    public void setSftpHostPublicKeyFilename(String sftpHostPublicKeyFilename) {
+        this.sftpHostPublicKeyFilename = sftpHostPublicKeyFilename;
+    }
 
     @Basic
-    @Column(name = "sftp_host_public_key")
-    public String getSftpHostPublicKey() {
-        return sftpHostPublicKey;
+    @Column(name = "sftp_host_public_key_fileData")
+    public String getSftpHostPublicKeyFileData() {
+        return sftpHostPublicKeyFileData;
     }
 
-    public void setSftpHostPublicKey(String sftpHostPublicKey) {
-        this.sftpHostPublicKey = sftpHostPublicKey;
+    public void setSftpHostPublicKeyFileData(String sftpHostPublicKeyFileData) {
+        this.sftpHostPublicKeyFileData = sftpHostPublicKeyFileData;
     }
+
+    /*
 
     @Basic
     @Column(name = "sftp_client_private_key")
@@ -148,10 +162,11 @@ public class ExtractTechnicalDetailsEntity {
                 Objects.equals(sftpHostDirectory, that.sftpHostDirectory) &&
                 Objects.equals(sftpHostPort, that.sftpHostPort) &&
                 Objects.equals(sftpClientUsername, that.sftpClientUsername) &&
-                Objects.equals(sftpClientPrivateKeyPassword, that.sftpClientPrivateKeyPassword)
+                Objects.equals(sftpClientPrivateKeyPassword, that.sftpClientPrivateKeyPassword) &&
+                Objects.equals(sftpHostPublicKeyFilename, that.sftpHostPublicKeyFilename) &&
+                Objects.equals(sftpHostPublicKeyFileData, that.sftpHostPublicKeyFileData)
                 /*
                 &&
-                Objects.equals(sftpHostPublicKey, that.sftpHostPublicKey) &&
                 Objects.equals(sftpClientPrivateKey, that.sftpClientPrivateKey) &&
                 Objects.equals(pgpCustomerPublicKey, that.pgpCustomerPublicKey) &&
                 Objects.equals(pgpInternalPublicKey, that.pgpInternalPublicKey)
@@ -163,8 +178,8 @@ public class ExtractTechnicalDetailsEntity {
     public int hashCode() {
 
         return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort,
-                sftpClientUsername, sftpClientPrivateKeyPassword /*, sftpHostPublicKey,
-                sftpClientPrivateKey, pgpCustomerPublicKey, pgpInternalPublicKey*/);
+                sftpClientUsername, sftpClientPrivateKeyPassword, sftpHostPublicKeyFilename, sftpHostPublicKeyFileData
+                /*sftpClientPrivateKey, pgpCustomerPublicKey, pgpInternalPublicKey*/);
     }
 
 }
