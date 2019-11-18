@@ -14,11 +14,11 @@ public class JsonExtractTechnicalDetails {
     private String sftpClientPrivateKeyPassword = null;
     private String sftpHostPublicKeyFilename = null;
     private String sftpHostPublicKeyFileData = null;
+    private String sftpClientPrivateKeyFilename = null;
+    private String sftpClientPrivateKeyFileData = null;
 
     // TODO (for now, a subset of all required fields, while doing further development)
     /*
-    private String sftpClientPrivateKeyFilename = null;
-    private String sftpClientPrivateKeyFileData = null;
     private String pgpCustomerPublicKeyFilename = null;
     private String pgpCustomerPublicKeyFileData = null;
     private String pgpInternalPublicKeyFilename = null;
@@ -100,15 +100,23 @@ public class JsonExtractTechnicalDetails {
         this.sftpHostPublicKeyFileData = sftpHostPublicKeyFileData;
     }
 
+    public String getSftpClientPrivateKeyFilename() {
+        return sftpClientPrivateKeyFilename;
+    }
+
+    public void setSftpClientPrivateKeyFilename(String sftpClientPrivateKeyFilename) {
+        this.sftpClientPrivateKeyFilename = sftpClientPrivateKeyFilename;
+    }
+
+    public String getSftpClientPrivateKeyFileData() {
+        return sftpClientPrivateKeyFileData;
+    }
+
+    public void setSftpClientPrivateKeyFileData(String sftpClientPrivateKeyFileData) {
+        this.sftpClientPrivateKeyFileData = sftpClientPrivateKeyFileData;
+    }
+
     /*
-
-    public String getSftpClientPrivateKey() {
-        return sftpClientPrivateKey;
-    }
-
-    public void setSftpClientPrivateKey(String sftpClientPrivateKey) {
-        this.sftpClientPrivateKey = sftpClientPrivateKey;
-    }
 
     public String getPgpCustomerPublicKey() {
         return pgpCustomerPublicKey;

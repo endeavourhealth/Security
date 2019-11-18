@@ -16,11 +16,12 @@ public class ExtractTechnicalDetailsEntity {
     private String sftpClientPrivateKeyPassword;
     private String sftpHostPublicKeyFilename;
     private String sftpHostPublicKeyFileData;
+    private String sftpClientPrivateKeyFilename;
+    private String sftpClientPrivateKeyFileData;
 
     // TODO (for now, a subset of all required fields, while doing further development)
     /*
-    private String sftpClientPrivateKeyFilename;
-    private String sftpClientPrivateKeyFileData;
+
     private String pgpCustomerPublicKeyFilename;
     private String pgpCustomerPublicKeyFileData;
     private String pgpInternalPublicKeyFilename;
@@ -117,17 +118,27 @@ public class ExtractTechnicalDetailsEntity {
         this.sftpHostPublicKeyFileData = sftpHostPublicKeyFileData;
     }
 
-    /*
+    @Basic
+    @Column(name = "sftp_client_private_key_filename")
+    public String getSftpClientPrivateKeyFilename() {
+        return sftpClientPrivateKeyFilename;
+    }
+
+    public void setSftpClientPrivateKeyFilename(String sftpClientPrivateKeyFilename) {
+        this.sftpClientPrivateKeyFilename = sftpClientPrivateKeyFilename;
+    }
 
     @Basic
-    @Column(name = "sftp_client_private_key")
-    public String getSftpClientPrivateKey() {
-        return sftpClientPrivateKey;
+    @Column(name = "sftp_client_private_key_fileData")
+    public String getSftpClientPrivateKeyFileData() {
+        return sftpClientPrivateKeyFileData;
     }
 
-    public void setSftpClientPrivateKey(String sftpClientPrivateKey) {
-        this.sftpClientPrivateKey = sftpClientPrivateKey;
+    public void setSftpClientPrivateKeyFileData(String sftpClientPrivateKeyFileData) {
+        this.sftpClientPrivateKeyFileData = sftpClientPrivateKeyFileData;
     }
+
+    /*
 
     @Basic
     @Column(name = "pgp_customer_public_key")
@@ -164,10 +175,10 @@ public class ExtractTechnicalDetailsEntity {
                 Objects.equals(sftpClientUsername, that.sftpClientUsername) &&
                 Objects.equals(sftpClientPrivateKeyPassword, that.sftpClientPrivateKeyPassword) &&
                 Objects.equals(sftpHostPublicKeyFilename, that.sftpHostPublicKeyFilename) &&
-                Objects.equals(sftpHostPublicKeyFileData, that.sftpHostPublicKeyFileData)
+                Objects.equals(sftpHostPublicKeyFileData, that.sftpHostPublicKeyFileData) &&
+                Objects.equals(sftpClientPrivateKeyFilename, that.sftpClientPrivateKeyFilename) &&
+                Objects.equals(sftpClientPrivateKeyFileData, that.sftpClientPrivateKeyFileData)
                 /*
-                &&
-                Objects.equals(sftpClientPrivateKey, that.sftpClientPrivateKey) &&
                 Objects.equals(pgpCustomerPublicKey, that.pgpCustomerPublicKey) &&
                 Objects.equals(pgpInternalPublicKey, that.pgpInternalPublicKey)
                 */
@@ -177,9 +188,9 @@ public class ExtractTechnicalDetailsEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort,
-                sftpClientUsername, sftpClientPrivateKeyPassword, sftpHostPublicKeyFilename, sftpHostPublicKeyFileData
-                /*sftpClientPrivateKey, pgpCustomerPublicKey, pgpInternalPublicKey*/);
+        return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort, sftpClientUsername, sftpClientPrivateKeyPassword,
+                 sftpHostPublicKeyFilename, sftpHostPublicKeyFileData, sftpClientPrivateKeyFilename, sftpHostPublicKeyFileData
+                /*pgpCustomerPublicKey, pgpInternalPublicKey*/);
     }
 
 }
