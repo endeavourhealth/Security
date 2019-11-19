@@ -1,9 +1,9 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL;
 
-import org.apache.commons.lang3.StringUtils;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.*;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonAuthorityToShare;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonExtractTechnicalDetails;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProject;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProjectSchedule;
 import org.endeavourhealth.common.security.usermanagermodel.models.ConnectionManager;
@@ -95,6 +95,7 @@ public class SecurityProjectDAL {
         List<OrganisationEntity> publishers = getLinkedOrganisations(projectId, MapType.PUBLISHER.getMapType());
         List<OrganisationEntity> subscribers = getLinkedOrganisations(projectId, MapType.SUBSCRIBER.getMapType());
         ProjectApplicationPolicyEntity applicationPolicy = new SecurityProjectApplicationPolicyDAL().getProjectApplicationPolicyId(projectId);
+        ExtractTechnicalDetailsEntity extractTechnicalDetailsEntity = getLinkedExtractTechnicalDetails(projectId, MapType.EXTRACTTECHNICALDETAILS.getMapType());
         ProjectScheduleEntity scheduleEntity = getLinkedSchedule(projectId, MapType.SCHEDULE.getMapType());
 
         if (dsas != null) {
@@ -146,11 +147,37 @@ public class SecurityProjectDAL {
             project.setApplicationPolicy(applicationPolicy.getApplicationPolicyId());
         }
 
+        if (extractTechnicalDetailsEntity != null) {
+            project.setExtractTechnicalDetails(setJsonExtractTechnicalDetails(extractTechnicalDetailsEntity));
+        }
+
         if (scheduleEntity != null) {
             project.setSchedule(setJsonProjectSchedule(scheduleEntity));
         }
 
         return project;
+    }
+
+    public static JsonExtractTechnicalDetails setJsonExtractTechnicalDetails(ExtractTechnicalDetailsEntity detailsEntity) {
+        JsonExtractTechnicalDetails jsonDetails = new JsonExtractTechnicalDetails();
+
+        jsonDetails.setUuid(detailsEntity.getUuid());
+        jsonDetails.setName(detailsEntity.getName());
+        jsonDetails.setSftpHostName(detailsEntity.getSftpHostName());
+        jsonDetails.setSftpHostDirectory(detailsEntity.getSftpHostDirectory());
+        jsonDetails.setSftpHostPort(detailsEntity.getSftpHostPort());
+        jsonDetails.setSftpClientUsername(detailsEntity.getSftpClientUsername());
+        jsonDetails.setSftpClientPrivateKeyPassword(detailsEntity.getSftpClientPrivateKeyPassword());
+        jsonDetails.setSftpHostPublicKeyFilename(detailsEntity.getSftpHostPublicKeyFilename());
+        jsonDetails.setSftpHostPublicKeyFileData(detailsEntity.getSftpHostPublicKeyFileData());
+        jsonDetails.setSftpClientPrivateKeyFilename(detailsEntity.getSftpClientPrivateKeyFilename());
+        jsonDetails.setSftpClientPrivateKeyFileData(detailsEntity.getSftpClientPrivateKeyFileData());
+        jsonDetails.setPgpCustomerPublicKeyFilename(detailsEntity.getPgpCustomerPublicKeyFilename());
+        jsonDetails.setPgpCustomerPublicKeyFileData(detailsEntity.getPgpCustomerPublicKeyFileData());
+        jsonDetails.setPgpInternalPublicKeyFilename(detailsEntity.getPgpInternalPublicKeyFilename());
+        jsonDetails.setPgpInternalPublicKeyFileData(detailsEntity.getPgpInternalPublicKeyFileData());
+
+        return jsonDetails;
     }
 
     public static JsonProjectSchedule setJsonProjectSchedule(ProjectScheduleEntity scheduleEntity) {
@@ -216,6 +243,17 @@ public class SecurityProjectDAL {
         if (!orgUUIDs.isEmpty())
             ret = OrganisationCache.getOrganisationDetails(orgUUIDs);
 
+        return ret;
+    }
+
+    public ExtractTechnicalDetailsEntity getLinkedExtractTechnicalDetails(String projectId, Short mapType) throws Exception {
+
+        List <String> detailsUUIDs = new SecurityMasterMappingDAL().getChildMappings(projectId, MapType.PROJECT.getMapType(), mapType);
+        ExtractTechnicalDetailsEntity ret = null;
+
+        if (!detailsUUIDs.isEmpty()) {
+            ret = new SecurityExtractTechnicalDetailsDAL().getExtractTechnicalDetails(detailsUUIDs.get(0));
+        }
         return ret;
     }
 

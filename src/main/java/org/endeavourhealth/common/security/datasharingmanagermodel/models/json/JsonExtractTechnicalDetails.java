@@ -16,14 +16,10 @@ public class JsonExtractTechnicalDetails {
     private String sftpHostPublicKeyFileData = null;
     private String sftpClientPrivateKeyFilename = null;
     private String sftpClientPrivateKeyFileData = null;
-
-    // TODO (for now, a subset of all required fields, while doing further development)
-    /*
     private String pgpCustomerPublicKeyFilename = null;
     private String pgpCustomerPublicKeyFileData = null;
     private String pgpInternalPublicKeyFilename = null;
     private String pgpInternalPublicKeyFileData = null;
-    */
 
     public JsonExtractTechnicalDetails() {
     }
@@ -116,24 +112,36 @@ public class JsonExtractTechnicalDetails {
         this.sftpClientPrivateKeyFileData = sftpClientPrivateKeyFileData;
     }
 
-    /*
-
-    public String getPgpCustomerPublicKey() {
-        return pgpCustomerPublicKey;
+    public String getPgpCustomerPublicKeyFilename() {
+        return pgpCustomerPublicKeyFilename;
     }
 
-    public void setPgpCustomerPublicKey(String pgpCustomerPublicKey) {
-        this.pgpCustomerPublicKey = pgpCustomerPublicKey;
+    public void setPgpCustomerPublicKeyFilename(String pgpCustomerPublicKeyFilename) {
+        this.pgpCustomerPublicKeyFilename = pgpCustomerPublicKeyFilename;
     }
 
-    public String getPgpInternalPublicKey() {
-        return pgpInternalPublicKey;
+    public String getPgpCustomerPublicKeyFileData() {
+        return pgpCustomerPublicKeyFileData;
     }
 
-    public void setPgpInternalPublicKey(String pgpInternalPublicKey) {
-        this.pgpInternalPublicKey = pgpInternalPublicKey;
+    public void setPgpCustomerPublicKeyFileData(String pgpCustomerPublicKeyFileData) {
+        this.pgpCustomerPublicKeyFileData = pgpCustomerPublicKeyFileData;
     }
 
-    */
+    public String getPgpInternalPublicKeyFilename() {
+        return pgpInternalPublicKeyFilename;
+    }
+
+    public void setPgpInternalPublicKeyFilename(String pgpInternalPublicKeyFilename) {
+        this.pgpInternalPublicKeyFilename = pgpInternalPublicKeyFilename;
+    }
+
+    public String getPgpInternalPublicKeyFileData() {
+        return pgpInternalPublicKeyFileData;
+    }
+
+    public void setPgpInternalPublicKeyFileData(String pgpInternalPublicKeyFileData) {
+        this.pgpInternalPublicKeyFileData = pgpInternalPublicKeyFileData;
+    }
 
 }

@@ -18,15 +18,10 @@ public class ExtractTechnicalDetailsEntity {
     private String sftpHostPublicKeyFileData;
     private String sftpClientPrivateKeyFilename;
     private String sftpClientPrivateKeyFileData;
-
-    // TODO (for now, a subset of all required fields, while doing further development)
-    /*
-
     private String pgpCustomerPublicKeyFilename;
     private String pgpCustomerPublicKeyFileData;
     private String pgpInternalPublicKeyFilename;
     private String pgpInternalPublicKeyFileData;
-    */
 
     @Id
     @Column(name = "uuid")
@@ -138,29 +133,45 @@ public class ExtractTechnicalDetailsEntity {
         this.sftpClientPrivateKeyFileData = sftpClientPrivateKeyFileData;
     }
 
-    /*
-
     @Basic
-    @Column(name = "pgp_customer_public_key")
-    public String getPgpCustomerPublicKey() {
-        return pgpCustomerPublicKey;
+    @Column(name = "pgp_customer_public_key_filename")
+    public String getPgpCustomerPublicKeyFilename() {
+        return pgpCustomerPublicKeyFilename;
     }
 
-    public void setPgpCustomerPublicKey(String pgpCustomerPublicKey) {
-        this.pgpCustomerPublicKey = pgpCustomerPublicKey;
+    public void setPgpCustomerPublicKeyFilename(String pgpCustomerPublicKeyFilename) {
+        this.pgpCustomerPublicKeyFilename = pgpCustomerPublicKeyFilename;
     }
 
     @Basic
-    @Column(name = "pgp_internal_public_key")
-    public String getPgpArchivePublicKey() {
-        return pgpArchivePublicKey;
+    @Column(name = "pgp_customer_public_key_fileData")
+    public String getPgpCustomerPublicKeyFileData() {
+        return pgpCustomerPublicKeyFileData;
     }
 
-    public void setPgpInternalPublicKey(String pgpInternalPublicKey) {
-        this.pgpInternalPublicKey = pgpInternalPublicKey;
+    public void setPgpCustomerPublicKeyFileData(String pgpCustomerPublicKeyFileData) {
+        this.pgpCustomerPublicKeyFileData = pgpCustomerPublicKeyFileData;
     }
 
-    */
+    @Basic
+    @Column(name = "pgp_internal_public_key_filename")
+    public String getPgpInternalPublicKeyFilename() {
+        return pgpInternalPublicKeyFilename;
+    }
+
+    public void setPgpInternalPublicKeyFilename(String pgpInternalPublicKeyFilename) {
+        this.pgpInternalPublicKeyFilename = pgpInternalPublicKeyFilename;
+    }
+
+    @Basic
+    @Column(name = "pgp_internal_public_key_fileData")
+    public String getPgpInternalPublicKeyFileData() {
+        return pgpInternalPublicKeyFileData;
+    }
+
+    public void setPgpInternalPublicKeyFileData(String pgpInternalPublicKeyFileData) {
+        this.pgpInternalPublicKeyFileData = pgpInternalPublicKeyFileData;
+    }
 
     @Override
     public boolean equals(Object o) {
@@ -177,20 +188,20 @@ public class ExtractTechnicalDetailsEntity {
                 Objects.equals(sftpHostPublicKeyFilename, that.sftpHostPublicKeyFilename) &&
                 Objects.equals(sftpHostPublicKeyFileData, that.sftpHostPublicKeyFileData) &&
                 Objects.equals(sftpClientPrivateKeyFilename, that.sftpClientPrivateKeyFilename) &&
-                Objects.equals(sftpClientPrivateKeyFileData, that.sftpClientPrivateKeyFileData)
-                /*
-                Objects.equals(pgpCustomerPublicKey, that.pgpCustomerPublicKey) &&
-                Objects.equals(pgpInternalPublicKey, that.pgpInternalPublicKey)
-                */
-                ;
+                Objects.equals(sftpClientPrivateKeyFileData, that.sftpClientPrivateKeyFileData) &&
+                Objects.equals(pgpCustomerPublicKeyFilename, that.pgpCustomerPublicKeyFilename) &&
+                Objects.equals(pgpCustomerPublicKeyFileData, that.pgpCustomerPublicKeyFileData) &&
+                Objects.equals(pgpInternalPublicKeyFilename, that.pgpInternalPublicKeyFilename) &&
+                Objects.equals(pgpInternalPublicKeyFileData, that.pgpInternalPublicKeyFileData);
+
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort, sftpClientUsername, sftpClientPrivateKeyPassword,
-                 sftpHostPublicKeyFilename, sftpHostPublicKeyFileData, sftpClientPrivateKeyFilename, sftpHostPublicKeyFileData
-                /*pgpCustomerPublicKey, pgpInternalPublicKey*/);
+                 sftpHostPublicKeyFilename, sftpHostPublicKeyFileData, sftpClientPrivateKeyFilename, sftpClientPrivateKeyFileData,
+                 pgpCustomerPublicKeyFilename, pgpCustomerPublicKeyFileData, pgpInternalPublicKeyFilename, pgpInternalPublicKeyFileData);
     }
 
 }
