@@ -11,8 +11,6 @@ import org.endeavourhealth.common.security.usermanagermodel.models.caching.Organ
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.ProjectCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.caching.UserCache;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.AuditAction;
-import org.endeavourhealth.common.security.usermanagermodel.models.enums.ItemType;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 import org.keycloak.representations.idm.UserRepresentation;
 
@@ -145,9 +143,6 @@ public class SecurityUserProjectDAL {
         String auditJson = getAuditJsonForDefaultRoleChange(oldDefaultProject, newDefaultRole);
 
         UserCache.clearUserCache(userId);
-
-        new SecurityAuditDAL().addToAuditTrail(userProjectId,
-                AuditAction.EDIT, ItemType.DEFAULT_PROJECT, null, null, auditJson);
 
     }
 

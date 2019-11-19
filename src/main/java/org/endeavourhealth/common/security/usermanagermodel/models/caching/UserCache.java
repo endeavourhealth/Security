@@ -6,6 +6,7 @@ import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityU
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserProjectDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityUserRegionDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserApplicationPolicyEntity;
+import org.endeavourhealth.common.security.usermanagermodel.models.database.UserProjectEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.UserRegionEntity;
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonUser;
 import org.keycloak.representations.idm.UserRepresentation;
@@ -22,6 +23,7 @@ public class UserCache {
     private static Map<String, UserApplicationPolicyEntity> userApplicationPolicyMap = new HashMap<>();
     private static Map<String, Boolean> userProjectApplicationAccessMap = new HashMap<>();
     private static Map<String, UserRegionEntity> userRegionMap = new HashMap<>();
+    private static Map<String, UserProjectEntity> userProjectMap = new HashMap<>();
 
     public static UserRepresentation getUserDetails(String userId) throws Exception {
         UserRepresentation foundUser = null;
@@ -106,6 +108,22 @@ public class UserCache {
         return foundPolicy;
     }
 
+    public static UserProjectEntity getUserProject(String userProjectId) throws Exception {
+        UserProjectEntity foundUserProject = null;
+
+        if (userProjectMap.containsKey(userProjectId)) {
+            foundUserProject = userProjectMap.get(userProjectId);
+        } else {
+            UserProjectEntity userProj = new SecurityUserProjectDAL().getUserProject(userProjectId);
+            foundUserProject = userProj;
+            userProjectMap.put(userProjectId, userProj);
+        }
+
+        CacheManager.startScheduler();
+
+        return foundUserProject;
+    }
+
     public static UserRegionEntity getUserRegion(String userId) throws Exception {
         UserRegionEntity foundRegion = null;
 
@@ -159,6 +177,7 @@ public class UserCache {
         if (userRegionMap.containsKey(userId)) {
             userRegionMap.remove(userId);
         }
+        userProjectMap.clear();
     }
 
     public static void flushCache() throws Exception {
@@ -167,5 +186,6 @@ public class UserCache {
         userProjectApplicationAccessMap.clear();
         userApplicationPolicyMap.clear();
         userRegionMap.clear();
+        userProjectMap.clear();
     }
 }
