@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonCohort;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -11,6 +13,17 @@ public class CohortEntity {
     private Short consentModelId;
     private String description;
     private String technicalDefinition;
+
+    public CohortEntity(JsonCohort cohort) {
+        this.uuid = cohort.getUuid();
+        this.name = cohort.getName();
+        this.consentModelId = cohort.getConsentModelId();
+        this.description = cohort.getDescription();
+        this.technicalDefinition = cohort.getTechnicalDefinition();
+    }
+
+    public CohortEntity() {
+    }
 
     @Id
     @Column(name = "uuid")
