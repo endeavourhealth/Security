@@ -1,6 +1,10 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDataSet;
+
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -10,6 +14,19 @@ public class DatasetEntity {
     private String name;
     private String description;
     private String technicalDefinition;
+    @Transient private List<String> dpas;
+
+    public DatasetEntity() {
+    }
+
+    public DatasetEntity(JsonDataSet dataSet) {
+        this.uuid = dataSet.getUuid();
+        this.name = dataSet.getName();
+        this.description = dataSet.getDescription();
+        this.technicalDefinition = dataSet.getTechnicalDefinition();
+        this.dpas = new ArrayList<>();
+        dataSet.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
+    }
 
     @Id
     @Column(name = "uuid")
@@ -65,5 +82,15 @@ public class DatasetEntity {
 
     public void setTechnicalDefinition(String technicalDefinition) {
         this.technicalDefinition = technicalDefinition;
+    }
+
+    @Transient
+    public List<String> getDpas() {
+        return dpas;
+    }
+
+    @Transient
+    public void setDpas(List<String> dpas) {
+        this.dpas = dpas;
     }
 }

@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDPA;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -17,6 +19,27 @@ public class DataProcessingAgreementEntity {
     private String returnToSenderPolicy;
     private Date startDate;
     private Date endDate;
+
+    public DataProcessingAgreementEntity() {
+    }
+
+    public DataProcessingAgreementEntity(JsonDPA dpa) {
+        this.uuid = dpa.getUuid();
+        this.name = dpa.getName();
+        this.description = dpa.getDescription();
+        this.derivation = dpa.getDerivation();
+        this.publisherInformation = dpa.getPublisherInformation();
+        this.publisherContractInformation = dpa.getPublisherContractInformation();
+        this.publisherDataset = dpa.getPublisherDataset();
+        this.dsaStatusId = dpa.getDsaStatusId();
+        this.returnToSenderPolicy = dpa.getReturnToSenderPolicy();
+        if (dpa.getStartDate() != null) {
+            this.startDate = Date.valueOf(dpa.getStartDate());
+        }
+        if (dpa.getEndDate() != null) {
+            this.endDate = Date.valueOf(dpa.getEndDate());
+        }
+    }
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)

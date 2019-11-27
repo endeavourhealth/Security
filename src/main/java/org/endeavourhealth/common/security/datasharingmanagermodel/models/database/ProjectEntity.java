@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProject;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.*;
@@ -26,6 +28,35 @@ public class ProjectEntity {
     private Short projectStatusId;
     private Date startDate;
     private Date endDate;
+
+    public ProjectEntity() {
+    }
+
+    public ProjectEntity(JsonProject project) {
+        this.uuid = project.getUuid();
+        this.name = project.getName();
+        this.leadUser = project.getLeadUser();
+        this.technicalLeadUser = project.getTechnicalLeadUser();
+        this.consentModelId = project.getConsentModelId();
+        this.deidentificationLevel = project.getDeidentificationLevel();
+        this.projectTypeId = project.getProjectTypeId();
+        this.securityInfrastructureId = project.getSecurityInfrastructureId();
+        this.ipAddress = project.getIpAddress();
+        this.summary = project.getSummary();
+        this.businessCase = project.getBusinessCase();
+        this.objectives = project.getObjectives();
+        this.securityArchitectureId = project.getSecurityArchitectureId();
+        this.storageProtocolId = project.getStorageProtocolId();
+        this.businessCaseStatus = project.getBusinessCaseStatus();
+        this.flowScheduleId = project.getFlowScheduleId();
+        this.projectStatusId = project.getProjectStatusId();
+        if (project.getStartDate() != null) {
+            this.startDate = Date.valueOf(project.getStartDate());
+        }
+        if (project.getEndDate() != null) {
+            this.endDate = Date.valueOf(project.getEndDate());
+        }
+    }
 
     @Id
     @Column(name = "uuid")

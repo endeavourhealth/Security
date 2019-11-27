@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisation;
+
 import javax.persistence.*;
 import java.sql.Date;
 import java.util.*;
@@ -132,6 +134,29 @@ public class OrganisationEntity {
     private String bulkConflictedWith;
     private byte type;
     private byte active;
+
+    public OrganisationEntity() {
+    }
+
+    public OrganisationEntity(JsonOrganisation organisation) {
+        this.uuid = organisation.getUuid();
+        this.name = organisation.getName();
+        this.alternativeName = organisation.getAlternativeName();
+        this.odsCode = organisation.getOdsCode();
+        this.icoCode = organisation.getIcoCode();
+        this.igToolkitStatus = organisation.getIgToolkitStatus();
+        if (organisation.getDateOfRegistration() != null) {
+            this.dateOfRegistration = Date.valueOf(organisation.getDateOfRegistration());
+        }
+        this.registrationPerson = organisation.getRegistrationPerson();
+        this.evidenceOfRegistration = organisation.getEvidenceOfRegistration();
+        this.isService = (byte) (organisation.getIsService().equals("1") ? 1 : 0);
+        this.bulkImported = (byte) (organisation.getBulkImported().equals("1") ? 1 : 0);
+        this.bulkItemUpdated = (byte) (organisation.getBulkItemUpdated().equals("1") ? 1 : 0);
+        this.bulkConflictedWith = organisation.getBulkConflictedWith();
+        this.type = organisation.getType();
+        this.active =(byte) (organisation.isActive() ? 1 : 0);
+    }
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)

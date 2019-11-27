@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDSA;
+
 import javax.persistence.*;
 import java.sql.Date;
 
@@ -14,6 +16,24 @@ public class DataSharingAgreementEntity {
     private short consentModelId;
     private Date startDate;
     private Date endDate;
+
+    public DataSharingAgreementEntity() {
+    }
+
+    public DataSharingAgreementEntity(JsonDSA dsa) {
+        this.uuid = dsa.getUuid();
+        this.name = dsa.getName();
+        this.description = dsa.getDescription();
+        this.derivation = dsa.getDerivation();
+        this.dsaStatusId = dsa.getDsaStatusId();
+        this.consentModelId = dsa.getConsentModelId();
+        if (dsa.getStartDate() != null) {
+            this.startDate = Date.valueOf(dsa.getStartDate());
+        }
+        if (dsa.getEndDate() != null) {
+            this.endDate = Date.valueOf(dsa.getEndDate());
+        }
+    }
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)

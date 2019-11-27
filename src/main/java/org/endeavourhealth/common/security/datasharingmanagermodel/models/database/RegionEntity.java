@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonRegion;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,15 @@ public class RegionEntity {
     private String uuid;
     private String name;
     private String description;
+
+    public RegionEntity() {
+    }
+
+    public RegionEntity(JsonRegion region) {
+        this.uuid = region.getUuid();
+        this.name = region.getName();
+        this.description = region.getDescription();
+    }
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)
