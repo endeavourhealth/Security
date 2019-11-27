@@ -12,6 +12,16 @@ public class MasterMappingEntity {
     private short parentMapTypeId;
     private byte isDefault;
 
+    public  MasterMappingEntity(){}
+
+    public MasterMappingEntity(String childUuid, short childMapTypeId, String parentUuid, short parentMapTypeId)
+    {
+        this.childUuid = childUuid;
+        this.childMapTypeId = childMapTypeId;
+        this.parentUuid = parentUuid;
+        this.parentMapTypeId = parentMapTypeId;
+    }
+
     @Id
     @Column(name = "child_uuid", nullable = false, length = 36)
     public String getChildUuid() {
