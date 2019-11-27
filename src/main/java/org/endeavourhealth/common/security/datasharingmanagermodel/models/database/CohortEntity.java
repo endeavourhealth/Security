@@ -3,6 +3,8 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.datab
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonCohort;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -13,6 +15,7 @@ public class CohortEntity {
     private Short consentModelId;
     private String description;
     private String technicalDefinition;
+    @Transient private List<String> dpas;
 
     public CohortEntity(JsonCohort cohort) {
         this.uuid = cohort.getUuid();
@@ -20,6 +23,8 @@ public class CohortEntity {
         this.consentModelId = cohort.getConsentModelId();
         this.description = cohort.getDescription();
         this.technicalDefinition = cohort.getTechnicalDefinition();
+        this.dpas = new ArrayList<>();
+        cohort.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
     }
 
     public CohortEntity() {
@@ -65,6 +70,16 @@ public class CohortEntity {
         this.description = description;
     }
 
+    @Transient
+    public List<String> getDpas() {
+        return dpas;
+    }
+
+    @Transient
+    public void setDpas(List<String> dpas) {
+        this.dpas = dpas;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -74,12 +89,14 @@ public class CohortEntity {
                 Objects.equals(name, that.name) &&
                 Objects.equals(consentModelId, that.consentModelId) &&
                 Objects.equals(description, that.description);
+        // N.B. Definition excludes DPAs for now
     }
 
     @Override
     public int hashCode() {
 
         return Objects.hash(uuid, name, consentModelId, description);
+        // N.B. Definition excludes DPAs for now
     }
 
     @Basic
