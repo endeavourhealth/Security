@@ -33,4 +33,17 @@ public class SecurityCohortDAL {
             entityManager.close();
         }
     }
+
+    public CohortEntity getCohort(String uuid) throws Exception {
+        EntityManager entityManager = ConnectionManager.getDsmEntityManager();
+
+        try {
+
+            CohortEntity ret = entityManager.find(CohortEntity.class, uuid);
+
+            return ret;
+        } finally {
+            entityManager.close();
+        }
+    }
 }

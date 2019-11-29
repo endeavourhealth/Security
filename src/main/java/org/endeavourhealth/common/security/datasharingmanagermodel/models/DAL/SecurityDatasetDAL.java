@@ -33,4 +33,17 @@ public class SecurityDatasetDAL {
             entityManager.close();
         }
     }
+
+    public DatasetEntity getDataSet(String uuid) throws Exception {
+        EntityManager entityManager = ConnectionManager.getDsmEntityManager();
+
+        try {
+            DatasetEntity ret = entityManager.find(DatasetEntity.class, uuid);
+
+            return ret;
+        } finally {
+            entityManager.close();
+        }
+
+    }
 }

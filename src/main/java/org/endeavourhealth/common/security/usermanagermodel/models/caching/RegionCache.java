@@ -33,6 +33,33 @@ public class RegionCache {
 
     }
 
+    public static List<RegionEntity> getRegionDetails(List<String> regions) throws Exception {
+        List<RegionEntity> regionEntities = new ArrayList<>();
+        List<String> missingRegions = new ArrayList<>();
+
+        for (String reg : regions) {
+            if (regionMap.containsKey(reg)) {
+                regionEntities.add(regionMap.get(reg));
+            } else {
+                missingRegions.add(reg);
+            }
+        }
+
+        if (missingRegions.size() > 0) {
+            List<RegionEntity> entities = new SecurityRegionDAL().getRegionsFromList(missingRegions);
+
+            for (RegionEntity reg : entities) {
+                regionMap.put(reg.getUuid(), reg);
+                regionEntities.add(reg);
+            }
+        }
+
+        CacheManager.startScheduler();
+
+        return regionEntities;
+
+    }
+
     public static List<RegionEntity> getAllRegions() throws Exception {
 
         if (!allRegionsFound) {

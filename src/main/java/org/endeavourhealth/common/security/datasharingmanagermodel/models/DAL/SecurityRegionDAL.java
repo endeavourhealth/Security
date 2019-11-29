@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,27 @@ public class SecurityRegionDAL {
             entityManager.close();
         }
 
+    }
+
+    public List<RegionEntity> getRegionsFromList(List<String> regions) throws Exception {
+        EntityManager entityManager = ConnectionManager.getDsmEntityManager();
+
+        try {
+            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+            CriteriaQuery<RegionEntity> cq = cb.createQuery(RegionEntity.class);
+            Root<RegionEntity> rootEntry = cq.from(RegionEntity.class);
+
+            Predicate predicate = rootEntry.get("uuid").in(regions);
+
+            cq.where(predicate);
+            TypedQuery<RegionEntity> query = entityManager.createQuery(cq);
+
+            List<RegionEntity> ret = query.getResultList();
+
+            return ret;
+        } finally {
+            entityManager.close();
+        }
     }
 
     public List<RegionEntity> getAllRegions() throws Exception {

@@ -28,6 +28,11 @@ public class ProjectEntity {
     private Short projectStatusId;
     private Date startDate;
     private Date endDate;
+    @Transient private List<String> publishers;
+    @Transient private List<String> subscribers;
+    @Transient private List<String> cohorts;
+    @Transient private List<String> dataSets;
+    @Transient private List<String> dsas;
 
     public ProjectEntity() {
     }
@@ -196,6 +201,55 @@ public class ProjectEntity {
 
     public void setStorageProtocolId(short storageProtocolId) {
         this.storageProtocolId = storageProtocolId;
+    }
+
+    @Transient
+    public List<String> getPublishers() {
+        return publishers;
+    }
+
+    @Transient
+    public void setPublishers(List<String> publishers) {
+        this.publishers = publishers;
+    }
+
+    @Transient
+    public List<String> getSubscribers() {
+        return subscribers;
+    }
+
+    public void setSubscribers(List<String> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    @Transient
+    public List<String> getCohorts() {
+        return cohorts;
+    }
+
+    @Transient
+    public void setCohorts(List<String> cohorts) {
+        this.cohorts = cohorts;
+    }
+
+    @Transient
+    public List<String> getDataSets() {
+        return dataSets;
+    }
+
+    @Transient
+    public void setDataSets(List<String> dataSets) {
+        this.dataSets = dataSets;
+    }
+
+    @Transient
+    public List<String> getDsas() {
+        return dsas;
+    }
+
+    @Transient
+    public void setDsas(List<String> dsas) {
+        this.dsas = dsas;
     }
 
     @Override

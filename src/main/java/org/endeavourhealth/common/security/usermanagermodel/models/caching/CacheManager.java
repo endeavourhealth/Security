@@ -41,6 +41,8 @@ public class CacheManager {
                 ProjectCache.flushCache();
                 RegionCache.flushCache();
                 UserCache.flushCache();
+                DataSetCache.flushCache();
+                CohortCache.flushCache();
             } catch (Exception e) {
 
             }
