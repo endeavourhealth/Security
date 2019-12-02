@@ -33,6 +33,7 @@ public class ProjectEntity {
     @Transient private List<String> cohorts;
     @Transient private List<String> dataSets;
     @Transient private List<String> dsas;
+    @Transient private List<String> documentations;
 
     public ProjectEntity() {
     }
@@ -60,6 +61,36 @@ public class ProjectEntity {
         }
         if (project.getEndDate() != null) {
             this.endDate = Date.valueOf(project.getEndDate());
+        }
+
+        this.dsas = new ArrayList<>();
+        if (project.getDsas() != null) {
+            project.getDsas().forEach((k, v) -> this.dsas.add(k.toString()));
+        }
+
+        this.publishers = new ArrayList<>();
+        if (project.getPublishers() != null) {
+            project.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        }
+
+        this.subscribers = new ArrayList<>();
+        if (project.getSubscribers() != null) {
+            project.getSubscribers().forEach((k, v) -> this.subscribers.add(k.toString()));
+        }
+
+        this.documentations = new ArrayList<>();
+        if (project.getDocumentations() != null) {
+            project.getDocumentations().forEach((k) -> this.documentations.add(k.getUuid()));
+        }
+
+        this.cohorts = new ArrayList<>();
+        if (project.getCohorts() != null) {
+            project.getCohorts().forEach((k, v) -> this.cohorts.add(k.toString()));
+        }
+
+        this.dataSets = new ArrayList<>();
+        if (project.getDataSets() != null) {
+            project.getDataSets().forEach((k, v) -> this.dataSets.add(k.toString()));
         }
     }
 
@@ -250,6 +281,16 @@ public class ProjectEntity {
     @Transient
     public void setDsas(List<String> dsas) {
         this.dsas = dsas;
+    }
+
+    @Transient
+    public List<String> getDocumentations() {
+        return documentations;
+    }
+
+    @Transient
+    public void setDocumentations(List<String> documentations) {
+        this.documentations = documentations;
     }
 
     @Override

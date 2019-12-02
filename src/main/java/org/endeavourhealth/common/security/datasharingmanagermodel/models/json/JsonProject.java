@@ -30,8 +30,8 @@ public class JsonProject {
     private String endDate = null;
     private Map<UUID, String> publishers = null;
     private Map<UUID, String> subscribers = null;
-    private Map<UUID, String> basePopulation = null;
-    private Map<UUID, String> dataSet = null;
+    private Map<UUID, String> cohorts = null;
+    private Map<UUID, String> dataSets = null;
     private Map<UUID, String> projectConfiguration = null;
     private Map<UUID, String> dsas = null;
     private String applicationPolicy = null;
@@ -219,20 +219,20 @@ public class JsonProject {
         this.subscribers = subscribers;
     }
 
-    public Map<UUID, String> getBasePopulation() {
-        return basePopulation;
+    public Map<UUID, String> getCohorts() {
+        return cohorts;
     }
 
-    public void setBasePopulation(Map<UUID, String> basePopulation) {
-        this.basePopulation = basePopulation;
+    public void setCohorts(Map<UUID, String> cohorts) {
+        this.cohorts = cohorts;
     }
 
-    public Map<UUID, String> getDataSet() {
-        return dataSet;
+    public Map<UUID, String> getDataSets() {
+        return dataSets;
     }
 
-    public void setDataSet(Map<UUID, String> dataSet) {
-        this.dataSet = dataSet;
+    public void setDataSets(Map<UUID, String> dataSets) {
+        this.dataSets = dataSets;
     }
 
     public Map<UUID, String> getProjectConfiguration() {

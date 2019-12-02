@@ -113,7 +113,7 @@ public class SecurityProjectDAL {
             for (CohortEntity pop : basePopulations) {
                 populations.put(UUID.fromString(pop.getUuid()), pop.getName());
             }
-            project.setBasePopulation(populations);
+            project.setCohorts(populations);
         }
 
         if (dataSets != null) {
@@ -122,7 +122,7 @@ public class SecurityProjectDAL {
             for (DatasetEntity ds : dataSets) {
                 data.put(UUID.fromString(ds.getUuid()), ds.getName());
             }
-            project.setDataSet(data);
+            project.setDataSets(data);
         }
 
         if (publishers != null) {
