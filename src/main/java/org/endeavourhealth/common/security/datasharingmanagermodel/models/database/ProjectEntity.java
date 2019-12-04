@@ -34,6 +34,7 @@ public class ProjectEntity {
     @Transient private List<String> dataSets;
     @Transient private List<String> dsas;
     @Transient private List<String> documentations;
+    @Transient private List<String> schedules;
 
     public ProjectEntity() {
     }
@@ -91,6 +92,11 @@ public class ProjectEntity {
         this.dataSets = new ArrayList<>();
         if (project.getDataSets() != null) {
             project.getDataSets().forEach((k, v) -> this.dataSets.add(k.toString()));
+        }
+
+        this.schedules = new ArrayList<>();
+        if (project.getSchedule() != null) {
+            this.schedules.add(project.getSchedule().getUuid());
         }
     }
 
@@ -292,6 +298,13 @@ public class ProjectEntity {
     public void setDocumentations(List<String> documentations) {
         this.documentations = documentations;
     }
+
+    @Transient
+    public List<String> getSchedules() { return schedules; }
+
+    @Transient
+    public void setSchedules(List<String> schedules) { this.schedules = schedules; }
+
 
     @Override
     public boolean equals(Object o) {
