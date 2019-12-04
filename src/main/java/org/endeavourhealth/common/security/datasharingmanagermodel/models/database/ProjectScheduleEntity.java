@@ -1,9 +1,6 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.sql.Date;
 
 @Entity
@@ -11,17 +8,9 @@ import java.sql.Date;
 public class ProjectScheduleEntity {
 
     private String uuid;
-    private Date starts;
-    private Date ends;
-    private int frequency;
-    private String weeks;
-    private byte isMonday;
-    private byte isTuesday;
-    private byte isWednesday;
-    private byte isThursday;
-    private byte isFriday;
-    private byte isSaturday;
-    private byte isSunday;
+    private String cronExpression;
+    private String cronDescription;
+    private String cronSettings;
 
     @Id
     @Column(name = "uuid")
@@ -33,102 +22,33 @@ public class ProjectScheduleEntity {
         this.uuid = uuid;
     }
 
-    @Column(name = "starts")
-    public Date getStarts() {
-        return starts;
+    @Basic
+    @Column(name = "cron_expression")
+    public String getCronExpression() {
+        return cronExpression;
     }
 
-    public void setStarts(Date starts) {
-        this.starts = starts;
+    public void setCronExpression(String cronExpression) {
+        this.cronExpression = cronExpression;
     }
 
-    @Column(name = "ends")
-    public Date getEnds() {
-        return ends;
+    @Basic
+    @Column(name = "cron_description")
+    public String getCronDescription() {
+        return cronDescription;
     }
 
-    public void setEnds(Date ends) {
-        this.ends = ends;
+    public void setCronDescription(String cronDescription) {
+        this.cronDescription = cronDescription;
     }
 
-    @Column(name = "frequency")
-    public int getFrequency() {
-        return frequency;
+    @Basic
+    @Column(name = "cron_settings")
+    public String getCronSettings() {
+        return cronSettings;
     }
 
-    public void setFrequency(int frequency) {
-        this.frequency = frequency;
-    }
-
-    @Column(name = "weeks")
-    public String getWeeks() {
-        return weeks;
-    }
-
-    public void setWeeks(String weeks) {
-        this.weeks = weeks;
-    }
-
-    @Column(name = "is_monday")
-    public byte getIsMonday() {
-        return isMonday;
-    }
-
-    public void setIsMonday(byte isMonday) {
-        this.isMonday = isMonday;
-    }
-
-    @Column(name = "is_tuesday")
-    public byte getIsTuesday() {
-        return isTuesday;
-    }
-
-    public void setIsTuesday(byte isTuesday) {
-        this.isTuesday = isTuesday;
-    }
-
-    @Column(name = "is_wednesday")
-    public byte getIsWednesday() {
-        return isWednesday;
-    }
-
-    public void setIsWednesday(byte isWednesday) {
-        this.isWednesday = isWednesday;
-    }
-
-    @Column(name = "is_thursday")
-    public byte getIsThursday() {
-        return isThursday;
-    }
-
-    public void setIsThursday(byte isThursday) {
-        this.isThursday = isThursday;
-    }
-
-    @Column(name = "is_friday")
-    public byte getIsFriday() {
-        return isFriday;
-    }
-
-    public void setIsFriday(byte isFriday) {
-        this.isFriday = isFriday;
-    }
-
-    @Column(name = "is_saturday")
-    public byte getIsSaturday() {
-        return isSaturday;
-    }
-
-    public void setIsSaturday(byte isSaturday) {
-        this.isSaturday = isSaturday;
-    }
-
-    @Column(name = "is_sunday")
-    public byte getIsSunday() {
-        return isSunday;
-    }
-
-    public void setIsSunday(byte isSunday) {
-        this.isSunday = isSunday;
+    public void setCronSettings(String cronSettings) {
+        this.cronSettings = cronSettings;
     }
 }

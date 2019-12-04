@@ -34,7 +34,7 @@ public class ProjectEntity {
     @Transient private List<String> dataSets;
     @Transient private List<String> dsas;
     @Transient private List<String> documentations;
-    @Transient private ExtractTechnicalDetailsEntity extractTechnicalDetails;
+    @Transient private List<String> schedules;
 
     public ProjectEntity() {
     }
@@ -94,55 +94,9 @@ public class ProjectEntity {
             project.getDataSets().forEach((k, v) -> this.dataSets.add(k.toString()));
         }
 
-        if (project.getExtractTechnicalDetails() != null) {
-
-            this.extractTechnicalDetails = new ExtractTechnicalDetailsEntity();
-
-            if (project.getExtractTechnicalDetails().getUuid() != null) {
-                this.extractTechnicalDetails.setUuid(project.getExtractTechnicalDetails().getUuid());
-            }
-            if (project.getExtractTechnicalDetails().getName() != null) {
-                this.extractTechnicalDetails.setName(project.getExtractTechnicalDetails().getName());
-            }
-            if (project.getExtractTechnicalDetails().getSftpHostName() != null) {
-                this.extractTechnicalDetails.setSftpHostName(project.getExtractTechnicalDetails().getSftpHostName());
-            }
-            if (project.getExtractTechnicalDetails().getSftpHostDirectory() != null) {
-                this.extractTechnicalDetails.setSftpHostDirectory(project.getExtractTechnicalDetails().getSftpHostDirectory());
-            }
-            if (project.getExtractTechnicalDetails().getSftpHostPort() != null) {
-                this.extractTechnicalDetails.setSftpHostPort(project.getExtractTechnicalDetails().getSftpHostPort());
-            }
-            if (project.getExtractTechnicalDetails().getSftpClientUsername() != null) {
-                this.extractTechnicalDetails.setSftpClientUsername(project.getExtractTechnicalDetails().getSftpClientUsername());
-            }
-            if (project.getExtractTechnicalDetails().getSftpClientPrivateKeyPassword() != null) {
-                this.extractTechnicalDetails.setSftpClientPrivateKeyPassword(project.getExtractTechnicalDetails().getSftpClientPrivateKeyPassword());
-            }
-            if (project.getExtractTechnicalDetails().getSftpHostPublicKeyFilename() != null) {
-                this.extractTechnicalDetails.setSftpHostPublicKeyFilename(project.getExtractTechnicalDetails().getSftpHostPublicKeyFilename());
-            }
-            if (project.getExtractTechnicalDetails().getSftpHostPublicKeyFileData() != null) {
-                this.extractTechnicalDetails.setSftpHostPublicKeyFileData(project.getExtractTechnicalDetails().getSftpHostPublicKeyFileData());
-            }
-            if (project.getExtractTechnicalDetails().getSftpClientPrivateKeyFilename() != null) {
-                this.extractTechnicalDetails.setSftpClientPrivateKeyFilename(project.getExtractTechnicalDetails().getSftpClientPrivateKeyFilename());
-            }
-            if (project.getExtractTechnicalDetails().getSftpClientPrivateKeyFileData() != null) {
-                this.extractTechnicalDetails.setSftpClientPrivateKeyFileData(project.getExtractTechnicalDetails().getSftpClientPrivateKeyFileData());
-            }
-            if (project.getExtractTechnicalDetails().getPgpCustomerPublicKeyFilename() != null) {
-                this.extractTechnicalDetails.setPgpCustomerPublicKeyFilename(project.getExtractTechnicalDetails().getPgpCustomerPublicKeyFilename());
-            }
-            if (project.getExtractTechnicalDetails().getPgpCustomerPublicKeyFileData() != null) {
-                this.extractTechnicalDetails.setPgpCustomerPublicKeyFileData(project.getExtractTechnicalDetails().getPgpCustomerPublicKeyFileData());
-            }
-            if (project.getExtractTechnicalDetails().getPgpInternalPublicKeyFilename() != null) {
-                this.extractTechnicalDetails.setPgpInternalPublicKeyFilename(project.getExtractTechnicalDetails().getPgpInternalPublicKeyFilename());
-            }
-            if (project.getExtractTechnicalDetails().getPgpInternalPublicKeyFileData() != null) {
-                this.extractTechnicalDetails.setPgpInternalPublicKeyFileData(project.getExtractTechnicalDetails().getPgpInternalPublicKeyFileData());
-            }
+        this.schedules = new ArrayList<>();
+        if (project.getSchedule() != null) {
+            this.schedules.add(project.getSchedule().getUuid());
         }
     }
 
@@ -346,14 +300,11 @@ public class ProjectEntity {
     }
 
     @Transient
-    public ExtractTechnicalDetailsEntity getExtractTechnicalDetails() {
-        return extractTechnicalDetails;
-    }
+    public List<String> getSchedules() { return schedules; }
 
     @Transient
-    public void setExtractTechnicalDetails(ExtractTechnicalDetailsEntity extractTechnicalDetails) {
-        this.extractTechnicalDetails = extractTechnicalDetails;
-    }
+    public void setSchedules(List<String> schedules) { this.schedules = schedules; }
+
 
     @Override
     public boolean equals(Object o) {

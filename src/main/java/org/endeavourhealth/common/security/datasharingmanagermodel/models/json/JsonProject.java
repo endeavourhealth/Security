@@ -39,6 +39,7 @@ public class JsonProject {
     private List<JsonApplicationPolicyAttribute> applicationPolicyAttributes = new ArrayList<>();
     private JsonExtractTechnicalDetails extractTechnicalDetails = null;
     private JsonProjectSchedule schedule = null;
+    private Map<UUID, String> schedules = null;
 
     public JsonProject() {
     }
@@ -302,4 +303,8 @@ public class JsonProject {
     public JsonProjectSchedule getSchedule() { return schedule; }
 
     public void setSchedule(JsonProjectSchedule projectSchedule) { this.schedule = projectSchedule; }
+
+    public Map<UUID, String> getSchedules() { return schedules; }
+
+    public void setSchedules(Map<UUID, String> schedules) { this.schedules = schedules; }
 }
