@@ -1,6 +1,8 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.apache.commons.lang3.StringUtils;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProject;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProjectSchedule;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -34,7 +36,7 @@ public class ProjectEntity {
     @Transient private List<String> dataSets;
     @Transient private List<String> dsas;
     @Transient private List<String> documentations;
-    @Transient private List<String> schedules;
+    @Transient private ProjectScheduleEntity schedule;
     @Transient private ExtractTechnicalDetailsEntity extractTechnicalDetails;
 
     public ProjectEntity() {
@@ -95,9 +97,12 @@ public class ProjectEntity {
             project.getDataSets().forEach((k, v) -> this.dataSets.add(k.toString()));
         }
 
-        this.schedules = new ArrayList<>();
         if (project.getSchedule() != null) {
-            this.schedules.add(project.getSchedule().getUuid());
+            this.schedule = new ProjectScheduleEntity();
+            this.schedule.setUuid(project.getSchedule().getUuid());
+            this.schedule.setCronExpression(project.getSchedule().getCronExpression());
+            this.schedule.setCronDescription(project.getSchedule().getCronDescription());
+            this.schedule.setCronSettings(project.getSchedule().getCronSettings());
         }
 
         if (project.getExtractTechnicalDetails() != null) {
@@ -352,10 +357,10 @@ public class ProjectEntity {
     }
 
     @Transient
-    public List<String> getSchedules() { return schedules; }
+    public ProjectScheduleEntity getSchedule() { return schedule; }
 
     @Transient
-    public void setSchedules(List<String> schedules) { this.schedules = schedules; }
+    public void setSchedule(ProjectScheduleEntity schedule) { this.schedule = schedule; }
 
     @Transient
     public ExtractTechnicalDetailsEntity getExtractTechnicalDetails() {
