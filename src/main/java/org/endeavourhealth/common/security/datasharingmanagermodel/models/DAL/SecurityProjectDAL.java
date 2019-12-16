@@ -23,8 +23,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 public class SecurityProjectDAL {
 
@@ -296,6 +296,38 @@ public class SecurityProjectDAL {
             ret = ProjectCache.getProjectDetails(projectUUIDs);
 
         return ret;
+    }
+
+    public List<String> getPublishersForProject(String projectId, String requesterOdsCode) throws Exception {
+
+        List<String> pubOdsCodes = new ArrayList<>();
+        // get subscribers for specified project
+        List<String> projectSubscribers = new SecurityMasterMappingDAL().getChildMappings(projectId,
+                MapType.PROJECT.getMapType(), MapType.SUBSCRIBER.getMapType());
+
+        // get org details for all subscribers
+        List<OrganisationEntity> subsInProject = OrganisationCache.getOrganisationDetails(projectSubscribers);
+
+        // check if org is a subscriber in a project
+        Boolean orgIsSubInProject = subsInProject.stream()
+                .anyMatch(org -> org.getOdsCode().equals(requesterOdsCode));
+
+        // if not just return an empty list
+        if (!orgIsSubInProject) {
+            return pubOdsCodes;
+        }
+
+        // get all the publishers for a project
+        List<String> projectPublishers = new SecurityMasterMappingDAL().getChildMappings(projectId,
+                MapType.PROJECT.getMapType(), MapType.PUBLISHER.getMapType());
+
+        // get publisher details
+        List<OrganisationEntity> pubsInProject = OrganisationCache.getOrganisationDetails(projectPublishers);
+
+        // return the ods codes
+        pubOdsCodes = pubsInProject.stream().map(OrganisationEntity::getOdsCode).collect(Collectors.toList());
+
+        return pubOdsCodes;
     }
 
 }
