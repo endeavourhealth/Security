@@ -4,6 +4,8 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.J
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "data_sharing_agreement", schema = "data_sharing_manager")
@@ -16,6 +18,14 @@ public class DataSharingAgreementEntity {
     private short consentModelId;
     private Date startDate;
     private Date endDate;
+    @Transient private List<String> purposes;
+    @Transient private List<String> benefits;
+    @Transient private List<String> regions;
+    @Transient private List<String> projects;
+    @Transient private List<String> publishers;
+    @Transient private List<String> subscribers;
+    @Transient private List<String> documentation;
+
 
     public DataSharingAgreementEntity() {
     }
@@ -33,6 +43,20 @@ public class DataSharingAgreementEntity {
         if (dsa.getEndDate() != null) {
             this.endDate = Date.valueOf(dsa.getEndDate());
         }
+        this.purposes = new ArrayList<>();
+        dsa.getPurposes().forEach((p) -> this.purposes.add(p.getUuid()));
+        this.benefits = new ArrayList<>();
+        dsa.getBenefits().forEach((b) -> this.benefits.add(b.getUuid()));
+        this.regions = new ArrayList<>();
+        dsa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        this.projects = new ArrayList<>();
+        dsa.getProjects().forEach((k, v) -> this.projects.add(k.toString()));
+        this.publishers = new ArrayList<>();
+        dsa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        this.subscribers = new ArrayList<>();
+        dsa.getSubscribers().forEach((k, v) -> this.subscribers.add(k.toString()));
+        this.documentation = new ArrayList<>();
+        dsa.getDocumentations().forEach((d) -> this.documentation.add(d.getUuid()));
     }
 
     @Id
@@ -115,6 +139,76 @@ public class DataSharingAgreementEntity {
         this.endDate = endDate;
     }
 
+    @Transient
+    public List<String> getPurposes() {
+        return purposes;
+    }
+
+    @Transient
+    public void setPurposes(List<String> purposes) {
+        this.purposes = purposes;
+    }
+
+    @Transient
+    public List<String> getBenefits() {
+        return benefits;
+    }
+
+    @Transient
+    public void setBenefits(List<String> benefits) {
+        this.benefits = benefits;
+    }
+
+    @Transient
+    public List<String> getRegions() {
+        return regions;
+    }
+
+    @Transient
+    public void setRegions(List<String> regions) {
+        this.regions = regions;
+    }
+
+    @Transient
+    public List<String> getProjects() {
+        return projects;
+    }
+
+    @Transient
+    public void setProjects(List<String> projects) {
+        this.projects = projects;
+    }
+
+    @Transient
+    public List<String> getPublishers() {
+        return publishers;
+    }
+
+    @Transient
+    public void setPublishers(List<String> publishers) {
+        this.publishers = publishers;
+    }
+
+    @Transient
+    public List<String> getSubscribers() {
+        return subscribers;
+    }
+
+    @Transient
+    public void setSubscribers(List<String> subscribers) {
+        this.subscribers = subscribers;
+    }
+
+    @Transient
+    public List<String> getDocumentation() {
+        return documentation;
+    }
+
+    @Transient
+    public void setDocumentation(List<String> documentation) {
+        this.documentation = documentation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -132,6 +226,7 @@ public class DataSharingAgreementEntity {
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
 
         return true;
+        // N.B. Ignores linked items for now
     }
 
     @Override
@@ -145,5 +240,6 @@ public class DataSharingAgreementEntity {
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         return result;
+        // N.B. Ignores linked items for now
     }
 }
