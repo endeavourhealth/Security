@@ -4,6 +4,8 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.J
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "data_processing_agreement", schema = "data_sharing_manager")
@@ -19,6 +21,11 @@ public class DataProcessingAgreementEntity {
     private String returnToSenderPolicy;
     private Date startDate;
     private Date endDate;
+    @Transient private List<String> purposes;
+    @Transient private List<String> benefits;
+    @Transient private List<String> regions;
+    @Transient private List<String> publishers;
+    @Transient private List<String> documentation;
 
     public DataProcessingAgreementEntity() {
     }
@@ -39,6 +46,16 @@ public class DataProcessingAgreementEntity {
         if (dpa.getEndDate() != null) {
             this.endDate = Date.valueOf(dpa.getEndDate());
         }
+        this.purposes = new ArrayList<>();
+        dpa.getPurposes().forEach((p) -> this.purposes.add(p.getUuid()));
+        this.benefits = new ArrayList<>();
+        dpa.getBenefits().forEach((b) -> this.benefits.add(b.getUuid()));
+        this.regions = new ArrayList<>();
+        dpa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        this.publishers = new ArrayList<>();
+        dpa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        this.documentation = new ArrayList<>();
+        dpa.getDocumentations().forEach((d) -> this.documentation.add(d.getUuid()));
     }
 
     @Id
@@ -151,6 +168,56 @@ public class DataProcessingAgreementEntity {
         this.endDate = endDate;
     }
 
+    @Transient
+    public List<String> getPurposes() {
+        return purposes;
+    }
+
+    @Transient
+    public void setPurposes(List<String> purposes) {
+        this.purposes = purposes;
+    }
+
+    @Transient
+    public List<String> getBenefits() {
+        return benefits;
+    }
+
+    @Transient
+    public void setBenefits(List<String> benefits) {
+        this.benefits = benefits;
+    }
+
+    @Transient
+    public List<String> getRegions() {
+        return regions;
+    }
+
+    @Transient
+    public void setRegions(List<String> regions) {
+        this.regions = regions;
+    }
+
+    @Transient
+    public List<String> getPublishers() {
+        return publishers;
+    }
+
+    @Transient
+    public void setPublishers(List<String> publishers) {
+        this.publishers = publishers;
+    }
+
+    @Transient
+    public List<String> getDocumentation() {
+        return documentation;
+    }
+
+    @Transient
+    public void setDocumentation(List<String> documentation) {
+        this.documentation = documentation;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -175,6 +242,7 @@ public class DataProcessingAgreementEntity {
         if (endDate != null ? !endDate.equals(that.endDate) : that.endDate != null) return false;
 
         return true;
+        // N.B. Ignores linked items for now
     }
 
     @Override
@@ -191,5 +259,6 @@ public class DataProcessingAgreementEntity {
         result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
         result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         return result;
+        // N.B. Definition excludes linked items for now
     }
 }
