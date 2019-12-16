@@ -24,7 +24,7 @@ public class DataSharingAgreementEntity {
     @Transient private List<String> projects;
     @Transient private List<String> publishers;
     @Transient private List<String> subscribers;
-    @Transient private List<String> documentation;
+    @Transient private List<String> documentations;
 
 
     public DataSharingAgreementEntity() {
@@ -55,8 +55,8 @@ public class DataSharingAgreementEntity {
         dsa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
         this.subscribers = new ArrayList<>();
         dsa.getSubscribers().forEach((k, v) -> this.subscribers.add(k.toString()));
-        this.documentation = new ArrayList<>();
-        dsa.getDocumentations().forEach((d) -> this.documentation.add(d.getUuid()));
+        this.documentations = new ArrayList<>();
+        dsa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
     }
 
     @Id
@@ -200,13 +200,13 @@ public class DataSharingAgreementEntity {
     }
 
     @Transient
-    public List<String> getDocumentation() {
-        return documentation;
+    public List<String> getDocumentations() {
+        return documentations;
     }
 
     @Transient
-    public void setDocumentation(List<String> documentation) {
-        this.documentation = documentation;
+    public void setDocumentations(List<String> documentations) {
+        this.documentations = documentations;
     }
 
     @Override

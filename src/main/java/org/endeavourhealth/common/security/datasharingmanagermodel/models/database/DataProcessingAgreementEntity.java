@@ -25,7 +25,7 @@ public class DataProcessingAgreementEntity {
     @Transient private List<String> benefits;
     @Transient private List<String> regions;
     @Transient private List<String> publishers;
-    @Transient private List<String> documentation;
+    @Transient private List<String> documentations;
 
     public DataProcessingAgreementEntity() {
     }
@@ -54,8 +54,8 @@ public class DataProcessingAgreementEntity {
         dpa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
         this.publishers = new ArrayList<>();
         dpa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
-        this.documentation = new ArrayList<>();
-        dpa.getDocumentations().forEach((d) -> this.documentation.add(d.getUuid()));
+        this.documentations = new ArrayList<>();
+        dpa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
     }
 
     @Id
@@ -209,13 +209,13 @@ public class DataProcessingAgreementEntity {
     }
 
     @Transient
-    public List<String> getDocumentation() {
-        return documentation;
+    public List<String> getDocumentations() {
+        return documentations;
     }
 
     @Transient
-    public void setDocumentation(List<String> documentation) {
-        this.documentation = documentation;
+    public void setDocumentations(List<String> documentations) {
+        this.documentations = documentations;
     }
 
     @Override
