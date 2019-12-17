@@ -1,6 +1,6 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.json;
 
-public abstract class JsonObjectWithUuid {
+public abstract class JsonItem {
     private String uuid = null;
 
     public String getUuid() {

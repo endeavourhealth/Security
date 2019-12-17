@@ -3,7 +3,7 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class JsonDocumentation extends JsonObjectWithUuid {
+public class JsonDocumentation extends JsonItem {
     private String title = null;
     private String filename = null;
     private String fileData = null;
