@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDPA;
 
 import javax.persistence.*;
@@ -31,21 +33,27 @@ public class DataProcessingAgreementEntity {
     }
 
     public DataProcessingAgreementEntity(JsonDPA dpa) {
-        this.uuid = dpa.getUuid();
-        this.name = dpa.getName();
-        this.description = dpa.getDescription();
-        this.derivation = dpa.getDerivation();
-        this.publisherInformation = dpa.getPublisherInformation();
-        this.publisherContractInformation = dpa.getPublisherContractInformation();
-        this.publisherDataset = dpa.getPublisherDataset();
-        this.dsaStatusId = dpa.getDsaStatusId();
-        this.returnToSenderPolicy = dpa.getReturnToSenderPolicy();
+        updateFromJson(dpa);
+    }
+
+    public void updateFromJson(JsonDPA dpa) {
+        setUuid(dpa.getUuid());
+        setName(dpa.getName());
+        setDescription(dpa.getDescription());
+        setDerivation(dpa.getDerivation());
+        setPublisherInformation(dpa.getPublisherInformation());
+        setPublisherContractInformation(dpa.getPublisherContractInformation());
+        setPublisherDataset(dpa.getPublisherDataset());
+        setDsaStatusId(dpa.getDsaStatusId());
+        setReturnToSenderPolicy(dpa.getReturnToSenderPolicy());
+
         if (dpa.getStartDate() != null) {
-            this.startDate = Date.valueOf(dpa.getStartDate());
+            setStartDate(Date.valueOf(dpa.getStartDate()));
         }
         if (dpa.getEndDate() != null) {
-            this.endDate = Date.valueOf(dpa.getEndDate());
+            setEndDate(Date.valueOf(dpa.getEndDate()));
         }
+
         this.purposes = new ArrayList<>();
         dpa.getPurposes().forEach((p) -> this.purposes.add(p.getUuid()));
         this.benefits = new ArrayList<>();
