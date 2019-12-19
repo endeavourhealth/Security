@@ -4,20 +4,20 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "values_set", schema = "data_sharing_manager")
+@Table(name = "value_sets", schema = "data_sharing_manager")
 public class ValueSetsEntity {
 
-    private int id;
+    private String uuid;
     private String name;
 
     @Id
-    @Column(name = "id")
-    public int getId() {
-        return id;
+    @Column(name = "uuid")
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     @Basic
@@ -35,12 +35,12 @@ public class ValueSetsEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ValueSetsEntity that = (ValueSetsEntity) o;
-        return id == that.id && Objects.equals(name, that.name);
+        return uuid == that.uuid && Objects.equals(name, that.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name);
+        return Objects.hash(uuid, name);
     }
 
 }

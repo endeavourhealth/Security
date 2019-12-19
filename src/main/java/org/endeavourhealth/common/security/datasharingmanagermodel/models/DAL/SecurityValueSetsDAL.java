@@ -12,10 +12,11 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class SecurityValueSetsDAL {
 
-    public List<ValueSetsCodesEntity> getValueSetsCode(int valuesSetsId) throws Exception {
+    public List<ValueSetsCodesEntity> getValueSetsCode(String valueSetsUUid) throws Exception {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
         List<ValueSetsCodesEntity> ret = null;
@@ -24,10 +25,9 @@ public class SecurityValueSetsDAL {
             CriteriaQuery<ValueSetsCodesEntity> cq = cb.createQuery(ValueSetsCodesEntity.class);
             Root<ValueSetsCodesEntity> rootEntry = cq.from(ValueSetsCodesEntity.class);
             cq.select(rootEntry);
-            cq.where(cb.equal(rootEntry.get("valueSetsId"), valuesSetsId));
+            cq.where(cb.equal(rootEntry.get("valueSetsUuid"), valueSetsUUid));
             TypedQuery<ValueSetsCodesEntity> query = entityManager.createQuery(cq);
             ret = query.getResultList();
-
         } finally {
             entityManager.close();
         }
@@ -50,11 +50,11 @@ public class SecurityValueSetsDAL {
         }
     }
 
-    public void deleteValueSetsCodes(int codeSetId) throws Exception {
+    public void deleteValueSetsCodes(String valueSetsUuid) throws Exception {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
         try {
-            for (ValueSetsCodesEntity entity : getValueSetsCode(codeSetId)) {
+            for (ValueSetsCodesEntity entity : getValueSetsCode(valueSetsUuid)) {
                 entityManager.getTransaction().begin();
                 entityManager.detach(entity);
                 entityManager.remove(entityManager.contains(entity) ? entity : entityManager.merge(entity));
@@ -100,6 +100,12 @@ public class SecurityValueSetsDAL {
             query.setMaxResults(pageSize);
             ret = query.getResultList();
             for (ValueSetsEntity entity : ret) {
+                if (entity.getUuid() == null) {
+                    entityManager.getTransaction().begin();
+                    entity.setUuid(UUID.randomUUID().toString());
+                    entityManager.merge(entity);
+                    entityManager.getTransaction().commit();
+                }
                 jsonValueSets.add(parseEntityToJson(entity));
             }
         } finally {
@@ -148,13 +154,13 @@ public class SecurityValueSetsDAL {
         return ret;
     }
 
-    public ValueSetsEntity deleteValuesSets(int id) throws Exception {
+    public ValueSetsEntity deleteValuesSets(String uuid) throws Exception {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
         ValueSetsEntity entry = null;
         try {
             entityManager.getTransaction().begin();
-            entry = entityManager.find(ValueSetsEntity.class, id);
+            entry = entityManager.find(ValueSetsEntity.class, uuid);
             entry = entityManager.merge(entry);
             entityManager.remove(entry);
             entityManager.getTransaction().commit();
@@ -168,14 +174,6 @@ public class SecurityValueSetsDAL {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
         try {
-            CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-            CriteriaQuery<Integer> cq = cb.createQuery(Integer.class);
-            Root<ValueSetsEntity> rootEntry = cq.from(ValueSetsEntity.class);
-            cq.select(cb.max(rootEntry.get("id")));
-
-            TypedQuery<Integer> query = entityManager.createQuery(cq);
-            Integer max = query.getSingleResult();
-            valuesSets.setId(max + 1);
             entityManager.getTransaction().begin();
             entityManager.persist(valuesSets);
             entityManager.getTransaction().commit();
@@ -200,7 +198,7 @@ public class SecurityValueSetsDAL {
 
     public JsonValueSets parseEntityToJson(ValueSetsEntity codeSet) throws Exception {
 
-        List<ValueSetsCodesEntity> codeSetCodes = new SecurityValueSetsDAL().getValueSetsCode(codeSet.getId());
+        List<ValueSetsCodesEntity> codeSetCodes = new SecurityValueSetsDAL().getValueSetsCode(codeSet.getUuid());
         JsonValueSetCodes[] jsonCodeSetValues = new JsonValueSetCodes[codeSetCodes.size()];
 
         String read2ConceptIds = "";
@@ -209,7 +207,7 @@ public class SecurityValueSetsDAL {
 
         for (int i = 0; i < codeSetCodes.size(); i++) {
             jsonCodeSetValues[i] = new JsonValueSetCodes();
-            jsonCodeSetValues[i].setValueSetId(codeSetCodes.get(i).getValueSetsId());
+            jsonCodeSetValues[i].setValueSetsUuid(codeSetCodes.get(i).getValueSetsUuid());
             jsonCodeSetValues[i].setRead2ConceptId(codeSetCodes.get(i).getRead2ConceptId());
             jsonCodeSetValues[i].setCtv3ConceptId(codeSetCodes.get(i).getCtv3ConceptId());
             jsonCodeSetValues[i].setSctConceptId(codeSetCodes.get(i).getSctConceptId());
@@ -234,7 +232,7 @@ public class SecurityValueSetsDAL {
         }
 
         JsonValueSets jsonValueSets = new JsonValueSets();
-        jsonValueSets.setId(codeSet.getId());
+        jsonValueSets.setUuid(codeSet.getUuid());
         jsonValueSets.setName(codeSet.getName());
         jsonValueSets.setValuesSetCodes(jsonCodeSetValues);
 

@@ -2,7 +2,7 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.json;
 
 public class JsonValueSets {
 
-    private Integer id;
+    private String uuid;
     private String name;
     private JsonValueSetCodes[] valuesSetCodes;
 
@@ -10,12 +10,12 @@ public class JsonValueSets {
     private String ctv3ConceptIds;
     private String sctConceptIds;
 
-    public Integer getId() {
-        return id;
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
     public String getName() {

@@ -8,35 +8,35 @@ import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "values_set_codes", schema = "data_sharing_manager")
+@Table(name = "value_sets_codes", schema = "data_sharing_manager")
 public class ValueSetsCodesEntity {
 
     private static final Logger LOG = LoggerFactory.getLogger(ValueSetsCodesEntity.class);
 
-    private int uid;
-    private int valueSetsId;
+    private String uuid;
+    private String valueSetsUuid;
     private String read2ConceptId;
     private String ctv3ConceptId;
     private String sctConceptId;
 
     @Id
-    @Column
-    public int getUid() {
-        return uid;
+    @Column(name = "uuid")
+    public String getUuid() {
+        return uuid;
     }
 
-    public void setUid(int uid) {
-        this.uid = uid;
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
-    @NaturalId
-    @Column(name = "value_sets_id")
-    public int getValueSetsId() {
-        return valueSetsId;
+    @Basic
+    @Column(name = "value_sets_uuid")
+    public String getValueSetsUuid() {
+        return valueSetsUuid;
     }
 
-    public void setValueSetsId(int valueSetsId) {
-        this.valueSetsId = valueSetsId;
+    public void setValueSetsUuid(String valueSetsUuid) {
+        this.valueSetsUuid = valueSetsUuid;
     }
 
     @Basic
@@ -75,7 +75,7 @@ public class ValueSetsCodesEntity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ValueSetsCodesEntity that = (ValueSetsCodesEntity) o;
-        return valueSetsId == that.valueSetsId &&
+        return valueSetsUuid == that.valueSetsUuid &&
                 Objects.equals(read2ConceptId, that.read2ConceptId) &&
                 Objects.equals(ctv3ConceptId, that.ctv3ConceptId) &&
                 Objects.equals(sctConceptId, that.sctConceptId);
@@ -83,7 +83,7 @@ public class ValueSetsCodesEntity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(valueSetsId, read2ConceptId, ctv3ConceptId, sctConceptId);
+        return Objects.hash(valueSetsUuid, read2ConceptId, ctv3ConceptId, sctConceptId);
     }
 
 }
