@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDSA;
 
 import javax.persistence.*;
@@ -57,6 +59,19 @@ public class DataSharingAgreementEntity {
         dsa.getSubscribers().forEach((k, v) -> this.subscribers.add(k.toString()));
         this.documentations = new ArrayList<>();
         dsa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
+    }
+
+    public void setMappingsFromDAL () throws Exception {
+        SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
+        Short thisMapType = MapType.DATASHARINGAGREEMENT.getMapType();
+
+        this.setPurposes(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PURPOSE.getMapType()));
+        this.setBenefits(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.BENEFIT.getMapType()));
+        this.setRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.REGION.getMapType()));
+        this.setProjects(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PROJECT.getMapType()));
+        this.setPublishers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PUBLISHER.getMapType()));
+        this.setSubscribers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.SUBSCRIBER.getMapType()));
+        this.setDocumentations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DOCUMENT.getMapType()));
     }
 
     @Id

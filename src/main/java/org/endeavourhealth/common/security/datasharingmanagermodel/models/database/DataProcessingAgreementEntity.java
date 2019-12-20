@@ -66,6 +66,17 @@ public class DataProcessingAgreementEntity {
         dpa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
     }
 
+    public void setMappingsFromDAL () throws Exception {
+        SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
+        Short thisMapType = MapType.DATAPROCESSINGAGREEMENT.getMapType();
+
+        this.setPurposes(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PURPOSE.getMapType()));
+        this.setBenefits(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.BENEFIT.getMapType()));
+        this.setRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.REGION.getMapType()));
+        this.setPublishers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PUBLISHER.getMapType()));
+        this.setDocumentations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DOCUMENT.getMapType()));
+    }
+
     @Id
     @Column(name = "uuid", nullable = false, length = 36)
     public String getUuid() {
