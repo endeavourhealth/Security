@@ -1,6 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityPurposeDAL;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDPA;
 
@@ -23,8 +24,8 @@ public class DataProcessingAgreementEntity {
     private String returnToSenderPolicy;
     private Date startDate;
     private Date endDate;
-    @Transient private List<String> purposes;
-    @Transient private List<String> benefits;
+    @Transient private List<PurposeEntity> purposes;
+    @Transient private List<PurposeEntity> benefits;
     @Transient private List<String> regions;
     @Transient private List<String> publishers;
     @Transient private List<String> documentations;
@@ -55,9 +56,9 @@ public class DataProcessingAgreementEntity {
         }
 
         this.purposes = new ArrayList<>();
-        dpa.getPurposes().forEach((p) -> this.purposes.add(p.getUuid()));
+        dpa.getPurposes().forEach((p) -> this.purposes.add(new PurposeEntity(p)));
         this.benefits = new ArrayList<>();
-        dpa.getBenefits().forEach((b) -> this.benefits.add(b.getUuid()));
+        dpa.getBenefits().forEach((b) -> this.benefits.add(new PurposeEntity(b)));
         this.regions = new ArrayList<>();
         dpa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
         this.publishers = new ArrayList<>();
@@ -70,8 +71,11 @@ public class DataProcessingAgreementEntity {
         SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
         Short thisMapType = MapType.DATAPROCESSINGAGREEMENT.getMapType();
 
-        this.setPurposes(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PURPOSE.getMapType()));
-        this.setBenefits(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.BENEFIT.getMapType()));
+        List<String> purposes = securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PURPOSE.getMapType());
+        List<String> benefits = securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.BENEFIT.getMapType());
+
+        this.setPurposes(new SecurityPurposeDAL().getPurposesFromList(purposes));
+        this.setBenefits(new SecurityPurposeDAL().getPurposesFromList(benefits));  // Why is this failling?  Empty list...
         this.setRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.REGION.getMapType()));
         this.setPublishers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PUBLISHER.getMapType()));
         this.setDocumentations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DOCUMENT.getMapType()));
@@ -188,22 +192,22 @@ public class DataProcessingAgreementEntity {
     }
 
     @Transient
-    public List<String> getPurposes() {
+    public List<PurposeEntity> getPurposes() {
         return purposes;
     }
 
     @Transient
-    public void setPurposes(List<String> purposes) {
+    public void setPurposes(List<PurposeEntity> purposes) {
         this.purposes = purposes;
     }
 
     @Transient
-    public List<String> getBenefits() {
+    public List<PurposeEntity> getBenefits() {
         return benefits;
     }
 
     @Transient
-    public void setBenefits(List<String> benefits) {
+    public void setBenefits(List<PurposeEntity> benefits) {
         this.benefits = benefits;
     }
 
