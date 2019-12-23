@@ -71,4 +71,9 @@ public class PurposeEntity {
         result = 31 * result + (detail != null ? detail.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return this.getTitle() + " (" + this.getUuid() + ") / " + this.getDetail();
+    }
 }

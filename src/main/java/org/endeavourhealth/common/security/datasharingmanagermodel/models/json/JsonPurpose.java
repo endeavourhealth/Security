@@ -22,4 +22,9 @@ public final class JsonPurpose extends JsonItem {
     public void setDetail(String detail) {
         this.detail = detail;
     }
+
+    @Override
+    public String toString() {
+        return this.getTitle() + " (" + this.getUuid() + ") / " + this.getDetail();
+    }
 }
