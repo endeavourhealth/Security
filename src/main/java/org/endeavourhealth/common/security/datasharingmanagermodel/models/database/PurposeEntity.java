@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonPurpose;
+
 import javax.persistence.*;
 
 @Entity
@@ -8,6 +10,15 @@ public class PurposeEntity {
     private String uuid;
     private String title;
     private String detail;
+
+    public PurposeEntity() {
+    }
+
+    public PurposeEntity(JsonPurpose jp) {
+        this.uuid = jp.getUuid();
+        this.title = jp.getTitle();
+        this.detail = jp.getDetail();
+    }
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)
