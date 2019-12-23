@@ -12,6 +12,8 @@ public class DataSharingAgreementCache {
 
     private static Map<String, DataSharingAgreementEntity> dataSharingAgreementMap = new HashMap<>();
     private static Map<String, List<DataSharingAgreementEntity>> allDSAsForAllChildRegion = new HashMap<>();
+    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForPublisher = new HashMap<>();
+    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForPublisherAndSubscriber = new HashMap<>();
 
     public static List<DataSharingAgreementEntity> getDSADetails(List<String> sharingAgreements) throws Exception {
         List<DataSharingAgreementEntity> dataSharingAgreementEntities = new ArrayList<>();
@@ -71,12 +73,46 @@ public class DataSharingAgreementCache {
         return allDSAs;
     }
 
+    public static List<DataSharingAgreementEntity> getAllDSAsForPublisherOrg(String odsCode) throws Exception {
+        List <DataSharingAgreementEntity> allDSAs = new ArrayList<>();
+
+        if (allDSAsForPublisher.containsKey(odsCode)) {
+            allDSAs = allDSAsForPublisher.get(odsCode);
+        } else {
+            allDSAs = new SecurityDataSharingAgreementDAL().getAllDSAsForPublisherOrganisation(odsCode);
+            allDSAsForPublisher.put(odsCode, allDSAs);
+        }
+
+        CacheManager.startScheduler();
+
+        return allDSAs;
+    }
+
+    public static List<DataSharingAgreementEntity> getAllDSAsForPublisherAndSubscriber(String publisherOdsCode, String subscriberOdsCode) throws Exception {
+        List <DataSharingAgreementEntity> allDSAs = new ArrayList<>();
+
+        String key = publisherOdsCode + ":" + subscriberOdsCode;
+
+        if (allDSAsForPublisherAndSubscriber.containsKey(key)) {
+            allDSAs = allDSAsForPublisherAndSubscriber.get(key);
+        } else {
+            allDSAs = new SecurityDataSharingAgreementDAL().getDSAsWithMatchingPublisherAndSubscriber(publisherOdsCode, subscriberOdsCode);
+            allDSAsForPublisherAndSubscriber.put(key, allDSAs);
+        }
+
+        CacheManager.startScheduler();
+
+        return allDSAs;
+    }
+
     public static void clearDataSharingAgreementCache(String dsaId) throws Exception {
         if (dataSharingAgreementMap.containsKey(dsaId)) {
             dataSharingAgreementMap.remove(dsaId);
         }
 
         allDSAsForAllChildRegion.clear();
+        allDSAsForPublisher.clear();
+        allDSAsForPublisherAndSubscriber.clear();
 
     }
 

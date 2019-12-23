@@ -17,6 +17,7 @@ public class ProjectCache {
     private static Map<String, JsonProject> jsonProjectMap = new HashMap<>();
     private static Map<String, String> projectApplicationPolicyMap = new HashMap<>();
     private static Map<String, List<ProjectEntity>> allProjectsForAllChildRegion = new HashMap<>();
+    private static Map<String, List<String>> allPublishersForProjectWithSubCheck = new HashMap<>();
 
     public static List<ProjectEntity> getProjectDetails(List<String> projects) throws Exception {
         List<ProjectEntity> projectEntities = new ArrayList<>();
@@ -108,6 +109,22 @@ public class ProjectCache {
         return allDSAs;
     }
 
+    public static List<String> getAllPublishersForProjectWithSubscriberCheck(String projectId, String requesterOdsCode) throws Exception {
+        List <String> pubOdsCodes = new ArrayList<>();
+        String key = projectId + ":" + requesterOdsCode;
+
+        if (allPublishersForProjectWithSubCheck.containsKey(key)) {
+            pubOdsCodes = allPublishersForProjectWithSubCheck.get(key);
+        } else {
+            pubOdsCodes = new SecurityProjectDAL().getPublishersForProject(projectId, requesterOdsCode);
+            allPublishersForProjectWithSubCheck.put(key, pubOdsCodes);
+        }
+
+        CacheManager.startScheduler();
+
+        return pubOdsCodes;
+    }
+
     public static void clearProjectCache(String projectId) throws Exception {
         if (projectMap.containsKey(projectId)) {
             projectMap.remove(projectId);
@@ -122,6 +139,7 @@ public class ProjectCache {
         }
 
         allProjectsForAllChildRegion.clear();
+        allPublishersForProjectWithSubCheck.clear();
     }
 
     public static void flushCache() throws Exception {

@@ -79,7 +79,7 @@ public class SecurityDataProcessingAgreementDAL {
         }
     }
 
-    public List<DataProcessingAgreementEntity> getDataProcessingAgreementsForOrganisationAndSystemType(String odsCode, String systemName) throws Exception {
+    /*public List<DataProcessingAgreementEntity> getDataProcessingAgreementsForOrganisationAndSystemType(String odsCode, String systemName) throws Exception {
 
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
@@ -110,7 +110,7 @@ public class SecurityDataProcessingAgreementDAL {
         } finally {
             entityManager.close();
         }
-    }
+    }*/
 
     public List<DataProcessingAgreementEntity> getAllDPAsForAllChildRegions(String regionUUID) throws Exception {
         List<String> dpaUUIDs = new ArrayList<>();
