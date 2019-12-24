@@ -30,8 +30,7 @@ public class DataProcessingAgreementEntity {
     @Transient private List<String> publishers;
     @Transient private List<String> documentations;
 
-    public DataProcessingAgreementEntity() {
-    }
+    public DataProcessingAgreementEntity() {    }
 
     public DataProcessingAgreementEntity(JsonDPA dpa) {
         updateFromJson(dpa);
@@ -73,9 +72,9 @@ public class DataProcessingAgreementEntity {
 
         List<String> purposes = securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PURPOSE.getMapType());
         List<String> benefits = securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.BENEFIT.getMapType());
-
         this.setPurposes(new SecurityPurposeDAL().getPurposesFromList(purposes));
-        this.setBenefits(new SecurityPurposeDAL().getPurposesFromList(benefits));  // Why is this failling?  Empty list...
+        this.setBenefits(new SecurityPurposeDAL().getPurposesFromList(benefits));
+
         this.setRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.REGION.getMapType()));
         this.setPublishers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PUBLISHER.getMapType()));
         this.setDocumentations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DOCUMENT.getMapType()));
