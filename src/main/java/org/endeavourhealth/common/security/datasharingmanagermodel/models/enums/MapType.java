@@ -35,6 +35,19 @@ public enum MapType {
 
     private static final Map<Short, String> BY_TYPE_ID = new HashMap<>();
 
+    public static String valueOfTypeId(Short typeID, boolean addSpaces) {
+        if (typeID.equals(MapType.DATASHARINGAGREEMENT.getMapType())) {
+            return "DATA SHARING AGREEMENT";
+        }
+        if (typeID.equals(MapType.DATAPROCESSINGAGREEMENT.getMapType())) {
+            return "DATA PROCESSING AGREEMENT";
+        }
+        if (typeID.equals(MapType.EXTRACTTECHNICALDETAILS.getMapType())) {
+            return "EXTRACT TECHNICAL DETAILS";
+        }
+        return BY_TYPE_ID.get(typeID);
+    }
+
     public static String valueOfTypeId(Short typeId) {
         if (BY_TYPE_ID.containsKey(typeId)) {
             return BY_TYPE_ID.get(typeId);
