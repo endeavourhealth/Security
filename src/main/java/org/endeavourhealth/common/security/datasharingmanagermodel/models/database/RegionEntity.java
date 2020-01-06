@@ -50,8 +50,8 @@ public class RegionEntity {
 
         this.setSharingAgreements(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DATASHARINGAGREEMENT.getMapType()));
         this.setProcessingAgreements(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DATAPROCESSINGAGREEMENT.getMapType()));
-        this.setParentRegions(securityMasterMappingDAL.getParentMappings(this.uuid, MapType.CHILDREGION.getMapType(), MapType.PARENTREGION.getMapType()));
-        this.setChildRegions(securityMasterMappingDAL.getChildMappings(this.uuid, MapType.PARENTREGION.getMapType(), MapType.CHILDREGION.getMapType()));
+        this.setParentRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, thisMapType));
+        this.setChildRegions(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, thisMapType));
         this.setOrganisations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.ORGANISATION.getMapType()));
     }
 
