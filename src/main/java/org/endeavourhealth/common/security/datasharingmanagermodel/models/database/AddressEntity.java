@@ -3,6 +3,8 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.datab
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonAddress;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "address", schema = "data_sharing_manager")
@@ -18,6 +20,27 @@ public class AddressEntity {
     private Double lat;
     private Double lng;
     private Byte geolocationReprocess;
+
+    public AddressEntity() {
+    }
+
+    public AddressEntity(JsonAddress address) {
+        updateFromJson(address);
+    }
+
+    public void updateFromJson(JsonAddress address) {
+        this.uuid = address.getUuid();
+        this.organisationUuid = address.getOrganisationUuid();
+        this.buildingName = address.getBuildingName();
+        this.numberAndStreet = address.getNumberAndStreet();
+        this.locality = address.getLocality();
+        this.city = address.getCity();
+        this.county = address.getCounty();
+        this.postcode = address.getPostcode();
+        this.lat = address.getLat();
+        this.lng = address.getLng();
+        this.geolocationReprocess = 0;
+    }
 
     @Id
     @Column(name = "uuid", nullable = false, length = 36)
@@ -170,21 +193,10 @@ public class AddressEntity {
         return result;
     }
 
-    public AddressEntity() {
+    @Override
 
     }
 
-    public AddressEntity(JsonAddress address) {
-        this.uuid = address.getUuid();
-        this.organisationUuid = address.getOrganisationUuid();
-        this.buildingName = address.getBuildingName();
-        this.numberAndStreet = address.getNumberAndStreet();
-        this.locality = address.getLocality();
-        this.city = address.getCity();
-        this.county = address.getCounty();
-        this.postcode = address.getPostcode();
-        this.lat = address.getLat();
-        this.lng = address.getLng();
-        this.geolocationReprocess = 0;
+        return String.join(", ", components);
     }
 }
