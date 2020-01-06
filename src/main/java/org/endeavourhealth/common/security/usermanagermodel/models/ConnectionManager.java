@@ -199,8 +199,15 @@ public class ConnectionManager {
 
         } else if (dbName == Db.Um) {
             json = ConfigManager.getConfigurationAsJson(configName, "user-manager");
+
         } else if (dbName == Db.Dds) {
-            json = ConfigManager.getConfigurationAsJson("admin", "db_common");
+            //adding support for new-style config records
+            json = ConfigManager.getConfigurationAsJson("db_admin");
+            if (json == null) {
+                //if no new-style record, try getting it the old way
+                json = ConfigManager.getConfigurationAsJson("admin", "db_common");
+            }
+
         } else {
             throw new RuntimeException("Unknown database " + dbName);
         }
