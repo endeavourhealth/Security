@@ -3,6 +3,10 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.json;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.AddressEntity;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public final class JsonAddress {
     private String uuid = null;
@@ -134,3 +138,30 @@ public final class JsonAddress {
             this.setUuid(UUID.randomUUID().toString());
         }
     }
+
+    @Override
+    public String toString() {
+        List<String> components = new ArrayList<>();
+
+        if (buildingName != null && !buildingName.equals("")) {
+            components.add(buildingName);
+        }
+        if (numberAndStreet != null && !numberAndStreet.equals("")) {
+            components.add(numberAndStreet);
+        }
+        if (locality != null && !locality.equals("")) {
+            components.add(locality);
+        }
+        if (city != null && !city.equals("")) {
+            components.add(city);
+        }
+        if (county != null && !county.equals("")) {
+            components.add(county);
+        }
+        if (postcode != null && !postcode.equals("")) {
+            components.add(postcode);
+        }
+
+        return String.join(", ", components);
+    }
+}

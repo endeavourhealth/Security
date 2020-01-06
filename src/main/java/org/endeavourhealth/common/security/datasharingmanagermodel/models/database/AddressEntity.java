@@ -194,8 +194,27 @@ public class AddressEntity {
     }
 
     @Override
+    public String toString() {
+        List<String> components = new ArrayList<>();
 
-    }
+        if (buildingName != null && !buildingName.equals("")) {
+            components.add(buildingName);
+        }
+        if (numberAndStreet != null && !numberAndStreet.equals("")) {
+            components.add(numberAndStreet);
+        }
+        if (locality != null && !locality.equals("")) {
+            components.add(locality);
+        }
+        if (city != null && !city.equals("")) {
+            components.add(city);
+        }
+        if (county != null && !county.equals("")) {
+            components.add(county);
+        }
+        if (postcode != null && !postcode.equals("")) {
+            components.add(postcode);
+        }
 
         return String.join(", ", components);
     }
