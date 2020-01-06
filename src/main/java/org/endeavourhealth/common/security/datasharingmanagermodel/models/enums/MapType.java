@@ -21,9 +21,7 @@ public enum MapType {
     DATAEXCHANGE((short)13),
     PROJECT((short)14),
     EXTRACTTECHNICALDETAILS((short)15),
-    SCHEDULE((short)16),
-    PARENTREGION((short)17),
-    CHILDREGION((short)18);
+    SCHEDULE((short)16);
 
     private Short mapType;
 
