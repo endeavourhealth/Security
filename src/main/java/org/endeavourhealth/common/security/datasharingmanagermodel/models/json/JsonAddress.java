@@ -125,4 +125,12 @@ public final class JsonAddress {
     public void setLng(Double lng) {
         this.lng = lng;
     }
-}
+
+    public void setUuidsIfRequired(String organisationUuid) {
+        if (this.getOrganisationUuid() == null) {
+            this.setOrganisationUuid(organisationUuid);
+        }
+        if (this.getUuid() == null) {
+            this.setUuid(UUID.randomUUID().toString());
+        }
+    }
