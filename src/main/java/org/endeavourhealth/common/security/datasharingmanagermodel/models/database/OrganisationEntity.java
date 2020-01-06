@@ -1,5 +1,9 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityPurposeDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonAddress;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisation;
 
 import javax.persistence.*;
@@ -134,11 +138,20 @@ public class OrganisationEntity {
     private String bulkConflictedWith;
     private byte type;
     private byte active;
+    @Transient private List<String> regions = new ArrayList<>();
+    @Transient private List<String> parentOrganisations = new ArrayList<>();
+    @Transient private List<String> childOrganisations = new ArrayList<>();
+    @Transient private List<String> services = new ArrayList<>();
+    @Transient private List<String> dpaPublishing = new ArrayList<>();
+    @Transient private List<String> dsaPublishing = new ArrayList<>();
+    @Transient private List<String> dsaSubscribing = new ArrayList<>();
+    @Transient private List<AddressEntity> addresses = new ArrayList<>();
 
-    public OrganisationEntity() {
-    }
+    public OrganisationEntity() {    }
 
-    public OrganisationEntity(JsonOrganisation organisation) {
+    public OrganisationEntity(JsonOrganisation organisation) {  updateFromJson(organisation);  }
+
+    public void updateFromJson(JsonOrganisation organisation) {
         this.uuid = organisation.getUuid();
         this.name = organisation.getName();
         this.alternativeName = organisation.getAlternativeName();
@@ -156,6 +169,28 @@ public class OrganisationEntity {
         this.bulkConflictedWith = organisation.getBulkConflictedWith();
         this.type = organisation.getType();
         this.active =(byte) (organisation.isActive() ? 1 : 0);
+
+        organisation.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        organisation.getParentOrganisations().forEach((k, v) -> this.parentOrganisations.add(k.toString()));
+        organisation.getChildOrganisations().forEach((k, v) -> this.childOrganisations.add(k.toString()));
+        organisation.getServices().forEach((k, v) -> this.services.add(k.toString()));
+        organisation.getDpaPublishing().forEach((k, v) -> this.dpaPublishing.add(k.toString()));
+        organisation.getDsaPublishing().forEach((k, v) -> this.dsaPublishing.add(k.toString()));
+        organisation.getDsaSubscribing().forEach((k, v) -> this.dsaSubscribing.add(k.toString()));
+        organisation.getAddresses().forEach((a) -> this.addresses.add(new AddressEntity(a)));
+    }
+
+    public void setMappingsFromDAL () throws Exception {
+        SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
+        Short thisMapType = MapType.ORGANISATION.getMapType();
+
+        this.setRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.REGION.getMapType()));
+        this.setParentOrganisations(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, thisMapType));
+        this.setChildOrganisations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, thisMapType));
+        this.setServices(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.SERVICE.getMapType()));
+        this.setDpaPublishing(securityMasterMappingDAL.getParentMappings(this.uuid, MapType.PUBLISHER.getMapType(), MapType.DATAPROCESSINGAGREEMENT.getMapType()));
+        this.setDsaPublishing(securityMasterMappingDAL.getParentMappings(this.uuid, MapType.PUBLISHER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType()));
+        this.setDsaSubscribing(securityMasterMappingDAL.getParentMappings(this.uuid, MapType.SUBSCRIBER.getMapType(), MapType.DATASHARINGAGREEMENT.getMapType()));
     }
 
     @Id
@@ -354,5 +389,85 @@ public class OrganisationEntity {
 
     public void setActive(byte active) {
         this.active = active;
+    }
+
+    @Transient
+    public List<String> getRegions() {
+        return regions;
+    }
+
+    @Transient
+    public void setRegions(List<String> regions) {
+        this.regions = regions;
+    }
+
+    @Transient
+    public List<String> getParentOrganisations() {
+        return parentOrganisations;
+    }
+
+    @Transient
+    public void setParentOrganisations(List<String> parentOrganisations) {
+        this.parentOrganisations = parentOrganisations;
+    }
+
+    @Transient
+    public List<String> getChildOrganisations() {
+        return childOrganisations;
+    }
+
+    @Transient
+    public void setChildOrganisations(List<String> childOrganisations) {
+        this.childOrganisations = childOrganisations;
+    }
+
+    @Transient
+    public List<String> getServices() {
+        return services;
+    }
+
+    @Transient
+    public void setServices(List<String> services) {
+        this.services = services;
+    }
+
+    @Transient
+    public List<String> getDpaPublishing() {
+        return dpaPublishing;
+    }
+
+    @Transient
+    public void setDpaPublishing(List<String> dpaPublishing) {
+        this.dpaPublishing = dpaPublishing;
+    }
+
+    @Transient
+    public List<String> getDsaPublishing() {
+        return dsaPublishing;
+    }
+
+    @Transient
+    public void setDsaPublishing(List<String> dsaPublishing) {
+        this.dsaPublishing = dsaPublishing;
+    }
+
+    @Transient
+    public List<String> getDsaSubscribing() {
+        return dsaSubscribing;
+    }
+
+    @Transient
+    public void setDsaSubscribing(List<String> dsaSubscribing) {
+        this.dsaSubscribing = dsaSubscribing;
+    }
+
+    @Transient
+    public List<AddressEntity> getAddresses() {
+        return addresses;
+    }
+
+    @Transient
+    public void setAddresses(List<AddressEntity> addresses) {
+        this.addresses = addresses;
     }
 }
