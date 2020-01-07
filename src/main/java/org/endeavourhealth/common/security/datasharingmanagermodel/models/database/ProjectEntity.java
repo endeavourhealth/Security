@@ -1,6 +1,10 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
 import org.apache.commons.lang3.StringUtils;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityProjectDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisation;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProject;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProjectSchedule;
 
@@ -42,7 +46,9 @@ public class ProjectEntity {
     public ProjectEntity() {
     }
 
-    public ProjectEntity(JsonProject project) {
+    public ProjectEntity(JsonProject project) {   updateFromJson(project);   }
+
+    public void updateFromJson(JsonProject project) {
         this.uuid = project.getUuid();
         this.name = project.getName();
         this.leadUser = project.getLeadUser();
@@ -155,6 +161,21 @@ public class ProjectEntity {
                 this.extractTechnicalDetails.setPgpInternalPublicKeyFileData(project.getExtractTechnicalDetails().getPgpInternalPublicKeyFileData());
             }
         }
+    }
+    
+    public void setMappingsFromDAL () throws Exception {
+        SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
+        SecurityProjectDAL securityProjectDAL = new SecurityProjectDAL();
+        Short thisMapType = MapType.PROJECT.getMapType();
+
+        this.setDsas(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.DATASHARINGAGREEMENT.getMapType()));
+        this.setPublishers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PUBLISHER.getMapType()));
+        this.setSubscribers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.SUBSCRIBER.getMapType()));
+        this.setDocumentations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DOCUMENT.getMapType()));
+        this.setCohorts(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.COHORT.getMapType()));
+        this.setDataSets(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DATASET.getMapType()));
+        this.setSchedule(securityProjectDAL.getLinkedSchedule(this.uuid, MapType.SCHEDULE.getMapType()));
+        this.setExtractTechnicalDetails(securityProjectDAL.getLinkedExtractTechnicalDetails(this.uuid, MapType.EXTRACTTECHNICALDETAILS.getMapType()));
     }
 
     @Id
