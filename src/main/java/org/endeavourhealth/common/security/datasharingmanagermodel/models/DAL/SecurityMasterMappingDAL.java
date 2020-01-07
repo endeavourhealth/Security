@@ -15,6 +15,13 @@ import java.util.List;
 public class SecurityMasterMappingDAL {
 
     public List<String> getParentMappings(String childUuid, Short childMapTypeId, Short parentMapTypeId) throws Exception {
+        List<String> childUuids = new ArrayList<>();
+        childUuids.add(childUuid);
+        return getParentMappings(childUuids, childMapTypeId, parentMapTypeId);
+    }
+
+
+    public List<String> getParentMappings(List<String> childUuids, Short childMapTypeId, Short parentMapTypeId) throws Exception {
         EntityManager entityManager = ConnectionManager.getDsmEntityManager();
 
         try {
@@ -22,7 +29,7 @@ public class SecurityMasterMappingDAL {
             CriteriaQuery<MasterMappingEntity> cq = cb.createQuery(MasterMappingEntity.class);
             Root<MasterMappingEntity> rootEntry = cq.from(MasterMappingEntity.class);
 
-            Predicate predicate = cb.and(cb.equal(rootEntry.get("childUuid"), childUuid),
+            Predicate predicate = cb.and((rootEntry.get("childUuid").in(childUuids)),
                     cb.equal(rootEntry.get("childMapTypeId"), childMapTypeId),
                     cb.equal(rootEntry.get("parentMapTypeId"), parentMapTypeId));
 
