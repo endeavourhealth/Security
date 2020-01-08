@@ -1,6 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -215,5 +216,9 @@ public final class JsonOrganisation {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public String organisationOrService() {
+        return (IsService.equals("1") ? "Service" : "Organisation");
     }
 }

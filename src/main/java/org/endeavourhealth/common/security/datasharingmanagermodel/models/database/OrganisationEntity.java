@@ -470,4 +470,9 @@ public class OrganisationEntity {
     public void setAddresses(List<AddressEntity> addresses) {
         this.addresses = addresses;
     }
+
+    @Transient
+    public String organisationOrService() {
+        return (isService == 1 ? "Service" : "Organisation");
+    }
 }
