@@ -15,6 +15,10 @@ public class PurposeEntity {
     }
 
     public PurposeEntity(JsonPurpose jp) {
+        updateFromJson(jp);
+    }
+
+    public void updateFromJson(JsonPurpose jp) {
         this.uuid = jp.getUuid();
         this.title = jp.getTitle();
         this.detail = jp.getDetail();
