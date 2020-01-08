@@ -1,6 +1,9 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonCohort;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonExtractTechnicalDetails;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -18,6 +21,10 @@ public class CohortEntity {
     @Transient private List<String> dpas;
 
     public CohortEntity(JsonCohort cohort) {
+        updateFromJson(cohort);
+    }
+
+    public void updateFromJson(JsonCohort cohort) {
         this.uuid = cohort.getUuid();
         this.name = cohort.getName();
         this.consentModelId = cohort.getConsentModelId();
@@ -28,6 +35,13 @@ public class CohortEntity {
     }
 
     public CohortEntity() {
+    }
+
+    public void setMappingsFromDAL () throws Exception {
+        SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
+        Short thisMapType = MapType.COHORT.getMapType();
+
+        this.setDpas(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.DATAPROCESSINGAGREEMENT.getMapType()));
     }
 
     @Id

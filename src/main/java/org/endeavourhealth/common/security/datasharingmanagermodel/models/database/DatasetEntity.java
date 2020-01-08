@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonDataSet;
 
 import javax.persistence.*;
@@ -20,12 +22,23 @@ public class DatasetEntity {
     }
 
     public DatasetEntity(JsonDataSet dataSet) {
+        updateFromJson(dataSet);
+    }
+
+    public void updateFromJson(JsonDataSet dataSet) {
         this.uuid = dataSet.getUuid();
         this.name = dataSet.getName();
         this.description = dataSet.getDescription();
         this.technicalDefinition = dataSet.getTechnicalDefinition();
         this.dpas = new ArrayList<>();
         dataSet.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
+    }
+
+    public void setMappingsFromDAL () throws Exception {
+        SecurityMasterMappingDAL securityMasterMappingDAL = new SecurityMasterMappingDAL();
+        Short thisMapType = MapType.DATASET.getMapType();
+
+        this.setDpas(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.DATAPROCESSINGAGREEMENT.getMapType()));
     }
 
     @Id
