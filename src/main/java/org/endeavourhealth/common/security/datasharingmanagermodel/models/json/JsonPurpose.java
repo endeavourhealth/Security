@@ -25,6 +25,6 @@ public final class JsonPurpose extends JsonItem {
 
     @Override
     public String toString() {
-        return this.getTitle() + " (" + this.getUuid() + ") / " + this.getDetail();
+        return this.getTitle() + " (" + this.getDetail() + ", " + this.getUuid() + ")";
     }
 }
