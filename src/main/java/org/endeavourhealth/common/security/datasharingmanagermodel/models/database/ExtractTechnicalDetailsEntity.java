@@ -1,5 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
+import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonExtractTechnicalDetails;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -171,6 +173,25 @@ public class ExtractTechnicalDetailsEntity {
 
     public void setPgpInternalPublicKeyFileData(String pgpInternalPublicKeyFileData) {
         this.pgpInternalPublicKeyFileData = pgpInternalPublicKeyFileData;
+    }
+
+    public boolean equals(JsonExtractTechnicalDetails that) {
+        if (that == null) return false;
+        return Objects.equals(uuid, that.getUuid()) &&
+                Objects.equals(name, that.getName()) &&
+                Objects.equals(sftpHostName, that.getSftpHostName()) &&
+                Objects.equals(sftpHostDirectory, that.getSftpHostDirectory()) &&
+                Objects.equals(sftpHostPort, that.getSftpHostPort()) &&
+                Objects.equals(sftpClientUsername, that.getSftpClientUsername()) &&
+                Objects.equals(sftpClientPrivateKeyPassword, that.getSftpClientPrivateKeyPassword()) &&
+                Objects.equals(sftpHostPublicKeyFilename, that.getSftpHostPublicKeyFilename()) &&
+                Objects.equals(sftpHostPublicKeyFileData, that.getSftpHostPublicKeyFileData()) &&
+                Objects.equals(sftpClientPrivateKeyFilename, that.getSftpClientPrivateKeyFilename()) &&
+                Objects.equals(sftpClientPrivateKeyFileData, that.getSftpClientPrivateKeyFileData()) &&
+                Objects.equals(pgpCustomerPublicKeyFilename, that.getPgpCustomerPublicKeyFilename()) &&
+                Objects.equals(pgpCustomerPublicKeyFileData, that.getPgpCustomerPublicKeyFileData()) &&
+                Objects.equals(pgpInternalPublicKeyFilename, that.getPgpInternalPublicKeyFilename()) &&
+                Objects.equals(pgpInternalPublicKeyFileData, that.getPgpInternalPublicKeyFileData());
     }
 
     @Override
