@@ -221,8 +221,23 @@ public class ExtractTechnicalDetailsEntity {
     public int hashCode() {
 
         return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort, sftpClientUsername, sftpClientPrivateKeyPassword,
-                 sftpHostPublicKeyFilename, sftpHostPublicKeyFileData, sftpClientPrivateKeyFilename, sftpClientPrivateKeyFileData,
-                 pgpCustomerPublicKeyFilename, pgpCustomerPublicKeyFileData, pgpInternalPublicKeyFilename, pgpInternalPublicKeyFileData);
+                sftpHostPublicKeyFilename, sftpHostPublicKeyFileData, sftpClientPrivateKeyFilename, sftpClientPrivateKeyFileData,
+                pgpCustomerPublicKeyFilename, pgpCustomerPublicKeyFileData, pgpInternalPublicKeyFilename, pgpInternalPublicKeyFileData);
     }
 
+    //TODO: Improve formatting here!
+    @Override
+    public String toString() {
+        return "Uuid: " + uuid +
+                ", Name: " + name +
+                ", SFTP Host Name: " + sftpHostName +
+                ", SFTP Host Directory: " + sftpHostDirectory +
+                ", SFTP Host Port: " + sftpHostPort +
+                ", SFTP Client Username: " + sftpClientUsername +
+                ", SFTP Client Private Key Password: " + sftpClientPrivateKeyPassword +
+                ", SFTP Host Public Key: " + sftpHostPublicKeyFilename +
+                ", SFTP Client Private Key: " + sftpClientPrivateKeyFilename +
+                ", PGP Customer Public Key: " + pgpCustomerPublicKeyFilename +
+                ", PGP Internal Public Key: " + pgpInternalPublicKeyFilename;
+    }
 }
