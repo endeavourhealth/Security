@@ -88,7 +88,7 @@ public class SecurityOrganisationDAL {
         }
 
         List<OrganisationEntity> cachedOrgs = cachedOrganisations.get(userId);
-        System.out.println("found " + cachedOrgs.size() + " orgs");
+        //System.out.println("found " + cachedOrgs.size() + " orgs");
 
         if (cachedOrgs != null) {
             sortOrganisationCache(cachedOrganisations.get(userId), orderColumn, descending);
@@ -199,5 +199,9 @@ public class SecurityOrganisationDAL {
         } finally {
             entityManager.close();
         }
+    }
+
+    public Map<UUID, String> getCachedSearchTerm() {
+        return cachedSearchTerm;
     }
 }
