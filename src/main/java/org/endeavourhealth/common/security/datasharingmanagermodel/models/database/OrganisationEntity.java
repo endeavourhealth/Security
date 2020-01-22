@@ -1,9 +1,7 @@
 package org.endeavourhealth.common.security.datasharingmanagermodel.models.database;
 
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityMasterMappingDAL;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.SecurityPurposeDAL;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.enums.MapType;
-import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonAddress;
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisation;
 
 import javax.persistence.*;
@@ -138,6 +136,9 @@ public class OrganisationEntity {
     private String bulkConflictedWith;
     private byte type;
     private byte active;
+    private Short systemSupplierSystemId;
+    private String systemSupplierReference;
+    private Byte systemSupplierSharingActivated;
     @Transient private List<String> regions = new ArrayList<>();
     @Transient private List<String> parentOrganisations = new ArrayList<>();
     @Transient private List<String> childOrganisations = new ArrayList<>();
@@ -169,6 +170,9 @@ public class OrganisationEntity {
         this.bulkConflictedWith = organisation.getBulkConflictedWith();
         this.type = organisation.getType();
         this.active =(byte) (organisation.isActive() ? 1 : 0);
+        this.systemSupplierSystemId = organisation.getSystemSupplierSystemId();
+        this.systemSupplierReference = organisation.getSystemSupplierReference();
+        this.systemSupplierSharingActivated = organisation.getSystemSupplierSharingActivated();
 
         organisation.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
         organisation.getParentOrganisations().forEach((k, v) -> this.parentOrganisations.add(k.toString()));
@@ -333,6 +337,24 @@ public class OrganisationEntity {
         this.bulkConflictedWith = bulkConflictedWith;
     }
 
+    @Basic
+    @Column(name = "system_supplier_system_id", nullable = true)
+    public Short getSystemSupplierSystemId() { return systemSupplierSystemId; }
+
+    public void setSystemSupplierSystemId(Short systemSupplierSystemId) { this.systemSupplierSystemId = systemSupplierSystemId; }
+
+    @Basic
+    @Column(name = "system_supplier_reference", nullable = true, length = 50)
+    public String getSystemSupplierReference() { return systemSupplierReference; }
+
+    public void setSystemSupplierReference(String systemSupplierReference) { this.systemSupplierReference = systemSupplierReference; }
+
+    @Basic
+    @Column(name = "system_supplier_sharing_activated", nullable = true)
+    public Byte getSystemSupplierSharingActivated() { return systemSupplierSharingActivated; }
+
+    public void setSystemSupplierSharingActivated(Byte activated) {this.systemSupplierSharingActivated = activated; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -359,7 +381,10 @@ public class OrganisationEntity {
             return false;
         if (bulkConflictedWith != null ? !bulkConflictedWith.equals(that.bulkConflictedWith) : that.bulkConflictedWith != null)
             return false;
-
+        if (systemSupplierSystemId != null ? !systemSupplierSystemId.equals(that.systemSupplierSystemId) : that.systemSupplierSystemId != null)
+            return false;
+        if (systemSupplierReference != null ? !systemSupplierReference.equals(that.systemSupplierReference) : that.systemSupplierReference != null)
+            return false;
         return true;
     }
 
@@ -378,6 +403,8 @@ public class OrganisationEntity {
         result = 31 * result + (int) bulkImported;
         result = 31 * result + (int) bulkItemUpdated;
         result = 31 * result + (bulkConflictedWith != null ? bulkConflictedWith.hashCode() : 0);
+        result = 31 * result + (systemSupplierSystemId != null ? systemSupplierSystemId.hashCode() : 0);
+        result = 31 * result + (systemSupplierReference != null ? systemSupplierReference.hashCode() : 0);
         return result;
     }
 

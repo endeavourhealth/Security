@@ -25,6 +25,9 @@ public final class JsonOrganisation {
     private String bulkConflictedWith = null;
     private byte type;
     private boolean active;
+    private Short systemSupplierSystemId = null;
+    private String systemSupplierReference = null;
+    private Byte systemSupplierSharingActivated;
     private Map<UUID, String> regions = null;
     private Map<UUID, String> parentOrganisations = null;
     private Map<UUID, String> childOrganisations = null;
@@ -217,6 +220,18 @@ public final class JsonOrganisation {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    public Short getSystemSupplierSystemId() { return systemSupplierSystemId; }
+
+    public void setSystemSupplier(Short systemSupplierSystemId) { this.systemSupplierSystemId = systemSupplierSystemId; }
+
+    public String getSystemSupplierReference() { return systemSupplierReference; }
+
+    public void setSystemSupplierReference(String systemSupplierReference) { this.systemSupplierReference = systemSupplierReference; }
+
+    public Byte getSystemSupplierSharingActivated() {return systemSupplierSharingActivated; }
+
+    public void setSystemSupplierSharingActivated(Byte activated) {this.systemSupplierSharingActivated = activated; }
 
     public String organisationOrService() {
         return (IsService.equals("1") ? "Service" : "Organisation");
