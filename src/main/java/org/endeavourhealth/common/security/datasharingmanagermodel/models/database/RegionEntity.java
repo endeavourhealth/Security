@@ -33,15 +33,25 @@ public class RegionEntity {
         this.description = region.getDescription();
 
         this.sharingAgreements = new ArrayList<>();
-        region.getSharingAgreements().forEach((k, v) -> this.sharingAgreements.add(k.toString()));
+        if (region.getSharingAgreements() != null) {
+            region.getSharingAgreements().forEach((k, v) -> this.sharingAgreements.add(k.toString()));
+        }
         this.processingAgreements = new ArrayList<>();
-        region.getProcessingAgreements().forEach((k, v) -> this.processingAgreements.add(k.toString()));
+        if (region.getProcessingAgreements() != null) {
+            region.getProcessingAgreements().forEach((k, v) -> this.processingAgreements.add(k.toString()));
+        }
         this.parentRegions = new ArrayList<>();
-        region.getParentRegions().forEach((k, v) -> this.parentRegions.add(k.toString()));
+        if (region.getParentRegions() != null) {
+            region.getParentRegions().forEach((k, v) -> this.parentRegions.add(k.toString()));
+        }
         this.childRegions = new ArrayList<>();
-        region.getChildRegions().forEach((k, v) -> this.childRegions.add(k.toString()));
+        if (region.getChildRegions() != null) {
+            region.getChildRegions().forEach((k, v) -> this.childRegions.add(k.toString()));
+        }
         this.organisations = new ArrayList<>();
-        region.getOrganisations().forEach((k, v) -> this.organisations.add(k.toString()));
+        if (region.getOrganisations() != null) {
+            region.getOrganisations().forEach((k, v) -> this.organisations.add(k.toString()));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {

@@ -174,14 +174,30 @@ public class OrganisationEntity {
         this.systemSupplierReference = organisation.getSystemSupplierReference();
         this.systemSupplierSharingActivated = organisation.getSystemSupplierSharingActivated();
 
-        organisation.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
-        organisation.getParentOrganisations().forEach((k, v) -> this.parentOrganisations.add(k.toString()));
-        organisation.getChildOrganisations().forEach((k, v) -> this.childOrganisations.add(k.toString()));
-        organisation.getServices().forEach((k, v) -> this.services.add(k.toString()));
-        organisation.getDpaPublishing().forEach((k, v) -> this.dpaPublishing.add(k.toString()));
-        organisation.getDsaPublishing().forEach((k, v) -> this.dsaPublishing.add(k.toString()));
-        organisation.getDsaSubscribing().forEach((k, v) -> this.dsaSubscribing.add(k.toString()));
-        organisation.getAddresses().forEach((a) -> this.addresses.add(new AddressEntity(a)));
+        if (organisation.getRegions() != null) {
+            organisation.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        }
+        if (organisation.getParentOrganisations() != null) {
+            organisation.getParentOrganisations().forEach((k, v) -> this.parentOrganisations.add(k.toString()));
+        }
+        if (organisation.getChildOrganisations() != null) {
+            organisation.getChildOrganisations().forEach((k, v) -> this.childOrganisations.add(k.toString()));
+        }
+        if (organisation.getServices() != null) {
+            organisation.getServices().forEach((k, v) -> this.services.add(k.toString()));
+        }
+        if (organisation.getDpaPublishing() != null) {
+            organisation.getDpaPublishing().forEach((k, v) -> this.dpaPublishing.add(k.toString()));
+        }
+        if (organisation.getDsaPublishing() != null) {
+            organisation.getDsaPublishing().forEach((k, v) -> this.dsaPublishing.add(k.toString()));
+        }
+        if (organisation.getDsaSubscribing() != null) {
+            organisation.getDsaSubscribing().forEach((k, v) -> this.dsaSubscribing.add(k.toString()));
+        }
+        if (organisation.getAddresses() != null) {
+            organisation.getAddresses().forEach((a) -> this.addresses.add(new AddressEntity(a)));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {

@@ -31,7 +31,9 @@ public class CohortEntity {
         this.description = cohort.getDescription();
         this.technicalDefinition = cohort.getTechnicalDefinition();
         this.dpas = new ArrayList<>();
-        cohort.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
+        if (cohort.getDpas() != null) {
+            cohort.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
+        }
     }
 
     public CohortEntity() {

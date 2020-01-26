@@ -31,7 +31,9 @@ public class DatasetEntity {
         this.description = dataSet.getDescription();
         this.technicalDefinition = dataSet.getTechnicalDefinition();
         this.dpas = new ArrayList<>();
-        dataSet.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
+        if (dataSet.getDpas() != null) {
+            dataSet.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {

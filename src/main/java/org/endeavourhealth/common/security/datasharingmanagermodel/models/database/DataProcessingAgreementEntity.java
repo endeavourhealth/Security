@@ -55,15 +55,25 @@ public class DataProcessingAgreementEntity {
         }
 
         this.purposes = new ArrayList<>();
-        dpa.getPurposes().forEach((p) -> this.purposes.add(new PurposeEntity(p)));
+        if (dpa.getPurposes() != null) {
+            dpa.getPurposes().forEach((p) -> this.purposes.add(new PurposeEntity(p)));
+        }
         this.benefits = new ArrayList<>();
-        dpa.getBenefits().forEach((b) -> this.benefits.add(new PurposeEntity(b)));
+        if (dpa.getBenefits() != null) {
+            dpa.getBenefits().forEach((b) -> this.benefits.add(new PurposeEntity(b)));
+        }
         this.regions = new ArrayList<>();
-        dpa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        if (dpa.getRegions() != null) {
+            dpa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        }
         this.publishers = new ArrayList<>();
-        dpa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        if (dpa.getPublishers() != null) {
+            dpa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        }
         this.documentations = new ArrayList<>();
-        dpa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
+        if (dpa.getDocumentations() != null) {
+            dpa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {

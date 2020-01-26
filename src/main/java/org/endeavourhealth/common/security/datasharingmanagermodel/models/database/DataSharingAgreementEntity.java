@@ -52,19 +52,33 @@ public class DataSharingAgreementEntity {
         }
 
         this.purposes = new ArrayList<>();
-        dsa.getPurposes().forEach((p) -> this.purposes.add(new PurposeEntity(p)));
+        if (dsa.getPurposes() != null) {
+            dsa.getPurposes().forEach((p) -> this.purposes.add(new PurposeEntity(p)));
+        }
         this.benefits = new ArrayList<>();
-        dsa.getBenefits().forEach((b) -> this.benefits.add(new PurposeEntity(b)));
+        if (dsa.getBenefits() != null) {
+            dsa.getBenefits().forEach((b) -> this.benefits.add(new PurposeEntity(b)));
+        }
         this.regions = new ArrayList<>();
-        dsa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        if (dsa.getRegions() != null) {
+            dsa.getRegions().forEach((k, v) -> this.regions.add(k.toString()));
+        }
         this.projects = new ArrayList<>();
-        dsa.getProjects().forEach((k, v) -> this.projects.add(k.toString()));
+        if (dsa.getProjects() != null) {
+            dsa.getProjects().forEach((k, v) -> this.projects.add(k.toString()));
+        }
         this.publishers = new ArrayList<>();
-        dsa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        if (dsa.getPublishers() != null) {
+            dsa.getPublishers().forEach((k, v) -> this.publishers.add(k.toString()));
+        }
         this.subscribers = new ArrayList<>();
-        dsa.getSubscribers().forEach((k, v) -> this.subscribers.add(k.toString()));
+        if (dsa.getSubscribers() != null) {
+            dsa.getSubscribers().forEach((k, v) -> this.subscribers.add(k.toString()));
+        }
         this.documentations = new ArrayList<>();
-        dsa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
+        if (dsa.getDocumentations() != null) {
+            dsa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {
