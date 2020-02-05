@@ -20,6 +20,7 @@ public class JsonProject {
     private String ipAddress;
     private String summary;
     private String businessCase;
+    private short outputFormat;
     private String objectives;
     private short securityArchitectureId;
     private short storageProtocolId;
@@ -162,6 +163,14 @@ public class JsonProject {
 
     public void setObjectives(String objectives) {
         this.objectives = objectives;
+    }
+
+    public short getOutputFormat() {
+        return outputFormat;
+    }
+
+    public void setOutputFormat(short outputFormat) {
+        this.outputFormat = outputFormat;
     }
 
     public short getSecurityArchitectureId() {
