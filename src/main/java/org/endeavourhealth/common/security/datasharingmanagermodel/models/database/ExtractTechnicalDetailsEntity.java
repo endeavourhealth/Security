@@ -24,6 +24,9 @@ public class ExtractTechnicalDetailsEntity {
     private String pgpCustomerPublicKeyFileData;
     private String pgpInternalPublicKeyFilename;
     private String pgpInternalPublicKeyFileData;
+    private Short outputFormat;
+    private Short securityInfrastructure;
+    private Short securityArchitecture;
 
     @Id
     @Column(name = "uuid")
@@ -175,6 +178,36 @@ public class ExtractTechnicalDetailsEntity {
         this.pgpInternalPublicKeyFileData = pgpInternalPublicKeyFileData;
     }
 
+    @Basic
+    @Column(name = "output_format")
+    public Short getOutputFormat() {
+        return outputFormat;
+    }
+
+    public void setOutputFormat(Short outputFormat) {
+        this.outputFormat = outputFormat;
+    }
+
+    @Basic
+    @Column(name = "security_infrastructure")
+    public Short getSecurityInfrastructure() {
+        return securityInfrastructure;
+    }
+
+    public void setSecurityInfrastructure(Short securityInfrastructure) {
+        this.securityInfrastructure = securityInfrastructure;
+    }
+
+    @Basic
+    @Column(name = "security_architecture")
+    public Short getSecurityArchitecture() {
+        return securityArchitecture;
+    }
+
+    public void setSecurityArchitecture(Short securityArchitecture) {
+        this.securityArchitecture = securityArchitecture;
+    }
+
     public boolean equals(JsonExtractTechnicalDetails that) {
         if (that == null) return false;
         return Objects.equals(uuid, that.getUuid()) &&
@@ -191,7 +224,10 @@ public class ExtractTechnicalDetailsEntity {
                 Objects.equals(pgpCustomerPublicKeyFilename, that.getPgpCustomerPublicKeyFilename()) &&
                 Objects.equals(pgpCustomerPublicKeyFileData, that.getPgpCustomerPublicKeyFileData()) &&
                 Objects.equals(pgpInternalPublicKeyFilename, that.getPgpInternalPublicKeyFilename()) &&
-                Objects.equals(pgpInternalPublicKeyFileData, that.getPgpInternalPublicKeyFileData());
+                Objects.equals(outputFormat, that.getOutputFormat()) &&
+                Objects.equals(securityInfrastructure, that.getSecurityInfrastructure()) &&
+                Objects.equals(securityArchitecture, that.getSecurityArchitecture());
+
     }
 
     @Override
@@ -213,8 +249,10 @@ public class ExtractTechnicalDetailsEntity {
                 Objects.equals(pgpCustomerPublicKeyFilename, that.pgpCustomerPublicKeyFilename) &&
                 Objects.equals(pgpCustomerPublicKeyFileData, that.pgpCustomerPublicKeyFileData) &&
                 Objects.equals(pgpInternalPublicKeyFilename, that.pgpInternalPublicKeyFilename) &&
-                Objects.equals(pgpInternalPublicKeyFileData, that.pgpInternalPublicKeyFileData);
-
+                Objects.equals(pgpInternalPublicKeyFileData, that.pgpInternalPublicKeyFileData) &&
+                Objects.equals(outputFormat, that.outputFormat) &&
+                Objects.equals(securityInfrastructure, that.securityInfrastructure) &&
+                Objects.equals(securityArchitecture, that.securityArchitecture);
     }
 
     @Override
@@ -222,7 +260,8 @@ public class ExtractTechnicalDetailsEntity {
 
         return Objects.hash(uuid, name, sftpHostName, sftpHostDirectory, sftpHostPort, sftpClientUsername, sftpClientPrivateKeyPassword,
                 sftpHostPublicKeyFilename, sftpHostPublicKeyFileData, sftpClientPrivateKeyFilename, sftpClientPrivateKeyFileData,
-                pgpCustomerPublicKeyFilename, pgpCustomerPublicKeyFileData, pgpInternalPublicKeyFilename, pgpInternalPublicKeyFileData);
+                pgpCustomerPublicKeyFilename, pgpCustomerPublicKeyFileData, pgpInternalPublicKeyFilename, pgpInternalPublicKeyFileData,
+                outputFormat, securityInfrastructure, securityArchitecture);
     }
 
     //TODO: Improve formatting here!
@@ -238,6 +277,9 @@ public class ExtractTechnicalDetailsEntity {
                 ", SFTP Host Public Key: " + sftpHostPublicKeyFilename +
                 ", SFTP Client Private Key: " + sftpClientPrivateKeyFilename +
                 ", PGP Customer Public Key: " + pgpCustomerPublicKeyFilename +
-                ", PGP Internal Public Key: " + pgpInternalPublicKeyFilename;
+                ", PGP Internal Public Key: " + pgpInternalPublicKeyFilename +
+                ", Output Format: " + outputFormat +
+                ", Security Infrastructure: " + securityInfrastructure +
+                ", Security Architecture: " + securityArchitecture;
     }
 }

@@ -20,6 +20,9 @@ public class JsonExtractTechnicalDetails {
     private String pgpCustomerPublicKeyFileData = null;
     private String pgpInternalPublicKeyFilename = null;
     private String pgpInternalPublicKeyFileData = null;
+    private Short outputFormat;
+    private Short securityInfrastructure;
+    private Short securityArchitecture;
 
     public JsonExtractTechnicalDetails() {
     }
@@ -144,6 +147,30 @@ public class JsonExtractTechnicalDetails {
         this.pgpInternalPublicKeyFileData = pgpInternalPublicKeyFileData;
     }
 
+    public Short getOutputFormat() {
+        return outputFormat;
+    }
+
+    public void setOutputFormat(Short outputFormat) {
+        this.outputFormat = outputFormat;
+    }
+
+    public Short getSecurityInfrastructure() {
+        return securityInfrastructure;
+    }
+
+    public void setSecurityInfrastructure(Short securityInfrastructure) {
+        this.securityInfrastructure = securityInfrastructure;
+    }
+
+    public Short getSecurityArchitecture() {
+        return securityArchitecture;
+    }
+
+    public void setSecurityArchitecture(Short securityArchitecture) {
+        this.securityArchitecture = securityArchitecture;
+    }
+
     //TODO: Improve formatting here!
     @Override
     public String toString() {
@@ -157,6 +184,9 @@ public class JsonExtractTechnicalDetails {
                 ", SFTP Host Public Key: " + sftpHostPublicKeyFilename +
                 ", SFTP Client Private Key: " + sftpClientPrivateKeyFilename +
                 ", PGP Customer Public Key: " + pgpCustomerPublicKeyFilename +
-                ", PGP Internal Public Key: " + pgpInternalPublicKeyFilename;
+                ", PGP Internal Public Key: " + pgpInternalPublicKeyFilename +
+                ", Output Format: " + outputFormat +
+                ", Security Infrastructure: " + securityInfrastructure +
+                ", Security Architecture: " + securityArchitecture;
     }
 }
