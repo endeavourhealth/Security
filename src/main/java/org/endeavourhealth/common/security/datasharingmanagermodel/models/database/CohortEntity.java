@@ -19,6 +19,8 @@ public class CohortEntity {
     private String description;
     private String technicalDefinition;
     @Transient private List<String> dpas;
+    @Transient private List<String> dsas;
+    @Transient private List<String> projects;
 
     public CohortEntity(JsonCohort cohort) {
         updateFromJson(cohort);
@@ -44,6 +46,12 @@ public class CohortEntity {
         Short thisMapType = MapType.COHORT.getMapType();
 
         this.setDpas(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.DATAPROCESSINGAGREEMENT.getMapType()));
+
+        this.setDsas(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.DATASHARINGAGREEMENT.getMapType()));
+
+        this.setProjects(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.PROJECT.getMapType()));
+
+
     }
 
     @Id
@@ -94,6 +102,26 @@ public class CohortEntity {
     @Transient
     public void setDpas(List<String> dpas) {
         this.dpas = dpas;
+    }
+
+    @Transient
+    public List<String> getDsas() {
+        return dsas;
+    }
+
+    @Transient
+    public void setDsas(List<String> dsas) {
+        this.dsas = dsas;
+    }
+
+    @Transient
+    public List<String> getProjects() {
+        return projects;
+    }
+
+    @Transient
+    public void setProjects(List<String> projects) {
+        this.projects = projects;
     }
 
     @Override

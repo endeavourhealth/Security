@@ -7,6 +7,9 @@ public class JsonDDSOrganisationStatus {
     private String referenceAgreement = null;
     private String lastReceived;
     private Boolean inError = false;
+    private Short systemSupplierType = null;
+    private String systemSupplierReference = null;
+    private Byte sharingActivated = null;
 
     public JsonDDSOrganisationStatus() {
     }
@@ -57,5 +60,29 @@ public class JsonDDSOrganisationStatus {
 
     public void setReferenceAgreement(String referenceAgreement) {
         this.referenceAgreement = referenceAgreement;
+    }
+
+    public Short getSystemSupplierType() {
+        return systemSupplierType;
+    }
+
+    public void setSystemSupplierType(Short systemSupplierType) {
+        this.systemSupplierType = systemSupplierType;
+    }
+
+    public String getSystemSupplierReference() {
+        return systemSupplierReference;
+    }
+
+    public void setSystemSupplierReference(String systemSupplierReference) {
+        this.systemSupplierReference = systemSupplierReference;
+    }
+
+    public Byte getSharingActivated() {
+        return sharingActivated;
+    }
+
+    public void setSharingActivated(Byte sharingActivated) {
+        this.sharingActivated = sharingActivated;
     }
 }

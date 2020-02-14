@@ -95,6 +95,9 @@ public class SecurityDDSDAL {
 
             if (organisationEntity != null) {
                 org.setPracticeName(organisationEntity.getName());
+                org.setSystemSupplierType(organisationEntity.getSystemSupplierSystemId());
+                org.setSystemSupplierReference(organisationEntity.getSystemSupplierReference());
+                org.setSharingActivated(organisationEntity.getSystemSupplierSharingActivated());
             }
         }
     }

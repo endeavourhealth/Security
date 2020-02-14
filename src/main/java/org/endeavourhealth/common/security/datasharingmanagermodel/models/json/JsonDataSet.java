@@ -16,6 +16,8 @@ public class JsonDataSet {
     private String queryDefinition = null;
     private List<Object> composition = null;
     private Map<UUID, String> dpas = null;
+    private Map<UUID, String> dsas = null;
+    private Map<UUID, String> projects = null;
 
     public JsonDataSet() {
     }
@@ -77,4 +79,20 @@ public class JsonDataSet {
     public List<Object> getComposition() { return composition; }
 
     public void setComposition (List<Object> composition) {this.composition = composition; }
+
+    public Map<UUID, String> getDsas() {
+        return dsas;
+    }
+
+    public void setDsas(Map<UUID, String> dsas) {
+        this.dsas = dsas;
+    }
+
+    public Map<UUID, String> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Map<UUID, String> projects) {
+        this.projects = projects;
+    }
 }
