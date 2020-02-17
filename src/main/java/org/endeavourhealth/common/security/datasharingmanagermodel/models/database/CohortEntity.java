@@ -36,6 +36,14 @@ public class CohortEntity {
         if (cohort.getDpas() != null) {
             cohort.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
         }
+        this.dsas = new ArrayList<>();
+        if (cohort.getDsas() != null) {
+            cohort.getDsas().forEach((k, v) -> this.dsas.add(k.toString()));
+        }
+        this.projects = new ArrayList<>();
+        if (cohort.getProjects() != null) {
+            cohort.getProjects().forEach((k, v) -> this.projects.add(k.toString()));
+        }
     }
 
     public CohortEntity() {

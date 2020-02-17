@@ -36,6 +36,14 @@ public class DatasetEntity {
         if (dataSet.getDpas() != null) {
             dataSet.getDpas().forEach((k, v) -> this.dpas.add(k.toString()));
         }
+        this.dsas = new ArrayList<>();
+        if (dataSet.getDsas() != null) {
+            dataSet.getDsas().forEach((k, v) -> this.dsas.add(k.toString()));
+        }
+        this.projects = new ArrayList<>();
+        if (dataSet.getProjects() != null) {
+            dataSet.getProjects().forEach((k, v) -> this.projects.add(k.toString()));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {
