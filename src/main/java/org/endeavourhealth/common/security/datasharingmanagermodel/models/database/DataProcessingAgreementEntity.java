@@ -29,6 +29,8 @@ public class DataProcessingAgreementEntity {
     @Transient private List<String> regions;
     @Transient private List<String> publishers;
     @Transient private List<String> documentations;
+    @Transient private List<String> cohorts;
+    @Transient private List<String> dataSets;
 
     public DataProcessingAgreementEntity() {    }
 
@@ -74,6 +76,14 @@ public class DataProcessingAgreementEntity {
         if (dpa.getDocumentations() != null) {
             dpa.getDocumentations().forEach((d) -> this.documentations.add(d.getUuid()));
         }
+        this.cohorts = new ArrayList<>();
+        if (dpa.getCohorts() != null) {
+            dpa.getCohorts().forEach((k, v) -> this.cohorts.add(k.toString()));
+        }
+        this.dataSets = new ArrayList<>();
+        if (dpa.getDataSets() != null) {
+            dpa.getDataSets().forEach((k, v) -> this.dataSets.add(k.toString()));
+        }
     }
 
     public void setMappingsFromDAL () throws Exception {
@@ -88,6 +98,8 @@ public class DataProcessingAgreementEntity {
         this.setRegions(securityMasterMappingDAL.getParentMappings(this.uuid, thisMapType, MapType.REGION.getMapType()));
         this.setPublishers(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.PUBLISHER.getMapType()));
         this.setDocumentations(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DOCUMENT.getMapType()));
+        this.setCohorts(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.COHORT.getMapType()));
+        this.setDataSets(securityMasterMappingDAL.getChildMappings(this.uuid, thisMapType, MapType.DATASET.getMapType()));
     }
 
     @Id
@@ -248,6 +260,26 @@ public class DataProcessingAgreementEntity {
     @Transient
     public void setDocumentations(List<String> documentations) {
         this.documentations = documentations;
+    }
+
+    @Transient
+    public List<String> getCohorts() {
+        return cohorts;
+    }
+
+    @Transient
+    public void setCohorts(List<String> cohorts) {
+        this.cohorts = cohorts;
+    }
+
+    @Transient
+    public List<String> getDataSets() {
+        return dataSets;
+    }
+
+    @Transient
+    public void setDataSets(List<String> dataSets) {
+        this.dataSets = dataSets;
     }
 
     @Override

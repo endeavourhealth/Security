@@ -25,6 +25,8 @@ public class JsonDSA {
     private List<JsonDocumentation> documentations = new ArrayList<>();
     private List<JsonPurpose> purposes = new ArrayList<>();
     private List<JsonPurpose> benefits = new ArrayList<>();
+    private Map<UUID, String> cohorts = null;
+    private Map<UUID, String> dataSets = null;
 
     public String getUuid() {
         return uuid;
@@ -152,5 +154,21 @@ public class JsonDSA {
 
     public void setProjects(Map<UUID, String> projects) {
         this.projects = projects;
+    }
+
+    public Map<UUID, String> getCohorts() {
+        return cohorts;
+    }
+
+    public void setCohorts(Map<UUID, String> cohorts) {
+        this.cohorts = cohorts;
+    }
+
+    public Map<UUID, String> getDataSets() {
+        return dataSets;
+    }
+
+    public void setDataSets(Map<UUID, String> dataSets) {
+        this.dataSets = dataSets;
     }
 }
