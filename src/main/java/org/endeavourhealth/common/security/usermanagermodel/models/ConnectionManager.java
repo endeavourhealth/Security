@@ -195,13 +195,23 @@ public class ConnectionManager {
 
         JsonNode json = null;
         if (dbName == Db.Dsm) {
-            json = ConfigManager.getConfigurationAsJson(configName, "data-sharing-manager");
+            //support new-style DB config records where app ID isn't specified
+            json = ConfigManager.getConfigurationAsJson("db_data_sharing_manager");
+            if (json == null) {
+                //if no new-style record, try getting it the old way
+                json = ConfigManager.getConfigurationAsJson(configName, "data-sharing-manager");
+            }
 
         } else if (dbName == Db.Um) {
-            json = ConfigManager.getConfigurationAsJson(configName, "user-manager");
+            //support new-style DB config records where app ID isn't specified
+            json = ConfigManager.getConfigurationAsJson("db_user_manager");
+            if (json == null) {
+                //if no new-style record, try getting it the old way
+                json = ConfigManager.getConfigurationAsJson(configName, "user-manager");
+            }
 
         } else if (dbName == Db.Dds) {
-            //adding support for new-style config records
+            //support new-style DB config records where app ID isn't specified
             json = ConfigManager.getConfigurationAsJson("db_admin");
             if (json == null) {
                 //if no new-style record, try getting it the old way
