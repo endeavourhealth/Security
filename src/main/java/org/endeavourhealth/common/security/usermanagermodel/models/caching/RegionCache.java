@@ -6,22 +6,20 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.databa
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.RegionEntity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class RegionCache {
-    private static Map<String, RegionEntity> regionMap = new HashMap<>();
+    private static Map<String, RegionEntity> regionMap = new ConcurrentHashMap<>();
     private static boolean allRegionsFound = false;
-    private static Map<String, List<OrganisationEntity>> allOrgsForAllChildRegion = new HashMap<>();
-    private static Map<String, List<RegionEntity>> allRegionsForUser = new HashMap<>();
+    private static Map<String, List<OrganisationEntity>> allOrgsForAllChildRegion = new ConcurrentHashMap<>();
+    private static Map<String, List<RegionEntity>> allRegionsForUser = new ConcurrentHashMap<>();
 
     public static RegionEntity getRegionDetails(String regionId) throws Exception {
-        RegionEntity foundRegion = null;
 
-        if (regionMap.containsKey(regionId)) {
-            foundRegion = regionMap.get(regionId);
-        } else {
+        RegionEntity foundRegion = regionMap.get(regionId);
+        if (foundRegion == null) {
             foundRegion = new SecurityRegionDAL().getSingleRegion(regionId);
             regionMap.put(foundRegion.getUuid(), foundRegion);
 
@@ -38,8 +36,9 @@ public class RegionCache {
         List<String> missingRegions = new ArrayList<>();
 
         for (String reg : regions) {
-            if (regionMap.containsKey(reg)) {
-                regionEntities.add(regionMap.get(reg));
+            RegionEntity regInMap = regionMap.get(reg);
+            if (regInMap != null) {
+                regionEntities.add(regInMap);
             } else {
                 missingRegions.add(reg);
             }
@@ -78,11 +77,9 @@ public class RegionCache {
     }
 
     public static List<OrganisationEntity> getAllOrganisationsForAllChildRegions(String regionId) throws Exception {
-        List <OrganisationEntity> allOrgs = new ArrayList<>();
 
-        if (allOrgsForAllChildRegion.containsKey(regionId)) {
-            allOrgs = allOrgsForAllChildRegion.get(regionId);
-        } else {
+        List<OrganisationEntity> allOrgs = allOrgsForAllChildRegion.get(regionId);
+        if (allOrgs == null) {
             allOrgs = new SecurityRegionDAL().getAllOrganisationsForAllChildRegions(regionId);
             allOrgsForAllChildRegion.put(regionId, allOrgs);
         }
@@ -93,11 +90,9 @@ public class RegionCache {
     }
 
     public static List<RegionEntity> getAllChildRegionsForRegion(String regionId) throws Exception {
-        List <RegionEntity> allRegions = new ArrayList<>();
 
-        if (allRegionsForUser.containsKey(regionId)) {
-            allRegions = allRegionsForUser.get(regionId);
-        } else {
+        List<RegionEntity> allRegions = allRegionsForUser.get(regionId);
+        if (allRegions == null) {
             allRegions = new SecurityRegionDAL().getAllChildRegionsForRegion(regionId);
             allRegionsForUser.put(regionId, allRegions);
         }
@@ -108,9 +103,7 @@ public class RegionCache {
     }
 
     public static void clearRegionCache(String regionId) throws Exception {
-        if (regionMap.containsKey(regionId)) {
-            regionMap.remove(regionId);
-        }
+        regionMap.remove(regionId);
 
         allOrgsForAllChildRegion.clear();
         allRegionsForUser.clear();

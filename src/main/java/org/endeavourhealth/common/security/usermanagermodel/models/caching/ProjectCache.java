@@ -7,25 +7,26 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.databa
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonProject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ProjectCache {
 
-    private static Map<String, ProjectEntity> projectMap = new HashMap<>();
-    private static Map<String, JsonProject> jsonProjectMap = new HashMap<>();
-    private static Map<String, String> projectApplicationPolicyMap = new HashMap<>();
-    private static Map<String, List<ProjectEntity>> allProjectsForAllChildRegion = new HashMap<>();
-    private static Map<String, List<String>> allPublishersForProjectWithSubCheck = new HashMap<>();
+    private static Map<String, ProjectEntity> projectMap = new ConcurrentHashMap<>();
+    private static Map<String, JsonProject> jsonProjectMap = new ConcurrentHashMap<>();
+    private static Map<String, String> projectApplicationPolicyMap = new ConcurrentHashMap<>();
+    private static Map<String, List<ProjectEntity>> allProjectsForAllChildRegion = new ConcurrentHashMap<>();
+    private static Map<String, List<String>> allPublishersForProjectWithSubCheck = new ConcurrentHashMap<>();
 
     public static List<ProjectEntity> getProjectDetails(List<String> projects) throws Exception {
         List<ProjectEntity> projectEntities = new ArrayList<>();
         List<String> missingProjects = new ArrayList<>();
 
         for (String org : projects) {
-            if (projectMap.containsKey(org)) {
-                projectEntities.add(projectMap.get(org));
+            ProjectEntity projInMap = projectMap.get(org);
+            if (projInMap != null) {
+                projectEntities.add(projInMap);
             } else {
                 missingProjects.add(org);
             }
@@ -47,11 +48,9 @@ public class ProjectCache {
     }
 
     public static ProjectEntity getProjectDetails(String projectId) throws Exception {
-        ProjectEntity projectEntity = null;
 
-        if (projectMap.containsKey(projectId)) {
-            projectEntity = projectMap.get(projectId);
-        } else {
+        ProjectEntity projectEntity = projectMap.get(projectId);
+        if (projectEntity == null) {
             projectEntity = new SecurityProjectDAL().getProject(projectId);
             projectMap.put(projectEntity.getUuid(), projectEntity);
         }
@@ -63,11 +62,9 @@ public class ProjectCache {
     }
 
     public static JsonProject getJsonProjectDetails(String projectId) throws Exception {
-        JsonProject project = null;
 
-        if (jsonProjectMap.containsKey(projectId)) {
-            project = jsonProjectMap.get(projectId);
-        } else {
+        JsonProject project = jsonProjectMap.get(projectId);
+        if (project == null) {
             project = new SecurityProjectDAL().getFullProjectJson(projectId);
             jsonProjectMap.put(project.getUuid(), project);
         }
@@ -79,11 +76,9 @@ public class ProjectCache {
     }
 
     public static String getProjectApplicationPolicy(String projectId) throws Exception {
-        String foundPolicy = null;
 
-        if (projectApplicationPolicyMap.containsKey(projectId)) {
-            foundPolicy = projectApplicationPolicyMap.get(projectId);
-        } else {
+        String foundPolicy = projectApplicationPolicyMap.get(projectId);
+        if (foundPolicy == null) {
             ProjectApplicationPolicyEntity policyApp = new SecurityProjectApplicationPolicyDAL().getProjectApplicationPolicyId(projectId);
             foundPolicy = policyApp.getApplicationPolicyId();
             projectApplicationPolicyMap.put(projectId, foundPolicy);
@@ -95,27 +90,23 @@ public class ProjectCache {
     }
 
     public static List<ProjectEntity> getAllProjectsForAllChildRegions(String regionId) throws Exception {
-        List <ProjectEntity> allDSAs = new ArrayList<>();
 
-        if (allProjectsForAllChildRegion.containsKey(regionId)) {
-            allDSAs = allProjectsForAllChildRegion.get(regionId);
-        } else {
-            allDSAs = new SecurityProjectDAL().getProjectsForRegion(regionId);
-            allProjectsForAllChildRegion.put(regionId, allDSAs);
+        List<ProjectEntity> allProjects = allProjectsForAllChildRegion.get(regionId);
+        if (allProjects == null) {
+            allProjects = new SecurityProjectDAL().getProjectsForRegion(regionId);
+            allProjectsForAllChildRegion.put(regionId, allProjects);
         }
 
         CacheManager.startScheduler();
 
-        return allDSAs;
+        return allProjects;
     }
 
     public static List<String> getAllPublishersForProjectWithSubscriberCheck(String projectId, String requesterOdsCode) throws Exception {
-        List <String> pubOdsCodes = new ArrayList<>();
         String key = projectId + ":" + requesterOdsCode;
 
-        if (allPublishersForProjectWithSubCheck.containsKey(key)) {
-            pubOdsCodes = allPublishersForProjectWithSubCheck.get(key);
-        } else {
+        List<String> pubOdsCodes = allPublishersForProjectWithSubCheck.get(key);
+        if (pubOdsCodes == null) {
             pubOdsCodes = new SecurityProjectDAL().getPublishersForProject(projectId, requesterOdsCode);
             allPublishersForProjectWithSubCheck.put(key, pubOdsCodes);
         }
@@ -126,17 +117,11 @@ public class ProjectCache {
     }
 
     public static void clearProjectCache(String projectId) throws Exception {
-        if (projectMap.containsKey(projectId)) {
-            projectMap.remove(projectId);
-        }
+        projectMap.remove(projectId);
 
-        if (jsonProjectMap.containsKey(projectId)) {
-            jsonProjectMap.remove(projectId);
-        }
+        jsonProjectMap.remove(projectId);
 
-        if (projectApplicationPolicyMap.containsKey(projectId)) {
-            projectApplicationPolicyMap.remove(projectId);
-        }
+        projectApplicationPolicyMap.remove(projectId);
 
         allProjectsForAllChildRegion.clear();
         allPublishersForProjectWithSubCheck.clear();

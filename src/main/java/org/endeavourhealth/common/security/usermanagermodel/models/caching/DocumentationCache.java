@@ -4,21 +4,22 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.Se
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DocumentationEntity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DocumentationCache {
 
-    private static Map<String, DocumentationEntity> documentationMap = new HashMap<>();
+    private static Map<String, DocumentationEntity> documentationMap = new ConcurrentHashMap<>();
 
     public static List<DocumentationEntity> getDocumentDetails(List<String> documents) throws Exception {
         List<DocumentationEntity> documentationEntities = new ArrayList<>();
         List<String> missingDocuments = new ArrayList<>();
 
         for (String doc : documents) {
-            if (documentationMap.containsKey(doc)) {
-                documentationEntities.add(documentationMap.get(doc));
+            DocumentationEntity docInMap = documentationMap.get(doc);
+            if (docInMap != null) {
+                documentationEntities.add(docInMap);
             } else {
                 missingDocuments.add(doc);
             }
@@ -40,11 +41,9 @@ public class DocumentationCache {
     }
 
     public static DocumentationEntity getDocumentDetails(String documentId) throws Exception {
-        DocumentationEntity documentationEntity = null;
 
-        if (documentationMap.containsKey(documentId)) {
-            documentationEntity = documentationMap.get(documentId);
-        } else {
+        DocumentationEntity documentationEntity = documentationMap.get(documentId);
+        if (documentationEntity == null) {
             documentationEntity = new SecurityDocumentationDAL().getDocument(documentId);
             documentationMap.put(documentationEntity.getUuid(), documentationEntity);
         }
@@ -56,9 +55,7 @@ public class DocumentationCache {
     }
 
     public static void clearDocumentCache(String documentId) throws Exception {
-        if (documentationMap.containsKey(documentId)) {
-            documentationMap.remove(documentId);
-        }
+        documentationMap.remove(documentId);
     }
 
     public static void flushCache() throws Exception {

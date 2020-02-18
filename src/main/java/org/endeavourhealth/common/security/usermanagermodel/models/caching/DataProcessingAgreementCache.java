@@ -4,22 +4,23 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.Se
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataProcessingAgreementEntity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DataProcessingAgreementCache {
 
-    private static Map<String, DataProcessingAgreementEntity> dataProcessingAgreementMap = new HashMap<>();
-    private static Map<String, List<DataProcessingAgreementEntity>> allDPAsForAllChildRegion = new HashMap<>();
+    private static Map<String, DataProcessingAgreementEntity> dataProcessingAgreementMap = new ConcurrentHashMap<>();
+    private static Map<String, List<DataProcessingAgreementEntity>> allDPAsForAllChildRegion = new ConcurrentHashMap<>();
 
     public static List<DataProcessingAgreementEntity> getDPADetails(List<String> processingAgreements) throws Exception {
         List<DataProcessingAgreementEntity> dataProcessingAgreementEntities = new ArrayList<>();
         List<String> missingDSAs = new ArrayList<>();
 
         for (String dsa : processingAgreements) {
-            if (dataProcessingAgreementMap.containsKey(dsa)) {
-                dataProcessingAgreementEntities.add(dataProcessingAgreementMap.get(dsa));
+            DataProcessingAgreementEntity dpaInMap = dataProcessingAgreementMap.get(dsa);
+            if (dpaInMap != null) {
+                dataProcessingAgreementEntities.add(dpaInMap);
             } else {
                 missingDSAs.add(dsa);
             }
@@ -41,11 +42,9 @@ public class DataProcessingAgreementCache {
     }
 
     public static DataProcessingAgreementEntity getDPADetails(String dsaId) throws Exception {
-        DataProcessingAgreementEntity dataProcessingAgreementEntity = null;
 
-        if (dataProcessingAgreementMap.containsKey(dsaId)) {
-            dataProcessingAgreementEntity = dataProcessingAgreementMap.get(dsaId);
-        } else {
+        DataProcessingAgreementEntity dataProcessingAgreementEntity = dataProcessingAgreementMap.get(dsaId);
+        if (dataProcessingAgreementEntity == null) {
             dataProcessingAgreementEntity = new SecurityDataProcessingAgreementDAL().getDPA(dsaId);
             dataProcessingAgreementMap.put(dataProcessingAgreementEntity.getUuid(), dataProcessingAgreementEntity);
         }
@@ -57,11 +56,9 @@ public class DataProcessingAgreementCache {
     }
 
     public static List<DataProcessingAgreementEntity> getAllDPAsForAllChildRegions(String regionId) throws Exception {
-        List <DataProcessingAgreementEntity> allDPAs = new ArrayList<>();
 
-        if (allDPAsForAllChildRegion.containsKey(regionId)) {
-            allDPAs = allDPAsForAllChildRegion.get(regionId);
-        } else {
+        List <DataProcessingAgreementEntity> allDPAs = allDPAsForAllChildRegion.get(regionId);
+        if (allDPAs == null) {
             allDPAs = new SecurityDataProcessingAgreementDAL().getAllDPAsForAllChildRegions(regionId);
             allDPAsForAllChildRegion.put(regionId, allDPAs);
         }
@@ -72,9 +69,7 @@ public class DataProcessingAgreementCache {
     }
 
     public static void clearDataProcessingAgreementCache(String dpaId) throws Exception {
-        if (dataProcessingAgreementMap.containsKey(dpaId)) {
-            dataProcessingAgreementMap.remove(dpaId);
-        }
+        dataProcessingAgreementMap.remove(dpaId);
 
         allDPAsForAllChildRegion.clear();
 

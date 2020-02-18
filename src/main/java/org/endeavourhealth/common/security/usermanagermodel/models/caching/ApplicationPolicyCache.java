@@ -6,23 +6,21 @@ import org.endeavourhealth.common.security.usermanagermodel.models.database.Appl
 import org.endeavourhealth.common.security.usermanagermodel.models.json.JsonApplicationPolicyAttribute;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApplicationPolicyCache {
-    private static Map<String, ApplicationPolicyEntity> applicationPolicyMap = new HashMap<>();
+    private static Map<String, ApplicationPolicyEntity> applicationPolicyMap = new ConcurrentHashMap<>();
     private static List<ApplicationPolicyEntity> nonSUApplicationPolicies = new ArrayList<>();
-    private static Map<String, List<JsonApplicationPolicyAttribute>> policyAttributeMap = new HashMap<>();
+    private static Map<String, List<JsonApplicationPolicyAttribute>> policyAttributeMap = new ConcurrentHashMap<>();
     private static boolean allApplicationPoliciesFound = false;
     private static boolean nonSUApplicationPoliciesFound = false;
 
     public static ApplicationPolicyEntity getApplicationPolicyDetails(String applicationPolicyId) throws Exception {
-        ApplicationPolicyEntity foundPolicy = null;
 
-        if (applicationPolicyMap.containsKey(applicationPolicyId)) {
-            foundPolicy = applicationPolicyMap.get(applicationPolicyId);
-        } else {
+        ApplicationPolicyEntity foundPolicy = applicationPolicyMap.get(applicationPolicyId);
+        if (foundPolicy == null) {
             foundPolicy = new SecurityApplicationPolicyDAL().getApplicationPolicy(applicationPolicyId);
             applicationPolicyMap.put(foundPolicy.getId(), foundPolicy);
 
@@ -34,11 +32,9 @@ public class ApplicationPolicyCache {
     }
 
     public static List<JsonApplicationPolicyAttribute> getApplicationPolicyAttributes(String applicationPolicyId) throws Exception {
-        List<JsonApplicationPolicyAttribute> foundAttributes = null;
 
-        if (policyAttributeMap.containsKey(applicationPolicyId)) {
-            foundAttributes = policyAttributeMap.get(applicationPolicyId);
-        } else {
+        List<JsonApplicationPolicyAttribute> foundAttributes = policyAttributeMap.get(applicationPolicyId);
+        if (foundAttributes == null) {
             foundAttributes = new SecurityApplicationPolicyAttributeDAL().getApplicationPolicyAttributes(applicationPolicyId);
             policyAttributeMap.put(applicationPolicyId, foundAttributes);
         }

@@ -4,24 +4,25 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.Se
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DataSharingAgreementEntity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DataSharingAgreementCache {
 
-    private static Map<String, DataSharingAgreementEntity> dataSharingAgreementMap = new HashMap<>();
-    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForAllChildRegion = new HashMap<>();
-    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForPublisher = new HashMap<>();
-    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForPublisherAndSubscriber = new HashMap<>();
+    private static Map<String, DataSharingAgreementEntity> dataSharingAgreementMap = new ConcurrentHashMap<>();
+    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForAllChildRegion = new ConcurrentHashMap<>();
+    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForPublisher = new ConcurrentHashMap<>();
+    private static Map<String, List<DataSharingAgreementEntity>> allDSAsForPublisherAndSubscriber = new ConcurrentHashMap<>();
 
     public static List<DataSharingAgreementEntity> getDSADetails(List<String> sharingAgreements) throws Exception {
         List<DataSharingAgreementEntity> dataSharingAgreementEntities = new ArrayList<>();
         List<String> missingDSAs = new ArrayList<>();
 
         for (String dsa : sharingAgreements) {
-            if (dataSharingAgreementMap.containsKey(dsa)) {
-                dataSharingAgreementEntities.add(dataSharingAgreementMap.get(dsa));
+            DataSharingAgreementEntity dsaInMap = dataSharingAgreementMap.get(dsa);
+            if (dsaInMap != null) {
+                dataSharingAgreementEntities.add(dsaInMap);
             } else {
                 missingDSAs.add(dsa);
             }
@@ -43,11 +44,9 @@ public class DataSharingAgreementCache {
     }
 
     public static DataSharingAgreementEntity getDSADetails(String dsaId) throws Exception {
-        DataSharingAgreementEntity dataSharingAgreementEntity = null;
 
-        if (dataSharingAgreementMap.containsKey(dsaId)) {
-            dataSharingAgreementEntity = dataSharingAgreementMap.get(dsaId);
-        } else {
+        DataSharingAgreementEntity dataSharingAgreementEntity = dataSharingAgreementMap.get(dsaId);
+        if (dataSharingAgreementEntity == null) {
             dataSharingAgreementEntity = new SecurityDataSharingAgreementDAL().getDSA(dsaId);
             dataSharingAgreementMap.put(dataSharingAgreementEntity.getUuid(), dataSharingAgreementEntity);
         }
@@ -59,11 +58,9 @@ public class DataSharingAgreementCache {
     }
 
     public static List<DataSharingAgreementEntity> getAllDSAsForAllChildRegions(String regionId) throws Exception {
-        List <DataSharingAgreementEntity> allDSAs = new ArrayList<>();
 
-        if (allDSAsForAllChildRegion.containsKey(regionId)) {
-            allDSAs = allDSAsForAllChildRegion.get(regionId);
-        } else {
+        List <DataSharingAgreementEntity> allDSAs = allDSAsForAllChildRegion.get(regionId);
+        if (allDSAs == null) {
             allDSAs = new SecurityDataSharingAgreementDAL().getAllDSAsForAllChildRegions(regionId);
             allDSAsForAllChildRegion.put(regionId, allDSAs);
         }
@@ -74,11 +71,9 @@ public class DataSharingAgreementCache {
     }
 
     public static List<DataSharingAgreementEntity> getAllDSAsForPublisherOrg(String odsCode) throws Exception {
-        List <DataSharingAgreementEntity> allDSAs = new ArrayList<>();
 
-        if (allDSAsForPublisher.containsKey(odsCode)) {
-            allDSAs = allDSAsForPublisher.get(odsCode);
-        } else {
+        List <DataSharingAgreementEntity> allDSAs = allDSAsForPublisher.get(odsCode);
+        if (allDSAs == null) {
             allDSAs = new SecurityDataSharingAgreementDAL().getAllDSAsForPublisherOrganisation(odsCode);
             allDSAsForPublisher.put(odsCode, allDSAs);
         }
@@ -89,13 +84,11 @@ public class DataSharingAgreementCache {
     }
 
     public static List<DataSharingAgreementEntity> getAllDSAsForPublisherAndSubscriber(String publisherOdsCode, String subscriberOdsCode) throws Exception {
-        List <DataSharingAgreementEntity> allDSAs = new ArrayList<>();
 
         String key = publisherOdsCode + ":" + subscriberOdsCode;
 
-        if (allDSAsForPublisherAndSubscriber.containsKey(key)) {
-            allDSAs = allDSAsForPublisherAndSubscriber.get(key);
-        } else {
+        List <DataSharingAgreementEntity> allDSAs = allDSAsForPublisherAndSubscriber.get(key);
+        if (allDSAs == null) {
             allDSAs = new SecurityDataSharingAgreementDAL().getDSAsWithMatchingPublisherAndSubscriber(publisherOdsCode, subscriberOdsCode);
             allDSAsForPublisherAndSubscriber.put(key, allDSAs);
         }
@@ -106,9 +99,8 @@ public class DataSharingAgreementCache {
     }
 
     public static void clearDataSharingAgreementCache(String dsaId) throws Exception {
-        if (dataSharingAgreementMap.containsKey(dsaId)) {
-            dataSharingAgreementMap.remove(dsaId);
-        }
+
+        dataSharingAgreementMap.remove(dsaId);
 
         allDSAsForAllChildRegion.clear();
         allDSAsForPublisher.clear();
@@ -119,5 +111,7 @@ public class DataSharingAgreementCache {
     public static void flushCache() throws Exception {
         dataSharingAgreementMap.clear();
         allDSAsForAllChildRegion.clear();
+        allDSAsForPublisher.clear();
+        allDSAsForPublisherAndSubscriber.clear();
     }
 }

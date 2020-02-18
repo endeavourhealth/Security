@@ -8,20 +8,22 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.databa
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.json.JsonOrganisationCCG;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class OrganisationCache {
 
-    private static Map<String, OrganisationEntity> organisationMap = new HashMap<>();
-    private static Map<String, Boolean> organisationHasDPAMap = new HashMap<>();
-    private static Map<String, String> organisationCCGMap = new HashMap<>();
+    private static Map<String, OrganisationEntity> organisationMap = new ConcurrentHashMap<>();
+    private static Map<String, Boolean> organisationHasDPAMap = new ConcurrentHashMap<>();
+    private static Map<String, String> organisationCCGMap = new ConcurrentHashMap<>();
 
     public static List<OrganisationEntity> getOrganisationDetails(List<String> organisations) throws Exception {
         List<OrganisationEntity> organisationEntities = new ArrayList<>();
         List<String> missingOrgs = new ArrayList<>();
 
         for (String org : organisations) {
-            if (organisationMap.containsKey(org)) {
-                organisationEntities.add(organisationMap.get(org));
+            OrganisationEntity orgInMap = organisationMap.get(org);
+            if (orgInMap != null) {
+                organisationEntities.add(orgInMap);
             } else {
                 missingOrgs.add(org);
             }
@@ -43,11 +45,9 @@ public class OrganisationCache {
     }
 
     public static OrganisationEntity getOrganisationDetails(String organisationId) throws Exception {
-        OrganisationEntity organisationEntity = null;
 
-        if (organisationMap.containsKey(organisationId)) {
-            organisationEntity = organisationMap.get(organisationId);
-        } else {
+        OrganisationEntity organisationEntity = organisationMap.get(organisationId);
+        if (organisationEntity == null) {
             organisationEntity = new SecurityOrganisationDAL().getOrganisation(organisationId);
             organisationMap.put(organisationEntity.getUuid(), organisationEntity);
         }
@@ -112,11 +112,9 @@ public class OrganisationCache {
     }
 
     public static Boolean doesOrganisationHaveDPA(String odsCode) throws Exception {
-        Boolean orgHasDPA = false;
 
-        if (organisationHasDPAMap.containsKey(odsCode)) {
-            orgHasDPA = organisationHasDPAMap.get(odsCode);
-        } else {
+        Boolean orgHasDPA = organisationHasDPAMap.get(odsCode);
+        if (orgHasDPA == null) {
             List<DataProcessingAgreementEntity> processingAgreementEntities = new SecurityDataProcessingAgreementDAL().getDataProcessingAgreementsForOrganisation(odsCode);
 
             if (processingAgreementEntities.size() > 0) {
@@ -136,10 +134,11 @@ public class OrganisationCache {
         List<String> missingOrgCCGs = new ArrayList<>();
 
         for (String ods : odsCodes) {
-            if (organisationCCGMap.containsKey(ods)) {
+            String ccgInMap = organisationCCGMap.get(ods);
+            if (ccgInMap != null) {
                 JsonOrganisationCCG orgCCG = new JsonOrganisationCCG();
                 orgCCG.setOdsCode(ods);
-                orgCCG.setCcgName(organisationCCGMap.get(ods));
+                orgCCG.setCcgName(ccgInMap);
                 organisationCCGS.add(orgCCG);
             } else {
                 missingOrgCCGs.add(ods);
@@ -162,13 +161,9 @@ public class OrganisationCache {
     }
 
     public static void clearOrganisationCache(String organisationId) throws Exception {
-        if (organisationMap.containsKey(organisationId)) {
-            organisationMap.remove(organisationId);
-        }
+        organisationMap.remove(organisationId);
 
-        if (organisationHasDPAMap.containsKey(organisationId)) {
-            organisationHasDPAMap.remove(organisationId);
-        }
+        organisationHasDPAMap.remove(organisationId);
     }
 
     public static void flushCache() throws Exception {

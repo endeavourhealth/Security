@@ -4,18 +4,16 @@ package org.endeavourhealth.common.security.usermanagermodel.models.caching;
 import org.endeavourhealth.common.security.usermanagermodel.models.DAL.SecurityApplicationDAL;
 import org.endeavourhealth.common.security.usermanagermodel.models.database.ApplicationEntity;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class ApplicationCache {
-    private static Map<String, ApplicationEntity> applicationMap = new HashMap<>();
+    private static Map<String, ApplicationEntity> applicationMap = new ConcurrentHashMap<>();
 
     public static ApplicationEntity getApplicationDetails(String applicationId) throws Exception {
-        ApplicationEntity foundRole = null;
 
-        if (applicationMap.containsKey(applicationId)) {
-            foundRole = applicationMap.get(applicationId);
-        } else {
+        ApplicationEntity foundRole = applicationMap.get(applicationId);
+        if (foundRole == null) {
             foundRole = new SecurityApplicationDAL().getApplication(applicationId);
             applicationMap.put(foundRole.getId(), foundRole);
 
@@ -27,9 +25,7 @@ public class ApplicationCache {
     }
 
     public static void clearApplicationCache(String applicationId) throws Exception {
-        if (applicationMap.containsKey(applicationId)) {
-            applicationMap.remove(applicationId);
-        }
+        applicationMap.remove(applicationId);
     }
 
     public static void flushCache() throws Exception {

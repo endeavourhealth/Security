@@ -4,21 +4,22 @@ import org.endeavourhealth.common.security.datasharingmanagermodel.models.DAL.Se
 import org.endeavourhealth.common.security.datasharingmanagermodel.models.database.DatasetEntity;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class DataSetCache {
 
-    private static Map<String, DatasetEntity> dataSetMap = new HashMap<>();
+    private static Map<String, DatasetEntity> dataSetMap = new ConcurrentHashMap<>();
 
     public static List<DatasetEntity> getDataSetDetails(List<String> dataSets) throws Exception {
         List<DatasetEntity> datasetEntities = new ArrayList<>();
         List<String> missingDataSets = new ArrayList<>();
 
         for (String ds : dataSets) {
-            if (dataSetMap.containsKey(ds)) {
-                datasetEntities.add(dataSetMap.get(ds));
+            DatasetEntity dsInMap = dataSetMap.get(ds);
+            if (dsInMap != null) {
+                datasetEntities.add(dsInMap);
             } else {
                 missingDataSets.add(ds);
             }
@@ -40,11 +41,9 @@ public class DataSetCache {
     }
 
     public static DatasetEntity getDataSetDetails(String dataSetId) throws Exception {
-        DatasetEntity datasetEntity = null;
 
-        if (dataSetMap.containsKey(dataSetId)) {
-            datasetEntity = dataSetMap.get(dataSetId);
-        } else {
+        DatasetEntity datasetEntity = dataSetMap.get(dataSetId);
+        if (datasetEntity == null) {
             datasetEntity = new SecurityDatasetDAL().getDataSet(dataSetId);
             dataSetMap.put(datasetEntity.getUuid(), datasetEntity);
         }
@@ -56,9 +55,7 @@ public class DataSetCache {
     }
 
     public static void clearDataSetCache(String dataSetId) throws Exception {
-        if (dataSetMap.containsKey(dataSetId)) {
-            dataSetMap.remove(dataSetId);
-        }
+        dataSetMap.remove(dataSetId);
     }
 
     public static void flushCache() throws Exception {
