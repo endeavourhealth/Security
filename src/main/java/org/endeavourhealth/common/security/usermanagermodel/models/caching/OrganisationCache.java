@@ -111,21 +111,18 @@ public class OrganisationCache {
         return null;
     }
 
-    public static Boolean doesOrganisationHaveDPA(String odsCode) throws Exception {
+    public static boolean doesOrganisationHaveDPA(String odsCode) throws Exception {
 
         Boolean orgHasDPA = organisationHasDPAMap.get(odsCode);
         if (orgHasDPA == null) {
             List<DataProcessingAgreementEntity> processingAgreementEntities = new SecurityDataProcessingAgreementDAL().getDataProcessingAgreementsForOrganisation(odsCode);
-
-            if (processingAgreementEntities.size() > 0) {
-                orgHasDPA = true;
-            }
+            orgHasDPA = new Boolean(processingAgreementEntities.size() > 0);
             organisationHasDPAMap.put(odsCode, orgHasDPA);
         }
 
         CacheManager.startScheduler();
 
-        return orgHasDPA;
+        return orgHasDPA.booleanValue();
 
     }
 
