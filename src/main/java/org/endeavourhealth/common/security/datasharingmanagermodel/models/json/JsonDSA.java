@@ -2,7 +2,6 @@ package org.endeavourhealth.common.security.datasharingmanagermodel.models.json;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -22,9 +21,9 @@ public class JsonDSA {
     private Map<UUID, String> publishers = null;
     private Map<UUID, String> subscribers = null;
     private Map<UUID, String> projects = null;
-    private List<JsonDocumentation> documentations = new ArrayList<>();
-    private List<JsonPurpose> purposes = new ArrayList<>();
-    private List<JsonPurpose> benefits = new ArrayList<>();
+    private List<JsonDocumentation> documentations = null;
+    private List<JsonPurpose> purposes = null;
+    private List<JsonPurpose> benefits = null;
     private Map<UUID, String> cohorts = null;
     private Map<UUID, String> dataSets = null;
 

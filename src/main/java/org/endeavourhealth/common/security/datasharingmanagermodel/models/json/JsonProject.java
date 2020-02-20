@@ -36,7 +36,7 @@ public class JsonProject {
     private Map<UUID, String> projectConfiguration = null;
     private Map<UUID, String> dsas = null;
     private String applicationPolicy = null;
-    private List<JsonDocumentation> documentations = new ArrayList<>();
+    private List<JsonDocumentation> documentations = null;
     private List<JsonApplicationPolicyAttribute> applicationPolicyAttributes = new ArrayList<>();
     private JsonExtractTechnicalDetails extractTechnicalDetails = null;
     private JsonProjectSchedule schedule = null;
