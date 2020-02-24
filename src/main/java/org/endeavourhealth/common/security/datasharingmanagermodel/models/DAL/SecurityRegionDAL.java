@@ -117,18 +117,16 @@ public class SecurityRegionDAL {
 
         List<String> childRegions = new SecurityMasterMappingDAL().getChildMappings(regionUUID, MapType.REGION.getMapType(), MapType.REGION.getMapType());
 
-        // added to make sure that the values obtained from the map are existing entities, this method is recursive
-        // and might cause an infinite loop if the master mapping table have loose values
-        List<String> existingRegions = new ArrayList<>();
         for (String region : childRegions) {
+            // added to make sure that the values obtained from the map are existing entities, this method is recursive
+            // and might cause an infinite loop if the master mapping table have loose values
             if (getSingleRegion(region) != null) {
-                existingRegions.add(region);
+                //Only add regions to the list if they have not been added previously
+                if (!regionUUIDs.contains(region)) {
+                    regionUUIDs.add(region);
+                    regionUUIDs = getRegions(region, regionUUIDs);
+                }
             }
-        }
-        regionUUIDs.addAll(existingRegions);
-
-        for (String region : childRegions) {
-            regionUUIDs = getRegions(region, regionUUIDs);
         }
 
         return regionUUIDs;
