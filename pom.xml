@@ -4,7 +4,7 @@
 
   <groupId>org.endeavourhealth.common</groupId>
   <artifactId>security</artifactId>
-  <version>1.79-SNAPSHOT</version>
+  <version>1.80-SNAPSHOT</version>
 
   <properties>
     <java.version>1.8</java.version>
@@ -95,16 +95,6 @@
       <groupId>javax.servlet</groupId>
       <artifactId>servlet-api</artifactId>
       <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-core</artifactId>
-    </dependency>
-
-    <dependency>
-      <groupId>org.hibernate</groupId>
-      <artifactId>hibernate-hikaricp</artifactId>
     </dependency>
 
     <dependency>
