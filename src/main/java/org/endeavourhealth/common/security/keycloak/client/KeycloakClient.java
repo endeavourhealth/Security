@@ -56,7 +56,7 @@ public class KeycloakClient {
         return instance;
     }
 
-    public AccessTokenResponse getToken() throws IOException {
+    public synchronized AccessTokenResponse getToken() throws IOException {
         if(currentToken == null || refreshTokenExpired()) {
             LOG.trace("No token set or refresh token has expired, getting a new one...");
             currentToken = getTokenInternal();
